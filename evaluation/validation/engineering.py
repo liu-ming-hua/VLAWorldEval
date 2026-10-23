@@ -22,7 +22,7 @@ def acceptance_commands(python):
     return {
         "syntax": [python, "-m", "compileall", "-q", "adapters", "cli", "evaluation", "scripts", "vlaworldeval", "tests"],
         "lint": [python, "-m", "ruff", "check", "adapters", "cli", "evaluation", "scripts", "tests", "vlaworldeval"],
-        "tests": [python, "-m", "pytest", "-q"],
+        "tests": [python, "-m", "pytest", "tests", "-q"],
         "inventory": [python, "-m", "cli", "validate"],
         "capabilities": [python, "-m", "cli", "capabilities"],
         "documentation": [python, "scripts/checks/docs.py"],

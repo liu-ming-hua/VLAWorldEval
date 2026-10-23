@@ -30,13 +30,16 @@ def check_archives(wheel, sdist):
         wheel_names = archive.namelist()
     with tarfile.open(sdist) as archive:
         source_names = archive.getnames()
+    if any(name.startswith("tests/") or "/tests/" in name for name in wheel_names):
+        raise ValueError("Unexpected test package in inference wheel")
     for name in wheel_names + source_names:
         # Model guides are source documentation, not the runtime models tree.
         model_guide = "/docs/models/" in "/" + name and name.endswith(".md")
+        model_test = "/tests/models/" in "/" + name and name.endswith(".py")
         presentation = "/".join(name.split("/")[1:]) in PRESENTATION_ASSETS
         if ("site-packages/" in name or "/.cache/" in name or "/.uv-cache/" in name
                 or "/third_party/" in name or "/.archive/" in name or name.startswith("models/")
-                or ("/models/" in name and not model_guide)
+                or ("/models/" in name and not (model_guide or model_test))
                 or name.endswith((".safetensors", ".pt", ".npz", ".npy"))
                 or (name.endswith(".mp4") and not presentation)):
             raise ValueError(f"Unexpected runtime/model/data asset in package: {name}")

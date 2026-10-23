@@ -14,6 +14,26 @@ environment/core/bin/python scripts/acceptance/public_delivery.py \
 它在原 checkout 之外验证源码安装、wheel 资源和真实 CPU Worker。
 不安装所有 GPU 模型，不发布远程仓库，也不验证机器人动力学。
 
+## 测试归属与运行成本分层
+
+测试按职责分为 `tests/core/`（公共协议和评估流程）、`tests/models/`（模型专用的合成输入契约）、
+`tests/engineering/`（安装、资产、文档和发布）与 `tests/integration/`（可选官方数据和原生运行环境）。
+共享构造器放在 `tests/support/`，不再从另一个测试文件导入。
+
+```bash
+environment/core/bin/python -m pytest tests -m unit
+environment/core/bin/python -m pytest tests -m process
+environment/core/bin/python -m pytest tests --run-integration -m integration
+environment/core/bin/python scripts/checks/test_suite.py --json
+```
+
+默认工程检查包含轻量 `unit` 和 CPU 进程／视频 `process` 两层；不会因为本机已有数据或模型环境，
+就自动启用集成检查。可选检查应使用对应模型的解释器，缺少依赖或数据时明确跳过，不等同于验证成功。
+通过 `--suite-report .cache/quality/tests.json` 可记录所选用例、分层、结果和实际耗时。
+静态审计只展示测试与导入模块的关系，**不是执行行覆盖率或分支覆盖率**。
+CI 分别验证两个 Python 版本和两种 CPU 层级，并提供可下载的 `test-audit-*` 报告。
+完整说明见[测试指南](../../tests/README.md)。
+
 ## 导出干净的源码快照
 
 ```bash

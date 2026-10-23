@@ -14,6 +14,8 @@ def validate_documentation(root):
     files += [p for p in (root / "docs").rglob("*.md")
               if "archive" not in p.relative_to(root / "docs").parts]
     files += [root / name / "README.md" for name in ("adapters", "cli", "evaluation", "scripts", "configs")]
+    if (root / "tests/README.md").is_file():
+        files.append(root / "tests/README.md")
     errors, checked = [], 0
     for file in files:
         if not file.is_file():

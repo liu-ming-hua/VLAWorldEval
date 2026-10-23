@@ -133,7 +133,12 @@ include = ["adapters*", "cli*", "evaluation*", "vlaworldeval*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-ra"
+addopts = "-ra --strict-markers"
+markers = [
+  "unit: weight-free CPU contracts and synthetic data; no model environment required",
+  "process: weight-free CPU subprocess, IPC, local HTTP, shell or FFmpeg checks",
+  "integration: optional native model runtime, official checkout or real dataset; explicit opt-in",
+]
 
 [tool.ruff]
 target-version = "py310"

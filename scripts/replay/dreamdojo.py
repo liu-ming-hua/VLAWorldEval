@@ -35,11 +35,11 @@ def audit_environment(output: Path, config: Path, packet: Path):
     environment["LD_LIBRARY_PATH"] = ":".join(str(libs / name / "lib") for name in ("cudnn", "cublas", "cuda_runtime"))
     checks = {
         "cpu_tests": [str(ROOT / "environment/core/bin/python"), "-m", "pytest",
-                      str(ROOT / "tests/test_dreamdojo.py"), "-q"],
+                      str(ROOT / "tests/models/test_dreamdojo.py"), "-q"],
         "ruff": [str(ROOT / "environment/core/bin/python"), "-m", "ruff", "check",
                  *[str(ROOT / name) for name in (
                      "adapters/world_models/dreamdojo.py", "scripts/download/dreamdojo.py",
-                     "scripts/replay/dreamdojo.py", "evaluation/datasets/dreamdojo.py", "tests/test_dreamdojo.py")]],
+                     "scripts/replay/dreamdojo.py", "evaluation/datasets/dreamdojo.py", "tests/models/test_dreamdojo.py")]],
         "distributions": [str(python), "-c", "import importlib.metadata as m,json; "
                           "print(json.dumps({d.metadata['Name']:d.version for d in m.distributions()},sort_keys=True,indent=2))"],
         "pip_check": [uv, "pip", "check", "--python", str(python)],

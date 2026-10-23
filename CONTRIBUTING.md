@@ -23,6 +23,14 @@ bash scripts/check_project.sh
 Routine checks must not download or load models. GPU tests require explicit opt-in and owned resources.
 Do not equate engineering checks with [scientific reliability](docs/en/reliability.md).
 
+Tests are grouped by responsibility under `tests/core/`, `tests/models/`,
+`tests/engineering/` and `tests/integration/`; shared builders live in `tests/support/`.
+For a fast loop, use `TEST_TIER=unit bash scripts/check_project.sh`; run
+`TEST_TIER=process bash scripts/check_project.sh` before submitting worker/video changes.
+The default gate includes both weight-free tiers. Optional official-data/runtime parity is
+explicit: `environment/core/bin/python -m pytest tests --run-integration -m integration`.
+See the [test suite guide](tests/README.md) for ownership, selection and audit reports.
+
 ## What belongs in Git
 
 Commit original code, small declarations, tests and current user documentation.

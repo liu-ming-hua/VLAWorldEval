@@ -18,6 +18,7 @@ recursive-include environment/requirements *.txt
 recursive-include configs *.json *.yaml *.md
 recursive-include scripts *.sh *.py *.patch
 recursive-include tests *.py
+include tests/README.md
 recursive-include docs *.md
 recursive-include docs *.py *.rst *.css *.html
 recursive-include .github *.yml *.yaml

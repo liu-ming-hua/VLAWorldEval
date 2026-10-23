@@ -11,6 +11,7 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.10", "3.11"]
+        test-tier: ["unit", "process"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -22,8 +23,11 @@ jobs:
           python -m pip install -r environment/locks/engineering-tools-py311.txt -r environment/locks/build-tools-py311.txt build==1.3.0
           python -m pip install -e .
       - name: Install video tools
+        if: matrix.test-tier == 'process'
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
       - name: Run project quality gate
+        env:
+          TEST_TIER: ${{ matrix.test-tier }}
         run: |
           if bash scripts/check_project.sh > "$RUNNER_TEMP/framework-quality.log" 2>&1; then
             cat "$RUNNER_TEMP/framework-quality.log"
@@ -33,6 +37,7 @@ jobs:
             exit 1
           fi
       - name: Build and test installed wheel away from checkout
+        if: matrix.test-tier == 'process'
         run: |
           python -m build
           python -m pip install --no-deps --target "$RUNNER_TEMP/installed" dist/vlaworldeval-*.whl
@@ -47,11 +52,20 @@ jobs:
           python -m cli configure --config configs/experiments/openvla_worldgym_v1.json --output configs/experiments/ci_machine.json --vla-gpus 2 --wm-gpus 3 --chunks 40
           python "$GITHUB_WORKSPACE/scripts/acceptance/installed_core_smoke.py" --output "$RUNNER_TEMP/installed-workers"
       - name: Check source-distribution setup resources
+        if: matrix.test-tier == 'process'
         run: |
           python -c "import glob, tarfile; from scripts.acceptance.export_source import PRESENTATION_ASSETS; p=glob.glob('dist/*.tar.gz')[0]; names=tarfile.open(p).getnames(); media=tuple('/'+p for p in PRESENTATION_ASSETS if p.endswith('.mp4')); assert any(n.endswith('/environment/locks/core-py311.txt') for n in names); assert any(n.endswith('/scripts/setup/common.sh') for n in names); assert any(n.endswith('/docs/assets/framework.png') for n in names); assert not any('/site-packages/' in n or n.endswith(('.safetensors','.pt','.npz')) or n.endswith('.mp4') and not n.endswith(media) for n in names)"
       - name: Validate GitHub source export
+        if: matrix.test-tier == 'process'
         run: |
           python scripts/acceptance/export_source.py --sdist dist/*.tar.gz --output "$RUNNER_TEMP/github-source"
           cd "$RUNNER_TEMP/github-source"
           python -c "import cli; from pathlib import Path; assert Path(cli.__file__).resolve().is_relative_to(Path.cwd())"
           python -m cli validate
+      - name: Upload test ownership, tiers and observed timings
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-audit-py${{ matrix.python-version }}-${{ matrix.test-tier }}
+          path: .cache/quality/
+          if-no-files-found: ignore

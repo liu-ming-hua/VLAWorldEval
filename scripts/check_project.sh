@@ -4,6 +4,11 @@ set -euo pipefail
 # Fast, weight-free project gate. Model-specific integration tests remain
 # opt-in because their environments and checkpoints are intentionally isolated.
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+TEST_TIER="${TEST_TIER:-all}"
+case "${TEST_TIER}" in
+  all|unit|process) ;;
+  *) echo "TEST_TIER must be all, unit or process; native checks require explicit pytest opt-in" >&2; exit 1 ;;
+esac
 if [[ -z "${PYTHON_BIN:-}" ]]; then
   if [[ -x "${ROOT_DIR}/environment/core/bin/python" ]]; then
     PYTHON_BIN="${ROOT_DIR}/environment/core/bin/python"
@@ -28,11 +33,16 @@ echo "[2/5] Python syntax"
 echo "[3/5] static checks"
 "${PYTHON_BIN}" -m ruff check adapters cli evaluation scripts tests vlaworldeval
 
-echo "[4/5] framework tests"
-"${PYTHON_BIN}" -m pytest
+echo "[4/5] framework tests (tier=${TEST_TIER}; optional native integration excluded)"
+TEST_ARGS=(tests --suite-report ".cache/quality/tests-${TEST_TIER}.json")
+if [[ "${TEST_TIER}" != "all" ]]; then
+  TEST_ARGS+=(-m "${TEST_TIER}")
+fi
+"${PYTHON_BIN}" -m pytest "${TEST_ARGS[@]}"
 
 echo "[5/5] project metadata"
 "${PYTHON_BIN}" -m cli validate >/dev/null
 "${PYTHON_BIN}" scripts/checks/docs.py
+"${PYTHON_BIN}" scripts/checks/test_suite.py --json > .cache/quality/test-inventory.json
 
 echo "Project checks passed."

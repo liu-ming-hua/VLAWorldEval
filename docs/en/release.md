@@ -14,6 +14,28 @@ Choose a fresh output name. The offline delivery gate requires cached build/core
 it tests source installation, wheel resources and actual CPU workers away from this checkout.
 It does not install every GPU stack, publish a repository or validate robot physics.
 
+## Test ownership and cost tiers
+
+Tests are grouped into `tests/core/` (shared evaluator/protocols), `tests/models/`
+(model-specific synthetic contracts), `tests/engineering/` (installation, assets and release),
+and `tests/integration/` (optional official assets/native runtimes).
+Reusable fixtures belong in `tests/support/`, not another collected test module.
+
+```bash
+environment/core/bin/python -m pytest tests -m unit
+environment/core/bin/python -m pytest tests -m process
+environment/core/bin/python -m pytest tests --run-integration -m integration
+environment/core/bin/python scripts/checks/test_suite.py --json
+```
+
+The default engineering gate runs both weight-free tiers. Integration is never enabled
+merely because local assets exist. Run optional tests in the relevant model interpreter;
+missing dependencies/data are reported as skips, not successful validation.
+`--suite-report .cache/quality/tests.json` records selected cases, tiers and observed timings.
+The ownership inventory maps imports; it does **not** measure executed-line/branch coverage.
+CI checks both Python versions and CPU tiers, with downloadable `test-audit-*` reports.
+See the [test suite guide](../../tests/README.md) for detailed commands.
+
 ## Export a clean source snapshot
 
 ```bash
