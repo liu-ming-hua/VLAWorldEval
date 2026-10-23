@@ -1,0 +1,5 @@
+# Documentation only; never part of a model runtime or the lightweight core.
+Sphinx==8.2.3
+pydata-sphinx-theme==0.16.1
+myst-parser==4.0.1
+jieba==0.42.1

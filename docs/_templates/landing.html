@@ -1,0 +1,24 @@
+{% set zh = manual_language == 'zh' %}
+{% set prefix = 'zh/' if zh else 'en/' %}
+<section class="manual-hero" aria-label="VLAWorldEval">
+  <div class="hero-eyebrow">POLICIES × WORLD MODELS</div>
+  <h1>VLAWorld<span>Eval</span></h1>
+  <p class="hero-lede">{{ '连接机器人策略、世界模型与可复现评估。' if zh else 'Connect robot policies, world models and reproducible evaluation.' }}</p>
+  <p>{{ '从第一次 rollout，到可扩展的模型适配；让动作语义、执行过程和生成结果清晰可查。' if zh else 'From your first rollout to a new model adapter. Keep action semantics, execution and generated results explicit.' }}</p>
+  <div class="hero-actions">
+    <a class="hero-primary" href="{{ pathto(prefix ~ 'quickstart') }}">{{ '开始使用' if zh else 'Get started' }} <span aria-hidden="true">→</span></a>
+    <a class="hero-secondary" href="{{ pathto(prefix ~ 'compatibility') }}">{{ '查看模型组合' if zh else 'Explore compatible pairs' }}</a>
+  </div>
+  <div class="hero-facts"><span>{{ '隔离模型环境' if zh else 'Isolated model runtimes' }}</span><span>{{ '显式协议约束' if zh else 'Explicit protocol contracts' }}</span><span>{{ '统一输出与诊断' if zh else 'Shared artifacts & diagnostics' }}</span></div>
+</section>
+<section class="framework-preview" aria-label="{{ '框架流程' if zh else 'Framework overview' }}">
+  <img src="{{ pathto('assets/framework.svg', 1) }}" alt="Observation to policy, world model and evaluation, with generated-observation feedback" width="1240" height="530">
+</section>
+<details class="video-demo">
+  <summary>{{ '观看 64 秒世界模型回放与真实未来对照' if zh else 'Watch a 64-second world-model replay against recorded future' }}</summary>
+  <video controls preload="none" playsinline>
+    <source src="{{ pathto('assets/demos/cosmos-droid-task.mp4', 1) }}" type="video/mp4">
+    <a href="{{ pathto('assets/demos/cosmos-droid-task.mp4', 1) }}">{{ '下载 MP4' if zh else 'Download MP4' }}</a>
+  </video>
+  <p>{{ '真实动作驱动的 Cosmos 回放。左侧为生成视频，右侧为真实未来；不是已验证成功的 VLA rollout。' if zh else 'Cosmos recorded-action replay. Prediction on the left, recorded future on the right—not a verified successful VLA rollout.' }} <a href="{{ pathto('assets/provenance.json', 1) }}">{{ '来源记录' if zh else 'Provenance' }}</a></p>
+</details>

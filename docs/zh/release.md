@@ -30,6 +30,29 @@ environment/core/bin/python scripts/acceptance/export_source.py \
 不要 force-add 被忽略的权重、结果、私有数据或上游源码。
 以上命令不会创建远程仓库、上传文件或改写本地历史。
 
+## 构建文档网站
+
+网站采用 Sphinx + MyST + PyData 主题，直接复用 `docs/en/` 与 `docs/zh/` 的 Markdown 手册，
+不需要另写一套网页内容，也不应手动编辑生成的 HTML。
+
+```bash
+bash scripts/setup/docs.sh
+environment/tools/docs/bin/python -m sphinx -W --keep-going -b html docs .cache/site/html
+environment/core/bin/python scripts/checks/site.py --directory .cache/site/html
+environment/tools/docs/bin/python -m http.server 8000 --directory .cache/site/html
+```
+
+打开 `http://localhost:8000/`；服务器环境需先通过 SSH 将 8000 端口转发到自己的电脑。
+文档环境单独存放在 `environment/tools/docs/`，安装时关闭代理、使用配置的 PyPI 镜像；
+不依赖模型权重或 Torch 等模型包，生成网页保存在 `.cache/`。
+
+GitHub 仓库首次需选择 **Settings → Pages → Source → GitHub Actions**。
+`documentation-pages` 工作流在 PR 中构建、校验网站，在 `main` 上发布到项目 GitHub Pages。
+若尚未启用 Pages，工作流保留验证后的网页产物并提示设置步骤，不会把构建成功误报为部署成功。
+设置完成后可以从 **Actions → documentation-pages → Run workflow** 手动触发发布。
+
+全文检索同时索引中英文，语言切换保留当前所在的手册页面。
+
 ## 许可边界
 
 原创框架贡献采用 [MIT](../../LICENSE)，具体见[许可范围](../../LICENSE_SCOPE.md)。

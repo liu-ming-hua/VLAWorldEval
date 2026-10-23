@@ -9,6 +9,13 @@ scope = "framework"
 package_profile = "core-py311"
 notes = "Lightweight locked CLI environment; does not install any model stack."
 
+[environments.tools.docs]
+path = "environment/tools/docs"
+status = "configured"
+scope = "tools"
+package_profile = "docs"
+notes = "Isolated Sphinx/MyST/PyData documentation builder; no model libraries or weights."
+
 [environments.evaluators.video]
 path = "environment/evaluators/video"
 status = "configured"

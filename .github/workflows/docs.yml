@@ -1,0 +1,73 @@
+name: documentation-pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: documentation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install documentation dependencies only
+        run: |
+          unset HTTP_PROXY HTTPS_PROXY ALL_PROXY http_proxy https_proxy all_proxy
+          python -m pip install --index-url https://pypi.tuna.tsinghua.edu.cn/simple -r environment/locks/docs-py311.txt
+      - name: Build bilingual manual with warnings as errors
+        run: python -m sphinx -W --keep-going -b html docs .cache/site/html
+      - name: Validate generated links and media
+        run: python scripts/checks/site.py --directory .cache/site/html
+      - uses: actions/upload-pages-artifact@v3
+        if: github.event_name != 'pull_request'
+        with:
+          path: .cache/site/html
+
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Check repository Pages configuration
+        uses: actions/github-script@v7
+        id: pages
+        with:
+          script: |
+            try {
+              const {data} = await github.rest.repos.getPages(context.repo);
+              const enabled = data.build_type === 'workflow';
+              core.setOutput('enabled', String(enabled));
+              if (!enabled) core.warning('Select GitHub Actions as the publishing source in Settings > Pages, then rerun this workflow.');
+            } catch (error) {
+              if (error.status !== 404) throw error;
+              core.setOutput('enabled', 'false');
+              core.warning('Pages is not enabled. Select GitHub Actions in Settings > Pages, then rerun this workflow.');
+            }
+      - uses: actions/configure-pages@v5
+        if: steps.pages.outputs.enabled == 'true'
+      - uses: actions/deploy-pages@v4
+        id: deployment
+        if: steps.pages.outputs.enabled == 'true'
+      - name: Explain required repository setting
+        if: steps.pages.outputs.enabled != 'true'
+        run: |
+          echo '### Site built; publication needs one repository setting' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Open Settings → Pages → Source → **GitHub Actions**, then rerun documentation-pages.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'The validated website artifact is available on this workflow run.' >> "$GITHUB_STEP_SUMMARY"

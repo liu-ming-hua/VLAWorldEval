@@ -19,6 +19,8 @@
 
 **连接机器人策略、动作条件世界模型与可复现评估的统一框架。**
 
+[在线使用手册](https://liu-ming-hua.github.io/VLAWorldEval/zh/README.html) · [Documentation website](https://liu-ming-hua.github.io/VLAWorldEval/)
+
 既可以让 VLA 使用生成观测进行自回归闭环，也可以绕过 VLA，直接回放真实动作。
 模型依赖独立管理，动作语义显式声明，视频、动作数组与来源信息一起保存。
 面向机械臂与夹爪任务，不承诺任意模型之间都能直接组合。

@@ -21,6 +21,8 @@
 
 **One framework to connect robot policies, action-conditioned world models, and reproducible evaluation.**
 
+[Documentation website](https://liu-ming-hua.github.io/VLAWorldEval/) · [中文在线手册](https://liu-ming-hua.github.io/VLAWorldEval/zh/README.html)
+
 Run a VLA against generated observations, or replay recorded actions without a policy.
 Keep model dependencies isolated, action semantics explicit, and videos, arrays and provenance together.
 Designed for robotic-arm and gripper workflows—not an unrestricted Cartesian product of models.

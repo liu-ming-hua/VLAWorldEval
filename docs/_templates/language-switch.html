@@ -1,0 +1,3 @@
+{% set zh = pagename.startswith('zh/') %}
+{% set alternate = ('en/' ~ pagename[3:]) if zh else (('zh/' ~ pagename[3:]) if pagename.startswith('en/') else 'zh/README') %}
+<a class="language-switch" href="{{ pathto(alternate) }}" lang="{{ 'en' if zh else 'zh-CN' }}" aria-label="{{ 'Read this page in English' if zh else '阅读此页的中文版' }}">{{ 'English' if zh else '简体中文' }}</a>

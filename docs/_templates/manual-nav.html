@@ -1,0 +1,22 @@
+{% set zh = pagename.startswith('zh/') %}
+{% set prefix = 'zh/' if zh else 'en/' %}
+{% set groups = [
+  ('开始使用' if zh else 'GET STARTED', [('README', '概览' if zh else 'Overview'), ('quickstart', '快速开始' if zh else 'Quick start'), ('installation', '安装与下载' if zh else 'Installation & assets')]),
+  ('模型与协议' if zh else 'MODELS & PROTOCOLS', [('compatibility', '组合兼容性' if zh else 'Compatible pairs'), ('models', '模型输入输出与训练域' if zh else 'Model reference')]),
+  ('执行与结果' if zh else 'RUN & INSPECT', [('workflows', '闭环与真实动作回放' if zh else 'Loops & native replay'), ('artifacts', '视频与输出文件' if zh else 'Videos & artifacts'), ('reliability', '指标与可靠性边界' if zh else 'Metrics & reliability')]),
+  ('开发与维护' if zh else 'DEVELOP & MAINTAIN', [('architecture', '框架架构' if zh else 'Architecture'), ('extending', '添加适配器' if zh else 'Add an adapter'), ('troubleshooting', '故障排查' if zh else 'Troubleshooting'), ('release', '构建与发布' if zh else 'Build & release')])
+] %}
+<nav class="manual-nav" aria-label="{{ '使用手册导航' if zh else 'User manual navigation' }}">
+  <a class="manual-home" href="{{ pathto('index') }}">{{ '项目首页' if zh else 'Project home' }} <span>↗</span></a>
+  {% for heading, entries in groups %}
+  <section class="manual-nav-group">
+    <p>{{ heading }}</p>
+    <ul>
+    {% for name, title in entries %}
+      <li><a href="{{ pathto(prefix ~ name) }}" {% if pagename == prefix ~ name %}class="active" aria-current="page"{% endif %}>{{ title }}</a></li>
+    {% endfor %}
+    </ul>
+  </section>
+  {% endfor %}
+  <div class="manual-version">v{{ release }} <span>{{ '开源评测框架' if zh else 'Open evaluation infrastructure' }}</span></div>
+</nav>

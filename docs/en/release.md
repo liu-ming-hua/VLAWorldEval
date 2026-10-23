@@ -31,6 +31,30 @@ For a workspace with inherited upstream Git history, publish only the reviewed e
 clean repository. Do not force-add ignored weights, results, private datasets or upstream source.
 The commands above create no remote, upload nothing and do not rewrite local history.
 
+## Build the documentation website
+
+The website uses Sphinx + MyST + the PyData theme. The Markdown manuals remain
+the single source; edit `docs/en/` and `docs/zh/`, not generated HTML.
+
+```bash
+bash scripts/setup/docs.sh
+environment/tools/docs/bin/python -m sphinx -W --keep-going -b html docs .cache/site/html
+environment/core/bin/python scripts/checks/site.py --directory .cache/site/html
+environment/tools/docs/bin/python -m http.server 8000 --directory .cache/site/html
+```
+
+Open `http://localhost:8000/`. On a remote server, forward port 8000 with SSH first.
+The dedicated documentation environment disables proxies and uses the configured PyPI mirror;
+no model dependencies or weights are required. Generated HTML stays under `.cache/`.
+
+For GitHub Pages, select **Settings → Pages → Source → GitHub Actions** once.
+The `documentation-pages` workflow builds and validates both languages on pull requests,
+and publishes `main` to the project Pages URL. If Pages is disabled, the workflow
+keeps the validated artifact and reports the required setting instead of claiming deployment.
+Use **Actions → documentation-pages → Run workflow** after enabling Pages.
+
+Search indexes both English and Chinese text. Language switches preserve the current manual page.
+
 ## License boundary
 
 Original framework contributions use [MIT](../../LICENSE); see [license scope](../../LICENSE_SCOPE.md).

@@ -39,6 +39,10 @@ def allowed(path):
     top = path.parts[0]
     if path.parts[:2] == ('docs', 'assets'):
         return str(path) in PRESENTATION_ASSETS
+    if path.parts[:2] in {('docs', '_static'), ('docs', '_templates')}:
+        return path.suffix in {'.css', '.html'}
+    if str(path) == 'docs/index.rst':
+        return True
     if top in CODE_DIRS:
         return path.suffix in TEXT_SUFFIXES
     if top == '.github':
