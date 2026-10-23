@@ -24,7 +24,14 @@ jobs:
       - name: Install video tools
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
       - name: Run project quality gate
-        run: bash scripts/check_project.sh
+        run: |
+          if bash scripts/check_project.sh > "$RUNNER_TEMP/framework-quality.log" 2>&1; then
+            cat "$RUNNER_TEMP/framework-quality.log"
+          else
+            cat "$RUNNER_TEMP/framework-quality.log"
+            python -c 'import os; from pathlib import Path; text=(Path(os.environ["RUNNER_TEMP"])/"framework-quality.log").read_text()[-12000:]; text=text.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A"); print("::error title=Project quality gate::"+text)'
+            exit 1
+          fi
       - name: Build and test installed wheel away from checkout
         run: |
           python -m build
