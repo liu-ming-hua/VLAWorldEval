@@ -77,8 +77,6 @@ are fed back to the policy. This is a longer continuous loop, not a verified tas
   </a>
 </p>
 
-[Open the editable SVG diagram](docs/assets/framework.svg)
-
 | Building block | What you get |
 | --- | --- |
 | Model adapters | Separate VLA and WM interfaces; reuse official inference implementations |
