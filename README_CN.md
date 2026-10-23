@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="README.md">English</a> · <a href="docs/zh/README.md">使用手册</a> ·
+  <a href="README.md">English</a> · <a href="https://liu-ming-hua.github.io/VLAWorldEval/zh/README.html">在线使用手册</a> ·
   <a href="#模型组合">模型组合</a> · <a href="#原生域参考结果">参考结果</a> ·
   <a href="CONTRIBUTING.md">参与贡献</a>
 </p>

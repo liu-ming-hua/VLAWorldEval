@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="README_CN.md">简体中文</a> ·
-  <a href="docs/en/README.md">User manual</a> ·
+  <a href="https://liu-ming-hua.github.io/VLAWorldEval/">Documentation website</a> ·
   <a href="#model-combinations">Model combinations</a> ·
   <a href="#native-domain-reference-results">Reference results</a> ·
   <a href="CONTRIBUTING.md">Contributing</a>
