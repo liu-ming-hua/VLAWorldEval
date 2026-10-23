@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="530" viewBox="0 0 1240 530" role="img" aria-labelledby="title desc">
+<title id="title">VLAWorldEval — policy loops and world-model replay</title>
+<desc id="desc">Observations condition a policy and world model. Policy actions or recorded native actions enter the world model through an explicit bridge. Generated frames close the observation loop. Predictions and a separately recorded reference are compared after generation.</desc>
+<defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1 8 5 1 9" fill="none" stroke="#536178" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  <marker id="feedback" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1 8 5 1 9" fill="none" stroke="#308a9d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  <style>
+    text{font-family:Inter,Arial,sans-serif;fill:#23334c}
+    .title{font-size:25px;font-weight:700;text-anchor:middle}
+    .label{font-size:17px;text-anchor:middle;fill:#627087}
+    .small{font-size:15px;text-anchor:middle;fill:#68788e}
+    .flow{fill:none;stroke:#536178;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#arrow)}
+    .ink{stroke:#33465e;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+  </style>
+  <g id="arm" class="ink">
+    <path d="M-29 42H19L24 51H-34Z" fill="#b5d2e5"/>
+    <path d="M-16 40L-15 12 13-15 37 1" fill="none" stroke="#33465e" stroke-width="15"/>
+    <path d="M-16 40L-15 12 13-15 37 1" fill="none" stroke="#e8f1fa" stroke-width="10"/>
+    <circle cx="-15" cy="12" r="9" fill="#a7c8df"/>
+    <circle cx="13" cy="-15" r="8" fill="#a7c8df"/>
+    <path d="M37 1L37 12M29 12H45M29 12V23L33 26M45 12V23L41 26" fill="none"/>
+  </g>
+</defs>
+<rect width="1240" height="530" rx="24" fill="#fff"/>
+<!-- A visual context path keeps image conditioning explicit without an extra box. -->
+<path d="M150 160V126Q150 116 162 116H765Q780 116 780 130V157" class="flow" style="stroke:#97a7b9;stroke-width:2"/>
+<rect x="372" y="100" width="184" height="30" rx="15" fill="#fff"/>
+<text x="464" y="121" class="small">Visual context</text>
+<!-- Observation -->
+<rect x="50" y="160" width="200" height="220" rx="23" fill="#eef8ff" stroke="#8cc5ea" stroke-width="1.6"/>
+<text x="150" y="199" class="title">Observation</text>
+<rect x="89" y="218" width="122" height="91" rx="12" fill="#fff" class="ink"/>
+<path d="M96 289H204" fill="none" stroke="#a9c3d3" stroke-width="2"/>
+<use href="#arm" transform="translate(147 255) scale(.65)"/>
+<rect x="171" y="277" width="14" height="12" rx="3" fill="#f0bd63"/>
+<path d="M80 312H171Q180 312 180 321V339Q180 348 171 348H106L96 358V348H80Q71 348 71 339V321Q71 312 80 312Z" fill="#d7eafa" stroke="#719cb9" stroke-width="1.5"/>
+<path d="M87 325H162M87 334H145" stroke="#719cb9" stroke-width="2.4" stroke-linecap="round"/>
+<text x="150" y="367" class="label">RGB + task</text>
+<!-- VLA -->
+<rect x="325" y="160" width="200" height="220" rx="23" fill="#f4efff" stroke="#b49be4" stroke-width="1.6"/>
+<text x="425" y="199" class="title">VLA</text>
+<rect x="382" y="242" width="86" height="83" rx="17" fill="#daccf2" class="ink"/>
+<path d="M391 251H459V316H391Z" fill="#fff" stroke="#9f86c3" stroke-width="1.5"/>
+<g stroke="#8d76ae" stroke-width="2.5">
+  <path d="M369 258H382M369 279H382M369 300H382M468 258H481M468 279H481M468 300H481M399 229V242M423 229V242M447 229V242M399 325V338M423 325V338M447 325V338"/>
+  <path d="M408 268L440 270 425 299 408 268M440 270L405 298M408 268L448 299" fill="none"/>
+</g>
+<circle cx="408" cy="268" r="7" fill="#bda5e3"/><circle cx="440" cy="270" r="7" fill="#91c5e8"/>
+<circle cx="425" cy="299" r="7" fill="#f3cc77"/><circle cx="405" cy="298" r="5" fill="#a4d4c2"/><circle cx="448" cy="299" r="5" fill="#bda5e3"/>
+<text x="425" y="367" class="label">Policy adapter</text>
+<!-- WM, drawn as a stack of future video frames rather than engineering prose. -->
+<rect x="640" y="160" width="275" height="220" rx="23" fill="#fff5e7" stroke="#e4b35f" stroke-width="1.6"/>
+<text x="777" y="199" class="title">World Model</text>
+<rect x="680" y="217" width="151" height="100" rx="12" fill="#f6dfb5" stroke="#c6a572" stroke-width="1.5"/>
+<rect x="697" y="230" width="151" height="100" rx="12" fill="#fff0d7" stroke="#c6a572" stroke-width="1.5"/>
+<rect x="714" y="243" width="151" height="100" rx="12" fill="#fff" class="ink"/>
+<path d="M721 323H858" stroke="#c8bdad" stroke-width="2"/>
+<use href="#arm" transform="translate(775 283) scale(.68)"/>
+<rect x="810" y="307" width="17" height="16" rx="3" fill="#f1bf64" stroke="#b8853c" stroke-width="1.3"/>
+<path d="M806 292Q825 282 837 304" fill="none" stroke="#cd9750" stroke-width="2" stroke-dasharray="4 4"/>
+<path d="M850 255L858 260 850 265Z" fill="#b89562"/>
+<text x="777" y="367" class="label">Future video</text>
+<!-- Evaluation -->
+<rect x="990" y="160" width="200" height="220" rx="23" fill="#edf9f2" stroke="#86c3a3" stroke-width="1.6"/>
+<text x="1090" y="199" class="title">Evaluation</text>
+<rect x="1025" y="233" width="128" height="104" rx="12" fill="#fff" class="ink"/>
+<path d="M1041 248V321H1139" fill="none" stroke="#a2b4ab" stroke-width="2"/>
+<rect x="1051" y="289" width="15" height="31" rx="3" fill="#b5d8c4"/>
+<rect x="1079" y="274" width="15" height="46" rx="3" fill="#9ac9b2"/>
+<rect x="1107" y="254" width="15" height="66" rx="3" fill="#7fb99e"/>
+<path d="M1048 282L1073 269 1099 278 1130 247" fill="none" stroke="#5d8eac" stroke-width="2.5"/>
+<circle cx="1073" cy="269" r="4" fill="#5d8eac"/><circle cx="1130" cy="247" r="4" fill="#5d8eac"/>
+<text x="1090" y="367" class="label">Metrics + artifacts</text>
+<!-- The only primary left-to-right path. -->
+<path d="M253 270H321" class="flow"/>
+<path d="M528 270H636" class="flow"/>
+<text x="582" y="244" class="small">Action bridge</text>
+<path d="M918 270H986" class="flow"/>
+<!-- Recorded actions bypass the VLA, while retaining the same WM path. -->
+<rect x="479" y="432" width="206" height="39" rx="19" fill="#fff9ed" stroke="#dec28e" stroke-width="1.3"/>
+<text x="582" y="457" class="label">Recorded actions</text>
+<path d="M582 430V278" class="flow" style="stroke:#b99b66;stroke-dasharray:5 5;stroke-width:2"/>
+<!-- Autoregressive feedback. -->
+<path d="M885 382V487Q885 500 870 500H165Q150 500 150 485V383" fill="none" stroke="#308a9d" stroke-width="2.7" marker-end="url(#feedback)"/>
+<rect x="303" y="483" width="219" height="32" rx="16" fill="#fff"/>
+<text x="412" y="505" class="label" style="fill:#308a9d">Predicted observations</text>
+<!-- Real future is used only on the scoring side. -->
+<rect x="1010" y="442" width="160" height="34" rx="17" fill="#f6f8fa" stroke="#c8d1d9" stroke-width="1.2"/>
+<text x="1090" y="465" class="small">Real reference</text>
+<path d="M1090 440V383" class="flow" style="stroke:#99a5b4;stroke-dasharray:4 4;stroke-width:2"/>
+</svg>
+

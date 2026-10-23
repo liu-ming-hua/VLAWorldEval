@@ -1,0 +1,17 @@
+{
+  "model": "IWS",
+  "dataset": "Official Interactive World Simulator mini PushT validation episode",
+  "source": "https://huggingface.co/datasets/yixuan1999/interactive-world-sim-min-data",
+  "source_repository": "https://github.com/WangYixuan12/interactive_world_sim",
+  "source_commit": "3ba69b41d070d7a56e79c287da5b24a7d90742aa",
+  "dataset_revision": "987c175bcc29ddd0f6e6e3096b2c20df300253b0",
+  "source_path": "pusht/val/episode_0.hdf5",
+  "local_path": "datasets/iws/pusht/val",
+  "local_files": ["episode_0.hdf5"],
+  "sha256": "6a5be9048c851438493c03cf388da69888dd18d9ada40ec71baa827f0fb1baeb",
+  "protocol": "Default official observed-joint FK: obs/joint_pos -> official KinHelper(trossen_vx300s) and bimanual_push -> obs/world_t_robot_base -> absolute left/right world XY metres; camera_1_color initial RGB, subsequent frames generated; 10 Hz, no downsampling. Stored commands require explicit diagnostic mode.",
+  "action_shape": [1, 4],
+  "camera_order": ["camera_1_color"],
+  "status": "partial: one checksum-verified official val episode; remaining mini tasks/episodes not downloaded",
+  "documentation": "docs/models/IWS.md"
+}

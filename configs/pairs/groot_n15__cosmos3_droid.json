@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "pair_id": "groot_n15__cosmos3_nano_droid_fd_v1",
+  "seed": 0,
+  "vla": {
+    "adapter": "GrootN15Adapter",
+    "image_size": [256, 256],
+    "view_mapping": {
+      "video.exterior_image_1": "droid.exterior_1",
+      "video.exterior_image_2": "droid.exterior_2",
+      "video.wrist_image": "droid.wrist"
+    },
+    "view_mode": "mapping",
+    "squeeze_single_frame": true,
+    "state_schema": "droid_eef_rpy_gripper_v1",
+    "action": {
+      "dimension": 7,
+      "horizon": 16,
+      "representation": "cartesian_velocity_xyz_rpy+absolute_gripper",
+      "frame": "droid_controller",
+      "semantics": "velocity_command_with_absolute_gripper",
+      "rate_hz": 15.0,
+      "normalization": "groot_n15_oxe_droid_decoded",
+      "components": [
+        "dx",
+        "dy",
+        "dz",
+        "droll",
+        "dpitch",
+        "dyaw",
+        "gripper_position"
+      ]
+    }
+  },
+  "action_bridge": {
+    "name": "groot_n15_to_cosmos3_droid_v1",
+    "source": {
+      "dimension": 7,
+      "horizon": 16,
+      "representation": "cartesian_velocity_xyz_rpy+absolute_gripper",
+      "frame": "droid_controller",
+      "semantics": "velocity_command_with_absolute_gripper",
+      "rate_hz": 15.0,
+      "normalization": "groot_n15_oxe_droid_decoded",
+      "components": [
+        "dx",
+        "dy",
+        "dz",
+        "droll",
+        "dpitch",
+        "dyaw",
+        "gripper_position"
+      ]
+    },
+    "target": {
+      "dimension": 10,
+      "horizon": 16,
+      "representation": "framewise_delta_xyz+opencv_rot6d+flipped_gripper",
+      "frame": "droid_cosmos_opencv",
+      "semantics": "delta",
+      "rate_hz": 15.0,
+      "normalization": "none_raw_metric",
+      "components": [
+        "dx",
+        "dy",
+        "dz",
+        "rot6d_0",
+        "rot6d_1",
+        "rot6d_2",
+        "rot6d_3",
+        "rot6d_4",
+        "rot6d_5",
+        "gripper_closed"
+      ]
+    },
+    "config": {
+      "action_normalization": "none",
+      "requires_current_eef_pose": true,
+      "dynamics_calibration": "configs/calibration/droid_velocity_dynamics_v1.json"
+    }
+  },
+  "view_bridge": {
+    "name": "droid_cosmos_composite_v1",
+    "output_views": ["droid.cosmos_composite", "droid.exterior_1", "droid.exterior_2", "droid.wrist"],
+    "config": {
+      "views": {
+        "exterior_1": "droid.exterior_1",
+        "exterior_2": "droid.exterior_2",
+        "wrist": "droid.wrist",
+        "composite": "droid.cosmos_composite"
+      }
+    }
+  },
+  "world_model": {
+    "video": {"fps": 15, "frames_per_chunk": 16},
+    "adapter": "Cosmos3NanoDroidFDAdapter",
+    "view_mapping": {
+      "single_view": "droid.cosmos_composite"
+    },
+    "view_mode": "single",
+    "squeeze_single_frame": true,
+    "output_views": [
+      "droid.cosmos_composite"
+    ],
+    "action": {
+      "dimension": 10,
+      "horizon": 16,
+      "representation": "framewise_delta_xyz+opencv_rot6d+flipped_gripper",
+      "frame": "droid_cosmos_opencv",
+      "semantics": "delta",
+      "rate_hz": 15.0,
+      "normalization": "none_raw_metric",
+      "components": [
+        "dx",
+        "dy",
+        "dz",
+        "rot6d_0",
+        "rot6d_1",
+        "rot6d_2",
+        "rot6d_3",
+        "rot6d_4",
+        "rot6d_5",
+        "gripper_closed"
+      ]
+    }
+  },
+  "state_provider": {
+    "type": "integrated_action_target",
+    "state_schema": "droid_eef_rpy_gripper_v1",
+    "config": {
+      "action": "native",
+      "requires_embodiment_integrator": true,
+      "output_components": [
+        "state.eef_position",
+        "state.eef_rotation",
+        "state.gripper_position"
+      ]
+    }
+  },
+  "metadata": {
+    "status": "protocol_declared_official_checkpoint",
+    "dataset": "DROID",
+    "world_model_domain": "droid_lerobot",
+    "initial_state_source": "dataset_ground_truth",
+    "view_protocol": "The observation loader must retain three independent DROID views and derive droid.cosmos_composite as wrist on top with half-resolution exterior views below. Generated composites must be split back before the next GR00T query.",
+    "warning": "GR00T's decoded eef_position_delta/eef_rotation_delta match DROID action.cartesian_velocity statistics. The action bridge predicts the resulting pose trajectory from the current measured/predicted EEF pose before constructing Cosmos framewise deltas. The released 20k EMA DROID FD checkpoint consumes those deltas in raw metric units; quantile normalization or clipping is out of distribution."
+  }
+}

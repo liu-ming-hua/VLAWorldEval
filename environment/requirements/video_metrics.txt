@@ -1,0 +1,15 @@
+torch==2.6.0
+torchvision==0.21.0
+lpips==0.1.4
+safetensors==0.6.2
+numpy==1.26.4
+opencv-python==4.11.0.86
+pillow==11.3.0
+scipy==1.15.3
+imageio==2.37.0
+scikit-image==0.25.2
+huggingface-hub==0.36.0
+ultralytics==8.3.221
+einops==0.8.1
+transformers==4.51.3
+mediapy==1.2.4

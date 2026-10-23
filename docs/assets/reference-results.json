@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "purpose": "Compact README native-domain reference table, not a cross-domain ranking",
+  "aggregation": "Values are existing report group means; ranges span all selected groups, not confidence intervals. IWS selects the full 192-frame protocol, not its separate 16-frame protocol.",
+  "physical_validity_certified": false,
+  "records": [
+    {
+      "source_report": "results/checkpoint_capability_v1/budget400_v1/cosmos_metric_report_v2/report.json",
+      "source_sha256": "9dc7953acc4b0183cced19272cbc2b366133243937d476ab72be2f13d451d2f9",
+      "unique_episodes": 400,
+      "selected_group_count": 90,
+      "future_frames": [
+        16,
+        2704
+      ],
+      "ssim_group_mean_range": [
+        0.30132867647046385,
+        0.9513075580810542
+      ],
+      "lpips_group_mean_range": [
+        0.15057296166196465,
+        0.7228522180784039
+      ]
+    },
+    {
+      "source_report": "results/checkpoint_capability_v1/budget400_v1/irasim_metric_report_v2/report.json",
+      "source_sha256": "5e8394df70cc28583858b3ad89980ebfdc5411f11f5ff9e0c4f72ec8ea03ae62",
+      "unique_episodes": 400,
+      "selected_group_count": 26,
+      "future_frames": [
+        15,
+        49
+      ],
+      "ssim_group_mean_range": [
+        0.8258383157345637,
+        0.869196090367294
+      ],
+      "lpips_group_mean_range": [
+        0.15085464596748352,
+        0.19050738607582293
+      ]
+    },
+    {
+      "source_report": "results/checkpoint_capability_v1/budget400_v1/dreamdojo_metric_report_v1/report.json",
+      "source_sha256": "b2fb7adab32a09b61b0d4b4e2582a00b75883a7449507cd7a9504128aafcd925",
+      "unique_episodes": 100,
+      "selected_group_count": 1,
+      "future_frames": [
+        48,
+        48
+      ],
+      "ssim_group_mean_range": [
+        0.7327208845533592,
+        0.7327208845533592
+      ],
+      "lpips_group_mean_range": [
+        0.23937779794447123,
+        0.23937779794447123
+      ]
+    },
+    {
+      "source_report": "results/checkpoint_capability_v1/budget400_v1/ctrl_metric_report_v2/report.json",
+      "source_sha256": "c069bb36f600c1f4f79a16877d58bb574c1cbab29830e9d5c50404c773879933",
+      "unique_episodes": 2,
+      "selected_group_count": 1,
+      "future_frames": [
+        4,
+        4
+      ],
+      "ssim_group_mean_range": [
+        0.77608383096446,
+        0.77608383096446
+      ],
+      "lpips_group_mean_range": [
+        0.19622721261076598,
+        0.19622721261076598
+      ]
+    },
+    {
+      "source_report": "results/checkpoint_capability_v1/iws_report_versioned_v3/report.json",
+      "source_sha256": "c67750590682a79401ad4af9a98258a0d99c6910d250939c383cbfcfbcf5c2d2",
+      "unique_episodes": 10,
+      "selected_group_count": 1,
+      "future_frames": [
+        192,
+        192
+      ],
+      "ssim_group_mean_range": [
+        0.8693172210288715,
+        0.8693172210288715
+      ],
+      "lpips_group_mean_range": [
+        0.12134078758212533,
+        0.12134078758212533
+      ]
+    },
+    {
+      "source_report": "results/checkpoint_capability_v1/worldgym_released_test_report_integrity_v2/report.json",
+      "source_sha256": "6ff46d388226e81bc3bfd312b79a8993cfc18a1650a25919881660661cfc30a6",
+      "unique_episodes": 1,
+      "selected_group_count": 1,
+      "future_frames": [
+        21,
+        21
+      ],
+      "ssim_group_mean_range": [
+        0.8334932981067115,
+        0.8334932981067115
+      ],
+      "lpips_group_mean_range": [
+        0.1299600772677906,
+        0.1299600772677906
+      ]
+    }
+  ]
+}

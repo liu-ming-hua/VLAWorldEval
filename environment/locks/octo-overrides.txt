@@ -1,0 +1,8 @@
+# Match the existing TF 2.19.1 stack and avoid protobuf-6 generated metadata.
+# dlimp still declares TF 2.15 upstream: this is an explicit compatibility
+# override whose action inference is separately acceptance-tested.
+tensorflow==2.19.1
+tensorflow-metadata==1.16.1
+protobuf==5.29.5
+ml-dtypes==0.5.4
+googleapis-common-protos==1.75.0

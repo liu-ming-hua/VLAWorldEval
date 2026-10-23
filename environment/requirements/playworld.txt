@@ -1,0 +1,15 @@
+# Minimal official SVD runtime; no policies, reward servers, or AR stack.
+torch==2.7.1
+torchvision==0.22.1
+diffusers==0.34.0
+transformers==4.53.2
+accelerate==1.10.1
+huggingface-hub==0.34.4
+numpy==1.26.4
+Pillow==11.3.0
+einops==0.8.1
+scipy==1.15.3
+mediapy==1.2.4
+omegaconf==2.3.0
+rich==14.1.0
+pytest==8.4.1

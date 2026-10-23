@@ -1,0 +1,3 @@
+# Keep the community export's Hub ABI. Diffusers is fixed to 0.39.0, which
+# satisfies Cosmos Framework >=0.39 and does not demand incompatible Hub 1.x.
+huggingface-hub==0.34.4

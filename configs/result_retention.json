@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "retired_paths": [
+    "results/integration/open_world_models_20261018/distribution_preview_v1",
+    "results/integration/open_world_models_20261018/delivery_phase_v1",
+    "results/integration/open_world_models_20261018/delivery_phase_v2",
+    "results/integration/open_world_models_20261018/engineering_phase_v1"
+  ],
+  "retire_before_utc": "2026-10-12T07:02:14+00:00",
+  "keep_experiments": [
+    "long_openvla_20261012", "long_spatialvla_20261012", "long_octo_20261012",
+    "long_rt1_x_20261012", "long_groot_cosmos_20261012"
+  ],
+  "retired_experiments": [
+    "droid_framework_v1", "engineering_groot_cosmos_v1", "groot_unified_runtime_split_20261012",
+    "openvla_worldgym_v1", "spatialvla_worldgym_v1", "octo_worldgym_v1", "rt1_x_worldgym_v1"
+  ],
+  "keep_acceptance": ["20261011T152345_598750Z_3c51c1eb", "20261011T152810_500632Z_7449ccf0"],
+  "keep_vla_smoke": ["20260929_151558", "latest.txt"],
+  "keep_delivery_patterns": [
+    "long_*", "repository_*", "*environments*.json", "current_model_asset_hashes_v1.json",
+    "native_ctrl_replay_v2_text", "worldgym_reference_check_20261012_v1.json"
+  ],
+  "gate_scratch_names": ["core_env", "source", "source_workers", "workers", "workspace"],
+  "generated_root_names": ["build", "models", "vlaworldeval.egg-info", ".pytest_cache", ".ruff_cache"]
+}

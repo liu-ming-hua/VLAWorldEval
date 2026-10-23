@@ -1,0 +1,10 @@
+{
+  "model": "Giga-World-1",
+  "source_repository": "https://github.com/open-gigaai/giga-world-1",
+  "source_commit": "external-local-checkout",
+  "source_path": "/data1/liuming/giga-world-1/downloads/Giga-World-1-Toydata",
+  "local_path": "datasets/gigaworld1/official/toydata",
+  "protocol": "official FunCtrl i2v smoke test; first image plus control video; control is Plucker/Ray-Map, not robot joint action",
+  "inference_assets": ["infer_assest/input_image.png", "infer_assest/control_video.mp4"],
+  "training_sample": "toy_train_dataset/pro/episode_000000_453e4c570c_s000000_e000129_0-129_121_480_1920.pt"
+}

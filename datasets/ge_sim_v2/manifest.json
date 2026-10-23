@@ -1,0 +1,10 @@
+{
+  "model": "GE-Sim 2.0",
+  "source_repository": "https://github.com/AgibotTech/GE-Sim-V2",
+  "source_commit": "4a34498",
+  "source_path": "third_party/ge-sim-v2/assets/demo_000",
+  "local_path": "datasets/ge_sim_v2/official/demo_000",
+  "protocol": "official GE-Sim bundle replay; G01 + OmniPicker; calibrated head/left/right views; absolute joint targets",
+  "action_shape": [null, 16],
+  "camera_order": ["cur_head", "cur_left", "cur_right"]
+}

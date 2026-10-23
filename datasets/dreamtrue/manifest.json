@@ -1,0 +1,14 @@
+{
+  "model": "DreamTrue",
+  "source_repository": "https://github.com/brave-eai/DreamTrue",
+  "source_commit": "991e2963c015be9c5b7f21695bb82bfaaceffed8",
+  "dataset_repository": "https://modelscope.cn/datasets/huoxingdawang/DreamTrue",
+  "dataset_revision": "69cabc89029eb5996ba3209bc7071c2b87970252",
+  "source_path": "condition/condition-mini.tar.gz",
+  "local_path": "datasets/dreamtrue/release/condition",
+  "sha256": "c81133b49137b2e2b8d05880abf60275267cc5369963e4d866b8d28583760eb3",
+  "protocol": "dreamtrue.rendered_geometry.threeviews.v1; official RGB + masked uint16 depth + OpenCV camera matrices, 101 padded inclusive frames, actual raw episode reference images; raw action unsupported",
+  "camera_order": ["head", "hand_left", "hand_right"],
+  "status": "conditions_verified; raw/base acquisition and native inference tracked in integration results",
+  "documentation": "docs/models/DREAMTRUE.md"
+}

@@ -1,0 +1,144 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vlaworldeval"
+version = "0.1.0"
+description = "A modular VLA × World Model closed-loop evaluation framework."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE", "LICENSE_SCOPE.md"]
+requires-python = ">=3.10"
+# Upstream WorldGym attribution belongs in README, not this fork's author list.
+dependencies = [
+  "mediapy==1.2.4",
+  "numpy==1.26.4",
+  "tqdm==4.67.1",
+  "pillow==11.3.0",
+  "opencv-python==4.11.0.86",
+  "tomli>=2.0; python_version < '3.11'",
+]
+
+[project.optional-dependencies]
+data-droid = ["pyarrow==25.0.1"]
+worldgym = [
+  "accelerate>=1.10.0", "torch==2.6.0", "torchvision==0.21.0",
+  "einops==0.8.1", "pytorchvideo==0.1.5", "diffusers==0.35.1",
+  "fire==0.7.1", "imageio==2.37.0", "matplotlib==3.10.6",
+  "backports.strenum==1.3.1; python_version < '3.11'",
+]
+scoring = ["openai==1.99.9"]
+openvla = [
+  "torch==2.6.0", "torchvision==0.21.0", "accelerate>=1.10.0",
+  "transformers==4.49.0",
+  "timm==0.9.10",
+]
+spatialvla = [
+  "torch==2.6.0", "torchvision==0.21.0", "accelerate>=1.10.0",
+  "scipy==1.15.3",
+  "transformers==4.48.1",
+]
+rt1 = [
+  "torch==2.6.0",
+  "setuptools==80.10.2",
+  "tensorflow==2.21.0",
+  "tf-agents==0.19.0",
+  "tensorflow-probability==0.24.0",
+  "tf-keras==2.21.0",
+  "tensorflow-hub==0.16.1",
+  "gin-config==0.5.0",
+  "gym==0.23.1",
+  "dm-reverb==0.14.0",
+]
+octo = [
+  "torch==2.6.0",
+  "octo @ git+https://github.com/octo-models/octo.git@241fb3514b7c40957a86d869fecb7c7fc353f540",
+  "dlimp @ git+https://github.com/kvablack/dlimp.git@5edaa4691567873d495633f2708982b42edf1972",
+  "gym>=0.26",
+  "chex==0.1.85",
+  "optax==0.1.5",
+  "tensorflow-probability==0.24.0",
+  "tensorflow==2.19.1",
+  "jax[cuda12]==0.4.29",
+  "distrax==0.1.5",
+  "flax==0.8.4",
+  "ml_collections>=0.1.0",
+  "absl-py>=0.12.0",
+  "scipy==1.12.0",
+  "wandb>=0.12.14",
+  "einops>=0.6.1",
+  "imageio>=2.31.1",
+  "moviepy>=1.0.3",
+  "pre-commit==3.3.3",
+  "transformers==4.49.0",
+  "tensorflow-hub==0.16.1",
+  "tensorflow-text==2.19.0",
+  "tensorflow-datasets==4.9.3",
+  "tensorflow-graphics==2021.12.3",
+  "tf-keras==2.19.0",
+  "tensorflow_keras==0.1",
+  "plotly>=5.16.1",
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.0",
+  "ruff>=0.9",
+]
+
+[project.scripts]
+vlaworldeval = "cli.main:main"
+
+[tool.setuptools]
+package-dir = {"" = "."}
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["adapters*", "cli*", "evaluation*", "vlaworldeval*"]
+
+[tool.setuptools.exclude-package-data]
+"*" = ["*.pt"]
+
+# Small declarative resources, never weights or installed environments.
+[tool.setuptools.data-files]
+"share/vlaworldeval/configs" = ["configs/*.json"]
+"share/vlaworldeval/configs/pairs" = ["configs/pairs/*.json"]
+"share/vlaworldeval/configs/experiments" = ["configs/experiments/*.json"]
+"share/vlaworldeval/configs/acceptance" = ["configs/acceptance/*.json"]
+"share/vlaworldeval/configs/calibration" = ["configs/calibration/*.json"]
+"share/vlaworldeval/configs/kinematics" = ["configs/kinematics/*.json"]
+"share/vlaworldeval/configs/replay" = ["configs/replay/*.json"]
+"share/vlaworldeval/configs/benchmarks" = ["configs/benchmarks/*.json"]
+"share/vlaworldeval/configs/vlas" = ["configs/vlas/*.json"]
+"share/vlaworldeval/configs/world_models" = ["configs/world_models/*.yaml"]
+"share/vlaworldeval/environment" = ["environment/registry.toml"]
+"share/vlaworldeval/environment/locks" = ["environment/locks/*.txt", "environment/locks/*.in"]
+"share/vlaworldeval/environment/requirements" = ["environment/requirements/*.txt"]
+"share/vlaworldeval/datasets/worldgym" = ["datasets/worldgym/manifest.json"]
+"share/vlaworldeval/datasets/cosmos3_droid" = ["datasets/cosmos3_droid/README.md"]
+"share/vlaworldeval/datasets/ctrl_world" = ["datasets/ctrl_world/manifest.json"]
+"share/vlaworldeval/datasets/cosmos3_nano" = ["datasets/cosmos3_nano/manifest.json"]
+"share/vlaworldeval/datasets/gigaworld1" = ["datasets/gigaworld1/manifest.json"]
+"share/vlaworldeval/datasets/gigaworld1_toy" = ["datasets/gigaworld1_toy/manifest.json"]
+"share/vlaworldeval/datasets/ge_sim_v2" = ["datasets/ge_sim_v2/manifest.json"]
+"share/vlaworldeval/datasets/a2world" = ["datasets/a2world/manifest.json"]
+"share/vlaworldeval/datasets/tau0_wm" = ["datasets/tau0_wm/manifest.json"]
+"share/vlaworldeval/datasets/vla_official_smoke" = ["datasets/vla_official_smoke/manifest.json"]
+"share/vlaworldeval/datasets/iws" = ["datasets/iws/manifest.json"]
+"share/vlaworldeval/datasets/dreamdojo" = ["datasets/dreamdojo/manifest.json"]
+"share/vlaworldeval/datasets/playworld" = ["datasets/playworld/manifest.json"]
+"share/vlaworldeval/datasets/dreamtrue" = ["datasets/dreamtrue/manifest.json"]
+"share/vlaworldeval/datasets/irasim" = ["datasets/irasim/manifest.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+exclude = ["third_party", "environment", "results", "checkpoints", "datasets"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "scope": "Native-domain paired replay pilot, seed0; not full paper test-set reproduction or cross-domain model ranking",
+  "cases": [
+    {"id": "dreamdojo_color0", "prepared": "datasets/dreamdojo/prepared_evaluation_v1/color_puzzles"},
+    {"id": "dreamdojo_fold0", "prepared": "datasets/dreamdojo/prepared_evaluation_v1/fold_cloth_long"},
+    {"id": "dreamdojo_mug0", "prepared": "datasets/dreamdojo/prepared_evaluation_v1/mug"},
+    {"id": "iws_val0", "prepared": "datasets/iws/prepared_evaluation_v1/episode0"},
+    {"id": "iws_val1", "prepared": "datasets/iws/prepared_evaluation_v1/episode1"},
+    {"id": "iws_val2", "prepared": "datasets/iws/prepared_evaluation_v1/episode2"},
+    {"id": "irasim_example0", "prepared": "datasets/irasim/prepared_evaluation_v1/example0"},
+    {"id": "worldgym_test2", "prepared": "datasets/worldgym/prepared_evaluation_v1/test2"},
+    {"id": "ctrl_droid0", "prepared": "datasets/ctrl_world/prepared_evaluation_v1/droid0_ffmpeg"},
+    {"id": "ctrl_droid1", "prepared": "datasets/ctrl_world/prepared_evaluation_v1/droid1"},
+    {"id": "ctrl_droid2", "prepared": "datasets/ctrl_world/prepared_evaluation_v1/droid2"},
+    {"id": "dreamtrue_droid0", "prepared": "datasets/dreamtrue/prepared_evaluation_v1/episode0"}
+  ],
+  "unavailable": {
+    "playworld_recorded_replay": "Pinned official preview returns403 GatedRepoError; public benchmark has no action trajectory or real future. No synthetic replacement.",
+    "physical_counterfactual_branches": "Original recorded future cannot score modified actions. Need reset-equivalent separately executed branches; these subsets do not supply such branch truth.",
+    "irasim_full_heldout_test": "Bundled public Language-Table example only in this pilot; not the paper's4562-test-episode/5243-clip corpus."
+  }
+}

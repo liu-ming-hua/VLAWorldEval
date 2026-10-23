@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "pair_id": "groot_n17_droid__cosmos3_nano_droid_fd_v1",
+  "seed": 0,
+  "vla": {
+    "adapter": "GrootN17DroidAdapter",
+    "view_mapping": {
+      "exterior_image_1_left": "droid.exterior_1",
+      "wrist_image_left": "droid.wrist"
+    },
+    "view_mode": "mapping",
+    "squeeze_single_frame": false,
+    "state_schema": "groot_n17_droid_joint_eef9d_v1",
+    "action": {
+      "dimension": 17,
+      "horizon": 40,
+      "representation": "decoded_absolute_eef9d+gripper+joint_position",
+      "frame": "droid_panda_base",
+      "semantics": "absolute_target",
+      "rate_hz": 15,
+      "normalization": "official_groot_n17_decoded"
+    },
+    "history_offsets": [
+      0
+    ]
+  },
+  "action_bridge": {
+    "name": "groot_n17_to_cosmos3_droid_v1",
+    "source": {
+      "dimension": 17,
+      "horizon": 40,
+      "representation": "decoded_absolute_eef9d+gripper+joint_position",
+      "frame": "droid_panda_base",
+      "semantics": "absolute_target",
+      "rate_hz": 15,
+      "normalization": "official_groot_n17_decoded"
+    },
+    "target": {
+      "dimension": 10,
+      "horizon": 16,
+      "representation": "framewise_delta_xyz+opencv_rot6d+flipped_gripper",
+      "frame": "droid_cosmos_opencv",
+      "semantics": "delta",
+      "rate_hz": 15,
+      "normalization": "none_raw_metric",
+      "components": [
+        "dx",
+        "dy",
+        "dz",
+        "rot6d_0",
+        "rot6d_1",
+        "rot6d_2",
+        "rot6d_3",
+        "rot6d_4",
+        "rot6d_5",
+        "gripper_open"
+      ]
+    },
+    "config": {
+      "kinematics": "configs/kinematics/droid_panda_link8_v1.json",
+      "execute_prefix": 16
+    }
+  },
+  "view_bridge": {
+    "name": "droid_cosmos_composite_v1",
+    "output_views": [
+      "droid.cosmos_composite",
+      "droid.exterior_1",
+      "droid.exterior_2",
+      "droid.wrist"
+    ],
+    "config": {
+      "views": {
+        "exterior_1": "droid.exterior_1",
+        "exterior_2": "droid.exterior_2",
+        "wrist": "droid.wrist",
+        "composite": "droid.cosmos_composite"
+      }
+    }
+  },
+  "world_model": {
+    "video": {
+      "fps": 15,
+      "frames_per_chunk": 16
+    },
+    "adapter": "Cosmos3NanoDroidFDAdapter",
+    "view_mapping": {
+      "single_view": "droid.cosmos_composite"
+    },
+    "view_mode": "single",
+    "squeeze_single_frame": true,
+    "output_views": [
+      "droid.cosmos_composite"
+    ],
+    "action": {
+      "dimension": 10,
+      "horizon": 16,
+      "representation": "framewise_delta_xyz+opencv_rot6d+flipped_gripper",
+      "frame": "droid_cosmos_opencv",
+      "semantics": "delta",
+      "rate_hz": 15,
+      "normalization": "none_raw_metric",
+      "components": [
+        "dx",
+        "dy",
+        "dz",
+        "rot6d_0",
+        "rot6d_1",
+        "rot6d_2",
+        "rot6d_3",
+        "rot6d_4",
+        "rot6d_5",
+        "gripper_open"
+      ]
+    },
+    "history_offsets": [
+      0
+    ]
+  },
+  "state_provider": {
+    "type": "integrated_action_target",
+    "state_schema": "groot_n17_droid_joint_eef9d_v1",
+    "config": {
+      "action": "native",
+      "requires_embodiment_integrator": true
+    }
+  },
+  "metadata": {
+    "status": "experimental",
+    "initial_state_source": "dataset_ground_truth",
+    "warning": "Official get_action decodes relative training predictions into absolute targets. Execute only first 16 joint targets, discard 24 tail steps on replanning, ignore redundant EEF action head. State is ideal target proxy, history uses real initial [-15,0] frames then generated history.",
+    "checkpoint_variant": "groot_n17_droid",
+    "task_success_verified": false
+  }
+}

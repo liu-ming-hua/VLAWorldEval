@@ -1,0 +1,605 @@
+{
+  "schema_version": 1,
+  "description": "Public input/output and data-domain contracts used by VLAWorldEval documentation.",
+  "vlas": {
+    "openvla": {
+      "adapter": "OpenVLAAdapter",
+      "environment": "vla.openvla",
+      "input": {
+        "observation": "one RGB image [H,W,3]",
+        "instruction": "natural-language instruction",
+        "state": "not consumed by the current adapter"
+      },
+      "native_output": "Bridge-style action [7] or a model-dependent chunk [T,7]",
+      "adapter_output": "WorldGym-format action [T,10]",
+      "action_semantics": "end-effector xyz + rotation + gripper; Bridge normalization",
+      "training_domain": "Open X-Embodiment mixture; OpenVLA reports about 970k robot episodes",
+      "source": "https://openvla.github.io/",
+      "status": "implemented",
+      "integration": {
+        "level": "supported",
+        "scope": "Declared engineering routes, not installation readiness, physical validity or task success.",
+        "supported_pair_ids": [
+          "openvla__worldgym_bridge_v1"
+        ],
+        "reason": "Bridge/Open-X WorldGym route only; not arbitrary DROID action compatibility."
+      }
+    },
+    "spatialvla": {
+      "adapter": "SpatialVLAAdapter",
+      "environment": "vla.spatialvla",
+      "input": {
+        "observation": "one RGB image [H,W,3]",
+        "instruction": "natural-language instruction",
+        "state": "not passed by the current adapter; upstream supports dataset-specific proprioception encodings"
+      },
+      "native_output": "decoded action [T,7] for the selected checkpoint/statistics",
+      "adapter_output": "WorldGym-format action [T,10]",
+      "action_semantics": "checkpoint/dataset-specific OXE action encoding, converted here through Bridge-style 7-D processing",
+      "training_domain": "about 1.1M real-robot demonstrations from Open X-Embodiment and RH20T",
+      "source": "https://github.com/SpatialVLA/SpatialVLA",
+      "status": "implemented",
+      "integration": {
+        "level": "supported",
+        "scope": "Declared engineering routes, not installation readiness, physical validity or task success.",
+        "supported_pair_ids": [
+          "spatialvla__worldgym_bridge_v1"
+        ],
+        "reason": "Bridge/Open-X WorldGym route only, in the selected statistics space."
+      }
+    },
+    "octo": {
+      "adapter": "OctoAdapter",
+      "environment": "vla.octo",
+      "input": {
+        "observation": "image_primary [1,1,H,W,3]",
+        "instruction": "language task prompt",
+        "state": "not consumed by the current adapter"
+      },
+      "native_output": "action sequence [T,7] sampled by Octo",
+      "adapter_output": "WorldGym-format action [T,10]",
+      "action_semantics": "Bridge dataset action after Octo unnormalization and Bridge rescaling",
+      "training_domain": "800k robot trajectories from the Open X-Embodiment mixture",
+      "source": "https://github.com/octo-models/octo",
+      "status": "implemented",
+      "integration": {
+        "level": "supported",
+        "scope": "Declared engineering routes, not installation readiness, physical validity or task success.",
+        "supported_pair_ids": [
+          "octo__worldgym_bridge_v1"
+        ],
+        "reason": "Bridge/Open-X WorldGym route only; review known near-static video diagnostics."
+      }
+    },
+    "rt1_x": {
+      "adapter": "RT1Adapter",
+      "environment": "vla.rt1",
+      "input": {
+        "observation": "one RGB image; official TF SavedModel resize-with-pad [256,320,3]; recurrent history is maintained in policy state",
+        "instruction": "text + 512-D Universal Sentence Encoder embedding",
+        "state": "not consumed by the current adapter"
+      },
+      "native_output": "one Bridge-style action [7]",
+      "adapter_output": "one WorldGym-format action [1,10]",
+      "action_semantics": "RT-1-X world vector + rotation delta + gripper, then Bridge rescaling",
+      "training_domain": "RT-1-X/Open X-Embodiment robotics mixture",
+      "source": "https://github.com/google-deepmind/open_x_embodiment",
+      "status": "implemented",
+      "integration": {
+        "level": "supported",
+        "scope": "Declared engineering routes, not installation readiness, physical validity or task success.",
+        "supported_pair_ids": [
+          "rt1_x__worldgym_bridge_v1"
+        ],
+        "reason": "Official SavedModel plus explicit WorldGym mapping; inference compatibility overrides are documented."
+      }
+    },
+    "groot_n15": {
+      "adapter": "GrootN15Adapter",
+      "environment": "vla.groot_n15",
+      "input": {
+        "observation": "OXE-DROID: 3 RGB views, each [1,256,256,3]",
+        "instruction": "one natural-language instruction",
+        "state": "EEF position, EEF rotation, and gripper position, each [1,D]"
+      },
+      "native_output": "16-step DROID action dictionary; adapter concatenates configured fields to [16,A]",
+      "adapter_output": "[16,A], still in the selected GR00T embodiment action space",
+      "action_semantics": "EEF translation/rotation deltas plus gripper position for the default OXE-DROID protocol",
+      "training_domain": "NVIDIA GR00T N1.5 cross-embodiment foundation model; the bundled adapter selects its OXE-DROID processor/statistics",
+      "source": "https://github.com/NVIDIA/Isaac-GR00T",
+      "status": "adapter_environment_checkpoint_and_inference_validated",
+      "integration": {
+        "level": "supported",
+        "scope": "Declared engineering routes, not installation readiness, physical validity or task success.",
+        "supported_pair_ids": [
+          "groot_n15__cosmos3_nano_droid_fd_v1"
+        ],
+        "reason": "Baseline Cosmos EEF pair uses a labelled analytical state proxy; the Ctrl pair is experimental."
+      }
+    },
+    "groot_n17": {
+      "adapter": "GrootN17Adapter",
+      "environment": "vla.groot_n17",
+      "input": {
+        "observation": "OXE-DROID: exterior + wrist RGB [1,2,H,W,3] at history offsets [-15,0]",
+        "instruction": "one natural-language instruction",
+        "state": "EEF 9-D, gripper, and 7 joint positions, each [1,1,D]"
+      },
+      "native_output": "40-step DROID action dictionary; adapter concatenates configured fields to [40,A]",
+      "adapter_output": "[40,A], still in the selected GR00T embodiment action space",
+      "action_semantics": "Training uses relative EEF/joints, but official get_action decodes into absolute EEF 9-D, absolute gripper and absolute joint targets. Do not integrate decoded output again.",
+      "training_domain": "NVIDIA GR00T N1.7 generalist checkpoint with an official OXE-DROID relative-action embodiment",
+      "source": "https://github.com/NVIDIA/Isaac-GR00T",
+      "status": "adapter_environment_checkpoint_backbone_and_inference_validated",
+      "integration": {
+        "level": "experimental",
+        "scope": "Declared engineering routes, not installation readiness, physical validity or task success.",
+        "supported_pair_ids": [],
+        "reason": "Registered DROID Cosmos/Ctrl loops use decoded joint targets, temporal history and an explicit state proxy."
+      }
+    },
+    "pi0_droid": {
+      "adapter": "Pi0Adapter",
+      "environment": "vla.openpi",
+      "input": {
+        "observation": "DROID exterior-left + wrist-left RGB",
+        "instruction": "prompt string",
+        "state": "joint_position [7] + gripper_position [1]"
+      },
+      "native_output": "DROID action chunk [10,8]",
+      "adapter_output": "[10,8] without world-model conversion",
+      "action_semantics": "Normalized DROID joint velocity commands, scaled 0.2 rad/control tick by DROID controller; absolute 1=closed gripper. Not joint-position deltas or rad/s.",
+      "training_domain": "Official pi0 checkpoint fine-tuned on DROID",
+      "source": "https://github.com/Physical-Intelligence/openpi",
+      "status": "adapter_environment_checkpoint_and_inference_validated",
+      "integration": {
+        "level": "experimental",
+        "scope": "Declared engineering routes, not installation readiness, physical validity or task success.",
+        "supported_pair_ids": [],
+        "reason": "DROID Cosmos/Ctrl loops require joint-velocity FK, explicit idle tails and proxy feedback."
+      }
+    },
+    "pi05_droid": {
+      "adapter": "Pi05Adapter",
+      "environment": "vla.openpi",
+      "input": {
+        "observation": "DROID exterior-left + wrist-left RGB",
+        "instruction": "prompt string",
+        "state": "joint_position [7] + gripper_position [1]"
+      },
+      "native_output": "DROID action chunk [15,8]",
+      "adapter_output": "[15,8] without world-model conversion",
+      "action_semantics": "Normalized DROID joint velocity commands, scaled 0.2 rad/control tick by DROID controller; absolute 1=closed gripper. Not joint-position deltas or rad/s.",
+      "training_domain": "Official pi0.5 policy fine-tuned for DROID/RoboArena",
+      "source": "https://github.com/Physical-Intelligence/openpi",
+      "status": "adapter_environment_checkpoint_and_inference_validated",
+      "integration": {
+        "level": "experimental",
+        "scope": "Declared engineering routes, not installation readiness, physical validity or task success.",
+        "supported_pair_ids": [],
+        "reason": "DROID Cosmos/Ctrl loops require joint-velocity FK and proxy feedback; engineering execution is not task success."
+      }
+    },
+    "smolvla": {
+      "adapter": "SmolVLAAdapter",
+      "environment": "vla.smolvla",
+      "input": {
+        "observation": "three RGB views named camera1/camera2/camera3, each [3,256,256] before official preprocessing",
+        "instruction": "task string",
+        "state": "observation.state [6]"
+      },
+      "native_output": "continuous action chunk [50,6]",
+      "adapter_output": "[50,6] after official checkpoint unnormalization",
+      "action_semantics": "base-checkpoint normalized 6-D action; robot-specific meaning comes from downstream fine-tuning",
+      "training_domain": "LeRobot community-data base model intended for downstream robot-specific fine-tuning",
+      "source": "https://github.com/huggingface/lerobot",
+      "status": "adapter_environment_checkpoint_and_inference_validated",
+      "integration": {
+        "level": "experimental",
+        "scope": "Declared engineering routes, not installation readiness, physical validity or task success.",
+        "supported_pair_ids": [],
+        "reason": "Native base-checkpoint startup only; no matching robot-specific checkpoint/pair is declared."
+      }
+    },
+    "groot_n17_droid": {
+      "adapter": "GrootN17DroidAdapter",
+      "environment": "vla.groot_n17",
+      "input": {
+        "observation": "DROID specialist: exterior + wrist RGB [1,1,H,W,3], current frame only (delta_indices=[0])",
+        "instruction": "one natural-language instruction",
+        "state": "EEF 9-D, gripper, and 7 joint positions, each [1,1,D]"
+      },
+      "native_output": "40-step DROID action dictionary; adapter concatenates configured fields to [40,A]",
+      "adapter_output": "[40,A], still in the selected GR00T embodiment action space",
+      "action_semantics": "Training uses relative EEF/joints, but official get_action decodes into absolute EEF 9-D, absolute gripper and absolute joint targets. Do not integrate decoded output again.",
+      "training_domain": "Official nvidia/GR00T-N1.7-DROID post-trained checkpoint; distinct from the N1.7 base model",
+      "source": "https://github.com/NVIDIA/Isaac-GR00T",
+      "status": "droid_specialist_ctrl_and_cosmos_closed_loop_engineering_validated",
+      "integration": {
+        "level": "experimental",
+        "scope": "Declared engineering routes, not installation readiness, physical validity or task success.",
+        "supported_pair_ids": [],
+        "reason": "Registered DROID specialist Cosmos/Ctrl loops; current-frame checkpoint, proxy feedback, no scientific quality qualification."
+      }
+    },
+    "pi0_fast_droid": {
+      "adapter": "Pi0FastDroidAdapter",
+      "environment": "vla.openpi",
+      "input": {
+        "observation": "DROID exterior-left + wrist-left RGB",
+        "instruction": "prompt string",
+        "state": "joint_position [7] + gripper_position [1]"
+      },
+      "native_output": "DROID action chunk [10,8]",
+      "adapter_output": "[10,8] without world-model conversion",
+      "action_semantics": "Normalized DROID joint velocity commands, scaled 0.2 rad/control tick by DROID controller; absolute 1=closed gripper. Not joint-position deltas or rad/s.",
+      "training_domain": "Official pi0-FAST DROID checkpoint; mirrored HF bytes must pass official GCS metadata MD5 verification",
+      "source": "https://github.com/Physical-Intelligence/openpi",
+      "status": "official_source_bytes_and_ctrl_cosmos_closed_loop_engineering_validated",
+      "integration": {
+        "level": "experimental",
+        "scope": "Declared engineering routes, not installation readiness, physical validity or task success.",
+        "supported_pair_ids": [],
+        "reason": "Verified DROID mirror bytes and experimental Cosmos/Ctrl loops; idle tails and proxy feedback remain explicit."
+      }
+    },
+    "cosmos_policy_droid": {
+      "adapter": "CosmosDroidPolicyAdapter",
+      "environment": "vla.cosmos_policy_droid",
+      "input": {
+        "observation": "three current DROID RGB views; upstream composes the canonical RoboLab canvas",
+        "instruction": "task prompt",
+        "state": "current joints [7] and closed-gripper [1]"
+      },
+      "native_output": "Decoded absolute joint/gripper commands [32,8]",
+      "adapter_output": "[32,8], raw unclipped commands",
+      "action_semantics": "absolute joint targets and gripper; adapter flips upstream gripper convention once, not a state prediction",
+      "training_domain": "NVIDIA DROID policy post-train; base pretraining is not a held-out DROID guarantee",
+      "source": "https://huggingface.co/nvidia/Cosmos3-Nano-Policy-DROID",
+      "status": "native_policy_inference_and_clean_shutdown_verified_no_pair",
+      "integration": {
+        "level": "experimental",
+        "scope": "Native policy only, no registered WM pair or action-safety qualification.",
+        "supported_pair_ids": [],
+        "reason": "One native [32,8] inference and clean four-GPU worker exit verified; raw gripper can exceed [0,1]; preview decoding was not tested."
+      }
+    },
+    "dreamzero_droid": {
+      "adapter": "DreamZeroDroidAdapter",
+      "environment": "vla.dreamzero",
+      "input": {
+        "observation": "three canonical one-based DROID RGB keys: 1 current frame/view initially, then exactly 4 supplied frames/view",
+        "instruction": "fixed episode prompt, reset before changing task",
+        "state": "current measured or explicitly sourced joints [7] and gripper [1]; missing state rejected"
+      },
+      "native_output": "Decoded absolute joint/gripper commands [24,8], not the padded latent action dimension32",
+      "adapter_output": "[24,8] raw unclipped commands; joint video latents are not exported",
+      "action_semantics": "official GrootSimPolicy unapply restores absolute joint targets; input/history/state must be supplied explicitly",
+      "training_domain": "DreamZero DROID-specific WAM release; three-view DROID embodiment, training overlap unknown",
+      "source": "https://huggingface.co/GEAR-Dreams/DreamZero-DROID",
+      "status": "adapter_contract_tests_only_native_gpu_inference_pending",
+      "integration": {
+        "level": "experimental",
+        "scope": "Adapter implemented and fixture contract-tested; no native GPU acceptance or WM pair.",
+        "supported_pair_ids": [],
+        "reason": "Native IP1/2 keeps complete weights per rank (~42.7GiB payload). Current GPU0–3 free memory is insufficient; TE unavailable unless installed, torch backend must be selected explicitly."
+      }
+    }
+  },
+  "world_models": {
+    "worldgym": {
+      "adapter": "WorldGymAdapter",
+      "environment": "world_models.worldgym",
+      "input": {
+        "observation": "one RGB frame [256,256,3] uint8",
+        "action": "released code/checkpoint tensor [T,10]; paper describes a 7-D end-effector core",
+        "history": "internal sliding context up to 20 frames"
+      },
+      "output": {
+        "video": "future RGB frames [T,256,256,3] uint8",
+        "state": "none"
+      },
+      "training_domain": "nine Open X-Embodiment robot datasets with unified action spaces; Bridge V2 and RT-1 are explicitly named, while the full nine-dataset mixture and proportions are not published",
+      "action_bridge": "OpenVLA/SpatialVLA/Octo/RT-1-X adapters already emit the 10-D project format",
+      "source": "https://arxiv.org/html/2506.00613v3",
+      "status": "implemented",
+      "integration": {
+        "level": "supported",
+        "scope": "Declared engineering routes, not installation readiness, physical validity or task success.",
+        "supported_pair_ids": [
+          "openvla__worldgym_bridge_v1",
+          "spatialvla__worldgym_bridge_v1",
+          "octo__worldgym_bridge_v1",
+          "rt1_x__worldgym_bridge_v1"
+        ],
+        "reason": "Four Bridge/Open-X routes; released training mixture is only partially documented; no state output."
+      }
+    },
+    "ctrl_world": {
+      "adapter": "CtrlWorldAdapter",
+      "environment": "world_models.ctrl_world",
+      "input": {
+        "observation": "three synchronized RGB views, official mosaic [576,320,3] or per-view [192,320,3]",
+        "action": "five-step normalized absolute Cartesian EEF action [5,7]",
+        "history": "official sparse latent/action memory"
+      },
+      "output": {
+        "video": "three-view future video [5,3,192,320,3]",
+        "state": "none"
+      },
+      "training_domain": "DROID, about 95k trajectories across 564 scenes",
+      "action_bridge": "requires a 10-D-to-7-D Cartesian mapper plus three-view input; generic one-view VLA output is not directly compatible",
+      "source": "https://github.com/Robert-gyj/Ctrl-World",
+      "status": "implemented_official_protocol",
+      "integration": {
+        "level": "experimental",
+        "scope": "Declared engineering routes, not installation readiness, physical validity or task success.",
+        "supported_pair_ids": [],
+        "reason": "Native replay and six registered DROID policy loops; fixed-set long-loop quality controls did not qualify."
+      }
+    },
+    "cosmos3_nano": {
+      "adapter": "Cosmos3NanoAdapter",
+      "environment": "world_models.cosmos3_nano",
+      "input": {
+        "observation": "one RGB conditioning image [H,W,3]",
+        "action": "domain-specific chunk; DROID/bridge_orig_lerobot is [T,10]",
+        "history": "autoregressive terminal frame in the project adapter"
+      },
+      "output": {
+        "video": "future RGB video [T,H,W,3]",
+        "state": "none in forward_dynamics mode"
+      },
+      "training_domain": "base Cosmos3-Nano is general-purpose; the DROID forward-dynamics checkpoint is a separate post-trained domain model using DROID/LeRobot data",
+      "action_bridge": "10-D is only directly compatible with a matching DROID/Bridge domain; other VLA spaces need an explicit domain mapper",
+      "source": "https://github.com/NVIDIA/cosmos/tree/main/cookbooks/cosmos3/generator/action",
+      "status": "implemented_base_diffusers_only",
+      "integration": {
+        "level": "experimental",
+        "scope": "Declared engineering routes, not installation readiness, physical validity or task success.",
+        "supported_pair_ids": [],
+        "reason": "Generic base Diffusers/domain adapter, not the DROID EEF post-train; no unified VLA pair."
+      }
+    },
+    "cosmos3_nano_droid_fd_20k_ema": {
+      "adapter": "Cosmos3NanoDroidFDAdapter",
+      "environment": "world_models.cosmos3_nano_droid_fd",
+      "input": {
+        "observation": "DROID three-view composite RGB: wrist full-width on top, two half-size exterior views below; source 540x640, bucketed to 544x736",
+        "action": "exactly [16,10] raw metric [relative_xyz, OpenCV_rot6d, flipped_gripper], padded internally to [16,64]",
+        "history": "one conditioning composite frame per 17-frame window; terminal generated composite is used by project-level autoregression"
+      },
+      "output": {
+        "video": "16 future composite RGB frames at 15 FPS",
+        "state": "none; released training sets use_state=false"
+      },
+      "training_domain": "nvidia/Cosmos3-DROID, Franka Panda + Robotiq 2F-85, three synchronized views, 15 FPS; 20k-step EMA release",
+      "action_bridge": "domain id 8 (droid_lerobot); raw actions only, with no quantile normalization or clipping",
+      "source": "https://huggingface.co/jere-mybao/cosmos3-nano-droid-forward-dynamics",
+      "status": "long_closed_loop_engineering_verified_with_explicit_state_proxy",
+      "integration": {
+        "level": "supported",
+        "scope": "Declared engineering routes, not installation readiness, physical validity or task success.",
+        "supported_pair_ids": [
+          "groot_n15__cosmos3_nano_droid_fd_v1"
+        ],
+        "reason": "Baseline GR00T N1.5 route plus experimental DROID pairs. Community EEF FD, not NVIDIA's policy/base checkpoint; long-loop quality is not established."
+      }
+    },
+    "cosmos3_droid_joint_fd_best5600": {
+      "adapter": "Cosmos3DroidJointFDAdapter",
+      "environment": "world_models.cosmos3_droid_joint_fd",
+      "input": {
+        "observation": "Current DROID wrist-top/exteriors-bottom RGB composite [540,640,3] and measured initial joints [7]/gripper [1]",
+        "action": "32 raw absolute joint/gripper targets [32,8]; adapter flips closed-gripper convention exactly once and prepends current state, internally padded to [33,64]",
+        "history": "one initial image; subsequent images generated; subsequent joints/gripper are last-command proxies, not predicted states"
+      },
+      "output": {
+        "video": "32 future composite RGB frames per call at 15 FPS; missing decoded bottom/right border edge-filled without stretching views",
+        "state": "none; use_state is an INPUT conditioning flag, not a predicted state output"
+      },
+      "training_domain": "Community anshks DROID joint_pos FD post-train; model card reports 92,233 multi-view DROID episodes, use_state=true, recommended best-iter5600 export; episode350 training overlap unknown",
+      "action_bridge": "Native recorded-command replay verified; VLA pair bridge and closed-loop admission not yet registered",
+      "source": "https://huggingface.co/anshks/cosmos3-nano-droid-fd-wm",
+      "status": "native_recorded_action_autoregressive_replay_verified_not_vla_pair",
+      "integration": {
+        "level": "native_replay",
+        "scope": "Declared engineering routes, not installation readiness, physical validity or task success.",
+        "supported_pair_ids": [],
+        "reason": "Four recorded-command autoregressive chunks verified; state input is not state output; no VLA pair."
+      }
+    },
+    "a2world": {
+      "adapter": "A2WorldAdapter",
+      "environment": "world_models.a2world",
+      "input": {
+        "observation": "two or three synchronized RGB views, resized to [V,256,256,3]",
+        "action": "20-step action chunk [20,14]",
+        "history": "optional history/action-path conditioning for the LIBERO variant"
+      },
+      "output": {
+        "video": "future multi-view RGB video [T,V,256,256,3]",
+        "state": "none; history features are conditioning, not predicted state"
+      },
+      "training_domain": "public release describes more than 2.1M manipulation trajectories across 20+ embodiments; released workflows include heterogeneous pretraining and LIBERO variants",
+      "action_bridge": "requires a project-specific mapper to 14-D and matching camera IDs [2,0] or [2,0,3]",
+      "source": "https://github.com/LogosRoboticsGroup/A2World",
+      "status": "implemented_official_protocol",
+      "integration": {
+        "level": "experimental",
+        "scope": "Declared engineering routes, not installation readiness, physical validity or task success.",
+        "supported_pair_ids": [],
+        "reason": "Official 20x14 native sample/adapter; NVIDIA base tokenizer acquisition currently requires external gated access; no unified VLA pair."
+      }
+    },
+    "ge_sim_v2": {
+      "adapter": "GESimV2Adapter",
+      "environment": "world_models.ge_sim_v2",
+      "input": {
+        "observation": "calibrated G01 episode bundle: three views [3,384,512,3] plus camera/FK assets",
+        "action": "absolute joint target [T,16] in the official G01 layout",
+        "history": "official server-side trajectory conditioning"
+      },
+      "output": {
+        "video": "three-view RGB video [T,3,384,512,3]",
+        "state": "Pose-Expert predicted state [T,16]"
+      },
+      "training_domain": "broad real-world robot data; released v2.0 checkpoint is specialized for G01 + OmniPicker",
+      "action_bridge": "generic VLA output is not directly compatible; requires embodiment/action mapper, calibration, FK assets, and three views",
+      "source": "https://github.com/AgibotTech/GE-Sim-V2",
+      "status": "implemented_official_protocol",
+      "integration": {
+        "level": "native_replay",
+        "scope": "Declared engineering routes, not installation readiness, physical validity or task success.",
+        "supported_pair_ids": [],
+        "reason": "Model-specific G01/OmniPicker server/client replay with calibration/FK bundle and state output; no generic DROID pair."
+      }
+    },
+    "tau0_wm_simulator": {
+      "adapter": "Tau0WMSimulatorAdapter",
+      "environment": "world_models.tau0_wm_simulator",
+      "input": {
+        "observation": "synchronized RGB views sent as [V,3,192,256]",
+        "action": "20-D relative dual-arm EEF action [T,20]; server appends six whole-body channels to make 26-D model input",
+        "history": "server-side memory enabled by the simulator config"
+      },
+      "output": {
+        "video": "terminal generated views plus optional server video artifact",
+        "state": "none"
+      },
+      "training_domain": "released simulator endpoint and separate TacoPlay post-training workflows; exact released simulator mixture is not fully specified in the public contract",
+      "action_bridge": "7-D TacoPlay data and generic 7/10-D VLA actions are not compatible with the released 20-D simulator API",
+      "source": "https://github.com/sii-research/tau-0-wm",
+      "status": "implemented_server_client",
+      "integration": {
+        "level": "experimental",
+        "scope": "Declared engineering routes, not installation readiness, physical validity or task success.",
+        "supported_pair_ids": [],
+        "reason": "Released 20-D dual-arm API; local 7-D TacoPlay sample is incompatible. Zero-action server smoke is not a real-action task benchmark."
+      }
+    },
+    "dreamdojo_2b_gr1": {
+      "adapter": "DreamDojoAdapter",
+      "environment": "world_models.dreamdojo",
+      "input": {
+        "observation": "one initial GR1 ego RGB [480,640,3]",
+        "action": "native GR1 encoded action [12,384]: 29 normalized joint channels plus unused zero slots; four-frame block-relative conditions and official initial-state row",
+        "history": "default13-frame single window; explicit native_multiround supports49 frames in four12-action rounds, with a single global initial-state alias"
+      },
+      "output": {"video": "12 future ego RGB frames [12,480,640,3] per call", "state": "none"},
+      "training_domain": "Large-scale egocentric human video pretraining and GR1 robot post-training; selected release is 2B_GR1_post-train, not DROID, a 14B model or distilled student",
+      "action_bridge": "No generic arm/VLA bridge: requires the released GR1 joint encoding and checkpoint statistics",
+      "source": "https://github.com/NVIDIA/DreamDojo",
+      "status": "official_gr1_native_window_generation_verified_no_quality_approval",
+      "integration": {
+        "level": "native_replay",
+        "scope": "Official 2B GR1 native protocol only; no general-arm policy pair or paper reliability reproduction.",
+        "supported_pair_ids": [],
+        "reason": "Native13 and explicit native49 replay verified with35 steps and clean worker exit; global initial-state alias and official transform parity checked. Complete released100-sample In-lab evaluation is separately tracked; generic VLA pairing and physical reliability remain unverified."
+      }
+    },
+    "iws_pusht_cam1": {
+      "adapter": "IWSAdapter",
+      "environment": "world_models.iws",
+      "input": {
+        "observation": "one initial camera_1_color RGB, official square crop and area resize to [128,128,3]",
+        "action": "raw absolute bimanual world-frame XY targets [1,4]; checkpoint normalization and official command bounds",
+        "history": "official observed-joint FK seeds native actions/history, followed by predicted latent feedback; no recorded future-image feedback"
+      },
+      "output": {"video": "one predicted RGB [1,128,128,3] per step", "state": "none"},
+      "training_domain": "Task-specific real ALOHA PushT play; not an arbitrary DROID or general 6-DoF manipulation checkpoint",
+      "action_bridge": "No generic VLA bridge declared; native official task commands only",
+      "source": "https://github.com/WangYixuan12/interactive_world_sim",
+      "status": "official_fk_native_replay_20_calls_verified_no_quality_approval",
+      "integration": {
+        "level": "native_replay",
+        "scope": "Native official-example integration only; registration does not certify dynamics or a VLA pair.",
+        "supported_pair_ids": [],
+        "reason": "Official observed-joint FK to 4-D world XY, 20 generated-latent autoregressive calls and clean worker exit verified; no policy pair or task-success claim."
+      }
+    },
+    "playworld_svd": {
+      "adapter": "PlayWorldAdapter",
+      "environment": "world_models.playworld",
+      "input": {
+        "observation": "three actual RGB views: exterior_right, exterior_left, wrist, each [192,320,3]",
+        "action": "15 raw absolute XYZ/RPY/gripper samples [15,7]; official runtime selects [0,3,6,9,12]",
+        "history": "official VidWM latent history; source-version timing retained, not relabelled as Ctrl v2"
+      },
+      "output": {"video": "five generated frames per view [5,3,192,320,3]", "state": "none"},
+      "training_domain": "DROID-initialized SVD with authors' real robot-play collection; public benchmark and preview are not the full training corpus",
+      "action_bridge": "No generic VLA pair; native Cartesian commands and exact view layout required",
+      "source": "https://github.com/irom-princeton/open-world",
+      "status": "native_benchmark_initialization_hold_and_synthetic_probe_verified",
+      "integration": {
+        "level": "native_replay",
+        "scope": "SVD release only, not later AR checkpoints or quality approval.",
+        "supported_pair_ids": [],
+        "reason": "Official initialization with hold and synthetic x+2cm probes generated three-view videos; preview trajectory data is gated. Not recorded-action task replay, policy pairing or task success."
+      }
+    },
+    "dreamtrue_threeview_v1": {
+      "adapter": "DreamTrueAdapter",
+      "environment": "world_models.dreamtrue",
+      "input": {
+        "observation": "three actual initial RGB views [3,240,320,3] plus text prompt",
+        "action": "rendered geometry condition per view: RGB, uint16 depth, per-frame intrinsics and extrinsics; not a raw vector action",
+        "history": "101-frame official inclusive geometry-conditioned clip"
+      },
+      "output": {"video": "native inclusive three-view RGB [n_real_frames,3,240,320,3] after removing official front padding from the 101-frame model clip", "state": "none"},
+      "training_domain": "AgiBot, DROID, RoboMIND and RoboTwin robot video with rendered geometry conditions; mini conditions do not include all upstream raw RGB",
+      "action_bridge": "Requires calibrated robot geometry rendering. Generic numeric-action native replay v1 and VLA pairs are not declared compatible",
+      "source": "https://github.com/brave-eai/DreamTrue",
+      "status": "official_geometry_sample_50_step_generation_verified_cleanup_limitation_recorded",
+      "integration": {
+        "level": "native_replay",
+        "scope": "Public dual-LoRA inference integration; no training pipeline or policy-ranking reproduction claimed.",
+        "supported_pair_ids": [],
+        "reason": "Official geometry-conditioned sample generated three 44-frame videos with 50 steps; first run required SIGTERM after video save during interpreter shutdown. Requires calibrated rendered geometry and exact reference views; numeric-action native replay v1 and VLA pairing remain unsupported."
+      }
+    },
+    "irasim_languagetable_frame_ada": {
+      "adapter": "IRASimAdapter",
+      "environment": "world_models.irasim",
+      "input": {
+        "observation": "initial RGB resized to [288,512,3], or the exact released initial VAE latent [4,36,64] with decoded initial RGB",
+        "action": "15 raw metric XY translations [15,2], official Language-Table scaler x20",
+        "history": "16-frame inclusive inference window, retaining predicted terminal latent for the next call"
+      },
+      "output": {"video": "15 future RGB frames [15,288,512,3] per chunk", "state": "none"},
+      "training_domain": "Public Language-Table Frame-Ada release; separate RT1/Bridge archives exist, but this is not the v2 LIBERO policy-evaluation checkpoint",
+      "action_bridge": "No generic DROID/VLA bridge; raw 2-D Language-Table command protocol only",
+      "source": "https://github.com/bytedance/IRASim",
+      "status": "official_sample_50_step_native_generation_verified",
+      "integration": {
+        "level": "native_replay",
+        "scope": "Published archive version and native sample only, not reproduction of v2 policy rankings.",
+        "supported_pair_ids": [],
+        "reason": "Selected archive checkpoint and official Language-Table sample generated 15 future frames with 50 inference steps and clean worker exit. No policy pair, calibrated physical timing or v2 ranking reproduction."
+      }
+    },
+    "gigaworld1": {
+      "adapter": "GigaWorld1Adapter",
+      "environment": "world_models.gigaworld1",
+      "input": {
+        "observation": "initial RGB image plus native camera/Plucker/Ray-Map control video",
+        "action": "no native robot-action tensor contract",
+        "history": "pipeline-specific control-video conditioning"
+      },
+      "output": {
+        "video": "generated RGB video",
+        "state": "none"
+      },
+      "training_domain": "heterogeneous internet/physics video, robot data, egocentric hand data, and Giga multi-view robot demonstrations",
+      "action_bridge": "requires calibrated project-specific robot-action-to-control-video conversion; the static Toydata control video is smoke-only",
+      "source": "https://github.com/open-gigaai/giga-world-1",
+      "status": "control_video_only",
+      "integration": {
+        "level": "incompatible",
+        "scope": "Declared engineering routes, not installation readiness, physical validity or task success.",
+        "supported_pair_ids": [],
+        "reason": "Scope is the current robot-action-tensor policy loop only: release consumes a camera/control video. Native control-video inference remains a separate path."
+      }
+    }
+  }
+}

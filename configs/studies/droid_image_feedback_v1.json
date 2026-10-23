@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "study_id": "droid_image_feedback_v1",
+  "dataset": "datasets/cosmos3_droid/success",
+  "source_study": "results/studies/droid_positive_controls_v1",
+  "joint_source": "results/studies/droid_wm_positive_controls_v2/joint_fd/ep000903/full_input.npz",
+  "start_frame": 15,
+  "source_fps": 15,
+  "seed": 0,
+  "allowed_gpus": [0, 1, 2, 3],
+  "cases": [
+    {"id": "ctrl_ep795", "model": "ctrl", "episode": 795, "chunks": 19, "source_stride": 15},
+    {"id": "cosmos_eef_ep903", "model": "cosmos", "episode": 903, "chunks": 17, "source_stride": 16},
+    {"id": "cosmos_joint_ep903", "model": "cosmos_joint_fd", "episode": 903, "chunks": 8, "source_stride": 32}
+  ],
+  "modes": ["autoregressive", "ground_truth_visual_context"],
+  "state_intervention": "none; retain last-command proxy for joint FD",
+  "ctrl_history_intervention": "replace each terminal visual memory slot with real boundary image; preserve sparse indices, action memory and history length",
+  "rng_policy": "same fresh-worker seed per arm; preserve RNG during extra Ctrl VAE encoding; do not reset step indices",
+  "scientific_use": "diagnostic only; GT-visual arm is not closed loop or a benchmark score"
+}

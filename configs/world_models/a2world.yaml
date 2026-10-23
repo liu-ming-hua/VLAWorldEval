@@ -1,0 +1,15 @@
+# Project-local A2World defaults.
+checkpoint: checkpoints/world_models/a2world/a2world-pretrained.pt
+base_checkpoints: checkpoints/world_models/a2world/base
+variant: pretrained
+repo_path: third_party/a2world/world_model
+device: cuda
+view_ids: [2, 0, 3]
+width: 256
+height: 256
+fps: 10
+history: true
+history_length: 20
+num_sampling_steps: 35
+guidance: 0.0
+seed: 0

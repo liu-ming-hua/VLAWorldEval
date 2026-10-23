@@ -1,0 +1,8 @@
+{
+  "model": "Giga-World-1",
+  "dataset": "open-gigaai/Giga-World-1-Toydata",
+  "sample": "toy_train_dataset/pro/episode_000000_453e4c570c_s000000_e000129_0-129_121_480_1920.pt",
+  "inference_assets": ["infer_assets/input_image.png", "infer_assets/control_video.mp4"],
+  "download_endpoint": "https://hf-mirror.com",
+  "note": "GigaWorld-1 control-video/Ray-Map sample; not a direct robot-action-conditioned sample."
+}

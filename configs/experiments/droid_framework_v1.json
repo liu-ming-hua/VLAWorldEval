@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "suite_id": "droid_framework_v1",
+  "pair_manifest": "configs/pairs/groot_n15__cosmos3_droid.json",
+  "dataset": {
+    "root": "datasets/cosmos3_droid/success",
+    "episodes": [0],
+    "start_frame": 30,
+    "fps": 15,
+    "tail_policy": "drop_incomplete_chunk"
+  },
+  "runtime": {
+    "vla_environment": "vla.groot_n15",
+    "world_model_environment": "world_models.cosmos3_nano_droid_fd",
+    "world_model_worker_options": {"shutdown_grace_seconds": 30},
+    "vla_gpus": [1],
+    "world_model_gpus": [0, 1, 2, 3],
+    "execution": "persistent_isolated_workers",
+    "scheduling": "sequential_vla_world_model",
+    "max_process_memory_gib_per_gpu": 20,
+    "world_model_checkpoint": "checkpoints/world_models/cosmos3_nano_droid_fd/community_jere_mybao_v1_20k_ema"
+  },
+  "sampling": {
+    "num_inference_steps": 30,
+    "guidance": 1.0,
+    "shift": 10.0,
+    "image_size": 480,
+    "resolution": "480",
+    "diffusion_cache": false,
+    "torch_compile": false
+  },
+  "seeds": [0, 1, 2],
+  "output_root": "results/experiments/droid_framework_v1",
+  "experiments": [
+    {"id": "wm_real_smoke", "mode": "wm_replay", "action_source": "dataset_pose_derived", "state_provider": "none", "chunks": 3, "seeds": [0]},
+    {"id": "wm_real_long", "mode": "wm_replay", "action_source": "dataset_pose_derived", "state_provider": "none", "chunks": 20},
+    {"id": "wm_action_shuffle", "mode": "wm_replay", "action_source": "shuffle_valid_dataset_actions", "state_provider": "none", "chunks": 20},
+    {"id": "wm_no_motion", "mode": "wm_replay", "action_source": "zero_translation_identity_rotation_preserve_gripper", "state_provider": "none", "chunks": 20},
+    {"id": "loop_integrated_smoke", "mode": "policy_loop", "action_source": "vla", "state_provider": "integrated_action_target", "chunks": 3, "seeds": [0]},
+    {"id": "loop_integrated_long", "mode": "policy_loop", "action_source": "vla", "state_provider": "integrated_action_target", "chunks": 20},
+    {"id": "loop_hold_initial", "mode": "policy_loop", "action_source": "vla", "state_provider": "hold_initial", "chunks": 20},
+    {"id": "wm_real_30_chunks", "mode": "wm_replay", "action_source": "dataset_pose_derived", "state_provider": "none", "chunks": 30, "episodes": [5], "seeds": [0]}
+  ]
+}

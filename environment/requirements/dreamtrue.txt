@@ -1,0 +1,26 @@
+# Tested integration of DreamTrue wmvideo at 991e2963c015be9c5b7f21695bb82bfaaceffed8.
+# No DeepSpeed: official single-process inference does not import it.
+torch==2.6.0
+torchvision==0.21.0
+transformers==4.51.3
+accelerate==1.6.0
+peft==0.10.0
+datasets==3.5.0
+safetensors==0.5.3
+einops==0.8.1
+imageio==2.37.0
+imageio-ffmpeg==0.6.0
+pandas==2.2.3
+ftfy==6.3.1
+sentencepiece==0.2.0
+protobuf==5.29.4
+modelscope==1.25.0
+h5py==3.13.0
+hdf5plugin==5.1.0
+yq==3.4.3
+numpy==1.26.4
+pillow==11.1.0
+pyyaml==6.0.2
+pytest==8.3.5
+mediapy==1.2.2
+opencv-python-headless==4.11.0.86

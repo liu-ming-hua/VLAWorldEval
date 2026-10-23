@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "repository": "https://github.com/Physical-Intelligence/openpi",
+  "revision": "215abfb217dbac7d5f1273282331b9b1866c0479",
+  "source_path": "third_party/openpi",
+  "environment": "vla.openpi",
+  "models": {
+    "pi0_droid": {
+      "checkpoint_source": "gs://openpi-assets/checkpoints/pi0_droid",
+      "checkpoint": "checkpoints/vla/openpi/pi0-droid",
+      "input": "DROID: exterior_image_1_left RGB, wrist_image_left RGB, joint_position [7], gripper_position [1], prompt",
+      "output": "normalized joint velocity commands + absolute 1=closed gripper [10,8]"
+    },
+    "pi05_droid": {
+      "checkpoint_source": "gs://openpi-assets/checkpoints/pi05_droid",
+      "checkpoint": "checkpoints/vla/openpi/pi05-droid",
+      "input": "DROID: exterior_image_1_left RGB, wrist_image_left RGB, joint_position [7], gripper_position [1], prompt",
+      "output": "normalized joint velocity commands + absolute 1=closed gripper [15,8]"
+    }
+  }
+}

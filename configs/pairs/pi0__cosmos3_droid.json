@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "pair_id": "pi0__cosmos3_nano_droid_fd_v1",
+  "seed": 0,
+  "vla": {
+    "adapter": "Pi0Adapter",
+    "view_mapping": {
+      "observation/exterior_image_1_left": "droid.exterior_1",
+      "observation/wrist_image_left": "droid.wrist"
+    },
+    "view_mode": "mapping",
+    "squeeze_single_frame": true,
+    "state_schema": "droid_openpi_joint_gripper_eef_v1",
+    "action": {
+      "dimension": 8,
+      "horizon": 10,
+      "representation": "normalized_joint_velocity+absolute_closed_gripper",
+      "frame": "droid_panda_controller",
+      "semantics": "normalized_joint_velocity_with_absolute_gripper",
+      "rate_hz": 15,
+      "normalization": "openpi_droid_decoded",
+      "components": [
+        "joint_velocity_1",
+        "joint_velocity_2",
+        "joint_velocity_3",
+        "joint_velocity_4",
+        "joint_velocity_5",
+        "joint_velocity_6",
+        "joint_velocity_7",
+        "gripper_closed"
+      ]
+    }
+  },
+  "action_bridge": {
+    "name": "openpi_to_cosmos3_droid_v1",
+    "source": {
+      "dimension": 8,
+      "horizon": 10,
+      "representation": "normalized_joint_velocity+absolute_closed_gripper",
+      "frame": "droid_panda_controller",
+      "semantics": "normalized_joint_velocity_with_absolute_gripper",
+      "rate_hz": 15,
+      "normalization": "openpi_droid_decoded",
+      "components": [
+        "joint_velocity_1",
+        "joint_velocity_2",
+        "joint_velocity_3",
+        "joint_velocity_4",
+        "joint_velocity_5",
+        "joint_velocity_6",
+        "joint_velocity_7",
+        "gripper_closed"
+      ]
+    },
+    "target": {
+      "dimension": 10,
+      "horizon": 16,
+      "representation": "framewise_delta_xyz+opencv_rot6d+flipped_gripper",
+      "frame": "droid_cosmos_opencv",
+      "semantics": "delta",
+      "rate_hz": 15,
+      "normalization": "none_raw_metric",
+      "components": [
+        "dx",
+        "dy",
+        "dz",
+        "rot6d_0",
+        "rot6d_1",
+        "rot6d_2",
+        "rot6d_3",
+        "rot6d_4",
+        "rot6d_5",
+        "gripper_open"
+      ]
+    },
+    "config": {
+      "kinematics": "configs/kinematics/droid_panda_link8_v1.json",
+      "joint_delta_per_control_tick": 0.2,
+      "tail_policy": "zero_velocity_hold_gripper"
+    }
+  },
+  "view_bridge": {
+    "name": "droid_cosmos_composite_v1",
+    "output_views": [
+      "droid.cosmos_composite",
+      "droid.exterior_1",
+      "droid.exterior_2",
+      "droid.wrist"
+    ],
+    "config": {
+      "views": {
+        "exterior_1": "droid.exterior_1",
+        "exterior_2": "droid.exterior_2",
+        "wrist": "droid.wrist",
+        "composite": "droid.cosmos_composite"
+      }
+    }
+  },
+  "world_model": {
+    "video": {
+      "fps": 15,
+      "frames_per_chunk": 16
+    },
+    "adapter": "Cosmos3NanoDroidFDAdapter",
+    "view_mapping": {
+      "single_view": "droid.cosmos_composite"
+    },
+    "view_mode": "single",
+    "squeeze_single_frame": true,
+    "output_views": [
+      "droid.cosmos_composite"
+    ],
+    "action": {
+      "dimension": 10,
+      "horizon": 16,
+      "representation": "framewise_delta_xyz+opencv_rot6d+flipped_gripper",
+      "frame": "droid_cosmos_opencv",
+      "semantics": "delta",
+      "rate_hz": 15,
+      "normalization": "none_raw_metric",
+      "components": [
+        "dx",
+        "dy",
+        "dz",
+        "rot6d_0",
+        "rot6d_1",
+        "rot6d_2",
+        "rot6d_3",
+        "rot6d_4",
+        "rot6d_5",
+        "gripper_open"
+      ]
+    }
+  },
+  "state_provider": {
+    "type": "integrated_action_target",
+    "state_schema": "droid_openpi_joint_gripper_eef_v1",
+    "config": {
+      "action": "native",
+      "requires_embodiment_integrator": true
+    }
+  },
+  "metadata": {
+    "status": "experimental_protocol_registered_not_full_wm_validated",
+    "dataset": "DROID",
+    "world_model_domain": "droid_lerobot",
+    "initial_state_source": "dataset_ground_truth",
+    "warning": "Ideal DROID controller target proxy, not measured or video-predicted state. Clip joint commands, binarize 1=closed gripper, scale 0.2 rad/control tick and saturate joint limits. Execute all native steps then zero-velocity hold for the remaining Cosmos steps. Gripper is flipped once to Cosmos 1=open. FK admission checks measured EEF against link8 across the episode. No contact/lag model."
+  }
+}

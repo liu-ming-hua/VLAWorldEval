@@ -1,0 +1,22 @@
+{
+  "study_id": "cosmos_event_windows_v1",
+  "parent": "results/studies/cosmos_horizon_v1",
+  "dataset": "datasets/cosmos3_droid/success",
+  "allowed_gpus": [0, 1, 2, 3],
+  "new_seeds": [1, 2],
+  "source_ticks": 64,
+  "fps": 15,
+  "models": ["eef", "joint"],
+  "selection": "First measured gripper upward crossing0.5 after frame15;32 ticks before/after, chosen without generated outcomes",
+  "cases": [
+    {"episode": 0, "event": 148, "start": 116, "end": 180},
+    {"episode": 351, "event": 116, "start": 84, "end": 148},
+    {"episode": 365, "event": 82, "start": 50, "end": 114},
+    {"episode": 795, "event": 196, "start": 164, "end": 228},
+    {"episode": 903, "event": 86, "start": 54, "end": 118}
+  ],
+  "state_intervention": "none; joint initial measured q then last-command proxy",
+  "event_label": "sensor candidate, not verified contact or success",
+  "train_overlap": "unknown",
+  "quality_gate": "Source-event relevance and generated visual/contact validity reviewed separately; no automatic admission"
+}

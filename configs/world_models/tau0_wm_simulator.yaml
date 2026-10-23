@@ -1,0 +1,15 @@
+# τ₀-WM Action-Conditioned Video Simulator (20-D API / 26-D model input).
+# The simulator is a websocket server; start it with:
+#   bash scripts/serve/tau0_wm_simulator.sh 127.0.0.1 8002
+model_name: tau0_wm_simulator_relative_eef
+host: 127.0.0.1
+port: 8002
+action_dim: 20
+action_horizon: 33
+image_size: [192, 256]
+num_inference_steps: 25
+execution_step: 30
+sample_solver: unipc
+shift: 5.0
+guide_scale: 1.0
+instruction: ""

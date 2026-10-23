@@ -1,0 +1,10 @@
+{
+  "model": "A2World",
+  "source_repository": "https://github.com/LogosRoboticsGroup/A2World",
+  "source_commit": "077e10a",
+  "source_path": "third_party/a2world/world_model/examples/assets/pretrained/droid",
+  "local_path": "datasets/a2world/official/droid",
+  "protocol": "official a2world-demo pretrained replay; 3 initial RGB views; 20 future actions; pretrained checkpoint view IDs [2,0,3]",
+  "action_shape": [20, 14],
+  "camera_order": ["exterior_1", "wrist", "exterior_2"]
+}

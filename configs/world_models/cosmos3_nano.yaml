@@ -1,0 +1,9 @@
+# Project-local Cosmos3-Nano forward-dynamics defaults.
+model_path: checkpoints/world_models/cosmos3_nano/Cosmos3-Nano
+domain_name: bridge_orig_lerobot
+resolution_tier: 480
+view_point: ego_view
+fps: 5.0
+num_inference_steps: 30
+guidance_scale: 1.0
+enable_safety_check: false

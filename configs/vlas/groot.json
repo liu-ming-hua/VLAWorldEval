@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "models": {
+    "groot_n15": {
+      "repository": "https://github.com/NVIDIA/Isaac-GR00T",
+      "revision": "n1.5-release",
+      "source_path": "third_party/isaac-groot-n15",
+      "environment": "vla.groot_n15",
+      "checkpoint_source": "nvidia/GR00T-N1.5-3B",
+      "checkpoint": "checkpoints/vla/groot/n1.5-3b",
+      "default_protocol": "oxe_droid",
+      "input": {
+        "video": {
+          "keys": [
+            "video.exterior_image_1",
+            "video.exterior_image_2",
+            "video.wrist_image"
+          ],
+          "shape_each": "[1,256,256,3] uint8"
+        },
+        "state": {
+          "keys": [
+            "state.eef_position",
+            "state.eef_rotation",
+            "state.gripper_position"
+          ],
+          "shape_each": "[1,D] float32"
+        },
+        "language": "one instruction"
+      },
+      "output": {
+        "keys": [
+          "action.eef_position_delta",
+          "action.eef_rotation_delta",
+          "action.gripper_position"
+        ],
+        "shape": "[16,A] after ordered concatenation"
+      }
+    },
+    "groot_n17": {
+      "repository": "https://github.com/NVIDIA/Isaac-GR00T",
+      "revision": "n1.7-release",
+      "source_path": "third_party/isaac-groot-n17",
+      "environment": "vla.groot_n17",
+      "checkpoint_source": "nvidia/GR00T-N1.7-3B",
+      "checkpoint": "checkpoints/vla/groot/n1.7-3b",
+      "gated_backbone_source": "nvidia/Cosmos-Reason2-2B",
+      "gated_backbone_cache": ".cache/huggingface",
+      "default_protocol": "OXE_DROID_RELATIVE_EEF_RELATIVE_JOINT",
+      "input": {
+        "video": {
+          "keys": [
+            "exterior_image_1_left",
+            "wrist_image_left"
+          ],
+          "shape_each": "[1,2,H,W,3] uint8; history offsets [-15,0]"
+        },
+        "state": {
+          "keys": [
+            "eef_9d",
+            "gripper_position",
+            "joint_position"
+          ],
+          "shape_each": "[1,1,D] float32"
+        },
+        "language": "one instruction"
+      },
+      "output": {
+        "keys": [
+          "eef_9d",
+          "gripper_position",
+          "joint_position"
+        ],
+        "shape": "[40,A] after ordered concatenation",
+        "semantics": "get_action returns decoded absolute EEF/joint targets despite relative training representation"
+      },
+      "warning": "The official runtime loads Cosmos-Reason2-2B separately. It is cached locally here; a fresh installation must accept its gated terms and authenticate before downloading."
+    }
+  }
+}

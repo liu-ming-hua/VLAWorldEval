@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "suite_id": "pilworld_groot_n17_ctrl_v1",
+  "pair_manifest": "configs/pairs/groot_n17__ctrl_world.json",
+  "dataset": {
+    "root": "datasets/cosmos3_droid/success",
+    "episodes": [
+      0
+    ],
+    "start_frame": 30,
+    "fps": 15,
+    "tail_policy": "drop_incomplete_chunk"
+  },
+  "runtime": {
+    "vla_environment": "vla.groot_n17",
+    "world_model_environment": "world_models.ctrl_world",
+    "vla_gpus": [
+      1
+    ],
+    "world_model_gpus": [
+      1
+    ],
+    "vla_memory_gib": 20,
+    "world_model_worker_options": {
+      "shutdown_grace_seconds": 30
+    },
+    "execution": "persistent_isolated_workers",
+    "scheduling": "sequential_vla_world_model",
+    "max_process_memory_gib_per_gpu": 32,
+    "world_model_checkpoint": "checkpoints/world_models/ctrl_world/ctrl_world/checkpoint-10000.pt"
+  },
+  "sampling": {
+    "num_inference_steps": 50,
+    "guidance": 1,
+    "shift": 1,
+    "image_size": 320,
+    "resolution": "320x192",
+    "diffusion_cache": false,
+    "torch_compile": false
+  },
+  "seeds": [
+    0
+  ],
+  "output_root": "results/experiments/pilworld_groot_n17_ctrl_v1",
+  "experiments": [
+    {
+      "id": "pilworld_smoke",
+      "mode": "pilworld",
+      "action_source": "vla",
+      "state_provider": "pilworld_action_target",
+      "chunks": 2
+    },
+    {
+      "id": "pilworld_long",
+      "mode": "pilworld",
+      "action_source": "vla",
+      "state_provider": "pilworld_action_target",
+      "chunks": 20
+    }
+  ],
+  "metadata": {
+    "evaluation_protocol": "PiL-World-style absolute terminal-action state feedback",
+    "pilworld_model_adapter_loaded": false,
+    "paper_reproduction": false
+  }
+}

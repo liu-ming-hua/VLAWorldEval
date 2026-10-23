@@ -1,0 +1,22 @@
+{
+  "model": "PlayWorld/OpenWorld SVD",
+  "dataset": "tennyyyin/open-world-benchmark",
+  "source": "https://huggingface.co/datasets/tennyyyin/open-world-benchmark",
+  "source_commit": "044100cc22ed3a92321b8b66f799e57e71abe666",
+  "source_path": "irom_test_carrot/init_0",
+  "local_path": "datasets/playworld/benchmark/irom_test_carrot/init_0",
+  "protocol": "Official initialization: three uint8 192x320 RGB views, absolute robot-base XYZ/RPY/gripper state, joint/gripper state and instruction. No continuous actions or future reference video. Explicit stationary 15x7 probe only; SVD runtime samples [0,3,6,9,12] and advances nonoverlapping 15 ticks at 15Hz, producing five frames. Not Ctrl inclusive timing or a recorded-action replay.",
+  "camera_order": ["exterior_right", "exterior_left", "wrist"],
+  "files": ["exterior_right.png", "exterior_left.png", "wrist.png", "initialization.yaml"],
+  "action_shape": null,
+  "probe_action_shape": [15, 7],
+  "status": "official benchmark initialization available; snapshot hash verified; trajectory actions absent",
+  "preview": {
+    "source": "https://huggingface.co/datasets/tennyyyin/playworld_dataset_preview",
+    "revision": "bc4ea8f9bf88b8266c2aadf66e608b78aa035b17",
+    "source_path": "v0_2025_12_28_2000/annotation/val/9.json",
+    "local_path": "datasets/playworld/preview/v0_2025_12_28_2000",
+    "status": "partial metadata only; episode annotation/videos blocked by 403 GatedRepoError; not replayable"
+  },
+  "documentation": "docs/models/PLAYWORLD.md"
+}

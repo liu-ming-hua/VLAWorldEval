@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {"id": "openvla_worldgym", "suite": "configs/experiments/openvla_worldgym_v1.json", "smoke": ["wm_real_smoke", "loop_smoke"], "long": ["loop_long"], "seeds": [0]},
+    {"id": "spatialvla_worldgym", "suite": "configs/experiments/spatialvla_worldgym_v1.json", "smoke": ["wm_real_smoke", "loop_smoke"], "long": ["loop_long"], "seeds": [0]},
+    {"id": "octo_worldgym", "suite": "configs/experiments/octo_worldgym_v1.json", "smoke": ["wm_real_smoke", "loop_smoke"], "long": ["loop_long"], "seeds": [0]},
+    {"id": "rt1_x_worldgym", "suite": "configs/experiments/rt1_x_worldgym_v1.json", "smoke": ["wm_real_smoke", "loop_smoke"], "long": ["loop_long"], "seeds": [0]},
+    {"id": "groot_n15_cosmos_droid", "suite": "configs/experiments/droid_framework_v1.json", "smoke": ["wm_real_smoke", "loop_integrated_smoke"], "long": ["loop_integrated_long"], "seeds": [0]}
+  ]
+}

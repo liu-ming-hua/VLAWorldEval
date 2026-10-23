@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "environment": "world_models.cosmos3_droid_joint_fd",
+  "module": "adapters.world_models.cosmos3_droid_joint_fd",
+  "adapter": "Cosmos3DroidJointFDAdapter",
+  "kwargs": {
+    "model_path": {"project_path": "checkpoints/world_models/cosmos3_nano_droid_joint_fd/community_anshks_v1_best5600/best-iter5600"},
+    "runtime_dir": {"suite_path": "runtime"},
+    "num_inference_steps": 30,
+    "guidance": 1.0,
+    "shift": 5.0
+  },
+  "gpus": [0, 1, 2, 3],
+  "memory_gib": 16,
+  "seed": 0,
+  "action": {
+    "dimension": 8, "horizon": 32, "representation": "joint_positions_gripper",
+    "frame": "droid_robot_base", "semantics": "absolute_joint_target",
+    "rate_hz": 15, "normalization": "raw_adapter_flips_gripper_once"
+  },
+  "video": {"fps": 15, "frames_per_chunk": 32},
+  "output_views": ["droid.cosmos_composite"],
+  "reset_operation": "reset",
+  "instruction_conditioning": false,
+  "worker_options": {"startup_timeout_seconds": 900, "request_timeout_seconds": 900, "shutdown_grace_seconds": 30}
+}

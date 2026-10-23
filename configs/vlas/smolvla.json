@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "repository": "https://github.com/huggingface/lerobot",
+  "revision": "e595b7902714ba51f91e47523f66f89c5181b649",
+  "source_path": "third_party/lerobot",
+  "environment": "vla.smolvla",
+  "checkpoint_source": "lerobot/smolvla_base",
+  "checkpoint": "checkpoints/vla/smolvla/base",
+  "backbone_source": "HuggingFaceTB/SmolVLM2-500M-Video-Instruct",
+  "backbone": "checkpoints/vla/smolvla/smolvlm2-500m-video-instruct",
+  "input": {
+    "video": {
+      "keys": ["observation.images.camera1", "observation.images.camera2", "observation.images.camera3"],
+      "shape_each": "[3,256,256] float or equivalent RGB array"
+    },
+    "state": "observation.state [6]",
+    "language": "task string"
+  },
+  "output": "continuous action chunk [50,6]",
+  "warning": "This is a base checkpoint intended for robot-specific fine-tuning, not a universal zero-shot policy."
+}

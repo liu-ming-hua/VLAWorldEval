@@ -1,0 +1,3 @@
+# Exact tools used for source/editable builds; separate from model dependencies.
+setuptools==84.0.0
+wheel==0.48.0

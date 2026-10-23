@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "environment": "world_models.playworld",
+  "module": "adapters.world_models.playworld",
+  "adapter": "PlayWorldAdapter",
+  "kwargs": {
+    "checkpoint_path": {"project_path": "checkpoints/world_models/playworld/wm/checkpoint-120000.pt"},
+    "svd_model_path": {"project_path": "checkpoints/world_models/playworld/svd"},
+    "clip_model_path": {"project_path": "checkpoints/world_models/playworld/clip"},
+    "repo_path": {"project_path": "third_party/playworld"},
+    "action_downsample": 3,
+    "num_inference_steps": 4,
+    "decode_chunk_size": 5,
+    "memory_gib": 18
+  },
+  "gpus": [2],
+  "memory_gib": 18,
+  "seed": 0,
+  "action": {
+    "dimension": 7,
+    "horizon": 15,
+    "representation": "xyz_rpy_gripper",
+    "frame": "droid_robot_base",
+    "semantics": "absolute_eef_state",
+    "rate_hz": 15,
+    "normalization": "raw_metric_adapter_normalizes",
+    "temporal_layout": "future"
+  },
+  "video": {"fps": 5, "frames_per_chunk": 5, "temporal_layout": "future"},
+  "output_views": ["exterior_right", "exterior_left", "wrist"],
+  "reset_operation": "reset",
+  "instruction_conditioning": true,
+  "worker_options": {"startup_timeout_seconds": 900, "request_timeout_seconds": 900, "shutdown_grace_seconds": 30}
+}

@@ -1,0 +1,22 @@
+# Inference only; the upstream training installer also installs TensorFlow/DeepSpeed.
+torch==2.6.0
+torchvision==0.21.0
+nvidia-nvjitlink-cu12==12.4.127
+numpy==1.26.4
+diffusers==0.24.0
+huggingface-hub==0.25.2
+transformers==4.36.2
+timm==0.9.16
+einops==0.7.0
+omegaconf==2.3.0
+accelerate==0.27.2
+opencv-python-headless==4.10.0.84
+imageio==2.36.1
+imageio-ffmpeg==0.5.1
+decord==0.6.0
+safetensors==0.4.5
+sentencepiece==0.2.0
+pytest==8.3.5
+mediapy==1.2.4
+psutil==6.1.1
+hf-transfer==0.1.9

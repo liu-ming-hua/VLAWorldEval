@@ -1,0 +1,10 @@
+{
+  "model": "Ctrl-World",
+  "source_repository": "https://github.com/Robert-gyj/Ctrl-World",
+  "source_commit": "99fb206",
+  "source_path": "third_party/ctrl-world/dataset_example/droid_subset",
+  "local_path": "datasets/ctrl_world/official/droid_subset",
+  "protocol": "official rollout_replay_traj.py; DROID subset; 3 views; sparse latent/action history; 5 future frames per interaction",
+  "action_shape": [5, 7],
+  "camera_order": ["0", "1", "2"]
+}

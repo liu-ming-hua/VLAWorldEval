@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "bridge": {
+    "dataset": "WorldGym official Bridge sample",
+    "source": "datasets/worldgym/official/bridge/test/000000002.mp4",
+    "frame_indices": [
+      0
+    ],
+    "instruction": "put the eggplant in the pot",
+    "images": {
+      "primary": "datasets/vla_official_smoke/bridge/frame_000.png"
+    }
+  },
+  "droid": {
+    "dataset": "LeRobot DROID success, official episode 0",
+    "source": "datasets/cosmos3_droid/success",
+    "episode_index": 0,
+    "frame_indices": [
+      0,
+      15
+    ],
+    "instruction": "Pour the contents of the yellow cup into the bowl",
+    "images": {
+      "exterior_image_1_left": [
+        "datasets/vla_official_smoke/droid/exterior_image_1_left_000.png",
+        "datasets/vla_official_smoke/droid/exterior_image_1_left_015.png"
+      ],
+      "exterior_image_2_left": [
+        "datasets/vla_official_smoke/droid/exterior_image_2_left_000.png",
+        "datasets/vla_official_smoke/droid/exterior_image_2_left_015.png"
+      ],
+      "wrist_image_left": [
+        "datasets/vla_official_smoke/droid/wrist_image_left_000.png",
+        "datasets/vla_official_smoke/droid/wrist_image_left_015.png"
+      ]
+    },
+    "state": "datasets/vla_official_smoke/droid/state.npz"
+  },
+  "libero": {
+    "dataset": "LeRobot LIBERO, official episode 0",
+    "source": "datasets/lerobot_libero",
+    "episode_index": 0,
+    "frame_indices": [
+      0
+    ],
+    "instruction": "put the white mug on the left plate and put the yellow and white mug on the right plate",
+    "images": {
+      "image": "datasets/vla_official_smoke/libero/image_000.png",
+      "image2": "datasets/vla_official_smoke/libero/image2_000.png"
+    },
+    "state": "datasets/vla_official_smoke/libero/state.npy",
+    "adapter_projection": {
+      "camera1": "observation.images.image",
+      "camera2": "observation.images.image2",
+      "state": "first 6 values required by smolvla_base config.json"
+    }
+  }
+}

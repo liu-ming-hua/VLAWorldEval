@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "pair_id": "rt1_x__worldgym_bridge_v1",
+  "seed": 0,
+  "vla": {
+    "adapter": "RT1Adapter",
+    "image_size": [
+      256,
+      256
+    ],
+    "view_mapping": {
+      "single_view": "bridge.primary"
+    },
+    "view_mode": "single",
+    "squeeze_single_frame": true,
+    "action": {
+      "dimension": 10,
+      "horizon": 1,
+      "representation": "worldgym_bridge_xyz_rpy_gripper_reserved3",
+      "frame": "bridge_openx",
+      "semantics": "delta",
+      "rate_hz": 20,
+      "normalization": "legacy_adapter_worldgym_bridge_rescale",
+      "components": [
+        "dx",
+        "dy",
+        "dz",
+        "droll",
+        "dpitch",
+        "dyaw",
+        "gripper",
+        "reserved0",
+        "reserved1",
+        "reserved2"
+      ]
+    }
+  },
+  "action_bridge": {
+    "name": "identity",
+    "source": {
+      "dimension": 10,
+      "horizon": 1,
+      "representation": "worldgym_bridge_xyz_rpy_gripper_reserved3",
+      "frame": "bridge_openx",
+      "semantics": "delta",
+      "rate_hz": 20,
+      "normalization": "legacy_adapter_worldgym_bridge_rescale",
+      "components": [
+        "dx",
+        "dy",
+        "dz",
+        "droll",
+        "dpitch",
+        "dyaw",
+        "gripper",
+        "reserved0",
+        "reserved1",
+        "reserved2"
+      ]
+    },
+    "target": {
+      "dimension": 10,
+      "horizon": 1,
+      "representation": "worldgym_bridge_xyz_rpy_gripper_reserved3",
+      "frame": "bridge_openx",
+      "semantics": "delta",
+      "rate_hz": 20,
+      "normalization": "legacy_adapter_worldgym_bridge_rescale",
+      "components": [
+        "dx",
+        "dy",
+        "dz",
+        "droll",
+        "dpitch",
+        "dyaw",
+        "gripper",
+        "reserved0",
+        "reserved1",
+        "reserved2"
+      ]
+    },
+    "config": {}
+  },
+  "view_bridge": {
+    "name": "identity",
+    "config": {}
+  },
+  "world_model": {
+    "video": {"fps": 20, "frames_per_chunk": 1},
+    "adapter": "WorldGymAdapter",
+    "view_mapping": {
+      "single_view": "bridge.primary"
+    },
+    "view_mode": "single",
+    "squeeze_single_frame": true,
+    "output_views": [
+      "bridge.primary"
+    ],
+    "action": {
+      "dimension": 10,
+      "horizon": 1,
+      "representation": "worldgym_bridge_xyz_rpy_gripper_reserved3",
+      "frame": "bridge_openx",
+      "semantics": "delta",
+      "rate_hz": 20,
+      "normalization": "legacy_adapter_worldgym_bridge_rescale",
+      "components": [
+        "dx",
+        "dy",
+        "dz",
+        "droll",
+        "dpitch",
+        "dyaw",
+        "gripper",
+        "reserved0",
+        "reserved1",
+        "reserved2"
+      ]
+    }
+  },
+  "state_provider": {
+    "type": "none",
+    "state_schema": "not_required",
+    "config": {}
+  },
+  "metadata": {
+    "dataset": "WorldGym upstream Bridge test sample",
+    "warning": "Native actions here mean current adapter outputs (already converted 10-D), not raw network 7-D. 20 FPS describes official video indexing/playback, not verified physical controller rate."
+  }
+}

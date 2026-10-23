@@ -1,0 +1,19 @@
+# Official Ctrl-World inference profile.
+# Kept isolated because these pins conflict with the generic project/VLA stack.
+diffusers==0.34.0
+transformers==4.48.1
+torch==2.7.1
+mediapy
+wandb
+swanlab
+accelerate
+tqdm
+numpy
+decord
+einops
+scipy
+pandas
+imageio
+opencv-python
+Pillow
+pytest==8.3.5

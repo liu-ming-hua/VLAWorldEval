@@ -1,0 +1,11 @@
+{
+  "model": "Cosmos3-Nano",
+  "source_repository": "https://github.com/nvidia-cosmos/cosmos",
+  "source_commit": "b0e54e8",
+  "source_path": "third_party/cosmos/cookbooks/cosmos3/generator/action/assets/droid_lerobot_example",
+  "local_path": "datasets/cosmos3_nano/official/droid_lerobot_example",
+  "full_dataset": "datasets/cosmos3_droid",
+  "protocol": "official forward_dynamics DROID LeRobot reader; 15 FPS; 16 action transitions; 17-frame output including conditioning frame",
+  "action_shape": [16, 10],
+  "camera_order": ["wrist_image_left", "exterior_image_1_left", "exterior_image_2_left"]
+}

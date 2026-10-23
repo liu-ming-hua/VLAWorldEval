@@ -1,0 +1,185 @@
+# Paths are relative to the VLAWorldEval project root unless absolute.
+# Legacy WorldGym pairs can share a VLA interpreter. Incompatible runtimes
+# use isolated workers; registry availability is not pair acceptance.
+
+[environments.framework.core]
+path = "environment/core"
+status = "configured"
+scope = "framework"
+package_profile = "core-py311"
+notes = "Lightweight locked CLI environment; does not install any model stack."
+
+[environments.evaluators.video]
+path = "environment/evaluators/video"
+status = "configured"
+scope = "evaluator"
+package_profile = "lpips-vgg-video-metrics"
+notes = "Optional isolated CPU LPIPS, pinned EWMBench gripper detector and skimage checks. Evaluator assets are verified separately; cross-domain detection requires coverage and calibration review. No policy/world-model loading or cloud scoring."
+
+[environments.vla.openvla]
+path = "environment/vla/openvla"
+status = "ready"
+scope = "vla"
+package_profile = "openvla"
+notes = "Transformers 4.49.0; shared WorldGym runtime is available here."
+
+[environments.vla.spatialvla]
+path = "environment/vla/spatialvla"
+status = "ready"
+scope = "vla"
+package_profile = "spatialvla"
+notes = "Transformers 4.48.1; isolated from OpenVLA/Octo."
+
+[environments.vla.rt1]
+path = "environment/vla/rt1"
+status = "ready"
+scope = "vla"
+package_profile = "rt1"
+notes = "Official TensorFlow SavedModel; TensorFlow 2.21 and TF-Agents 0.19."
+
+[environments.vla.octo]
+path = "environment/vla/octo"
+status = "ready"
+scope = "vla"
+package_profile = "octo"
+notes = "Octo/JAX/Flax/Torch runtime; protobuf 5.29.5 + tensorflow-metadata 1.16.1 verified by real closed-loop acceptance. Source commit and TF compatibility overrides are pinned; disable XLA preallocation for shared GPU execution."
+
+[environments.vla.groot_n15]
+path = "environment/vla/groot_n15"
+status = "ready"
+scope = "vla"
+package_profile = "groot_n15"
+notes = "Official NVIDIA Isaac-GR00T N1.5 runtime, pinned to n1.5-release; OXE DROID checkpoint loading and 16x7 action inference validated."
+
+[environments.vla.groot_n17]
+path = "environment/vla/groot_n17"
+status = "ready"
+scope = "vla"
+package_profile = "groot_n17"
+notes = "Official NVIDIA Isaac-GR00T N1.7 runtime and local Cosmos-Reason2-2B backbone; official DROID inference validated at 40x17."
+
+[environments.vla.openpi]
+path = "environment/vla/openpi"
+status = "ready"
+scope = "vla"
+package_profile = "openpi"
+notes = "Official OpenPI runtime shared by pi0 and pi0.5; both DROID checkpoints passed MD5 verification and real action inference (10x8 and 15x8)."
+
+[environments.vla.smolvla]
+path = "environment/vla/smolvla"
+status = "ready"
+scope = "vla"
+package_profile = "smolvla"
+notes = "Official Hugging Face LeRobot SmolVLA runtime; 50x6 action inference validated, but the base checkpoint still requires robot-specific fine-tuning for meaningful evaluation."
+
+[environments.vla.cosmos_policy_droid]
+path = "environment/verification/cosmos_fd_v1"
+status = "native_verified"
+scope = "vla"
+package_profile = "cosmos_framework_droid"
+notes = "Shares the verified Cosmos Framework environment. Official policy assets and one DROID native 32x8 action inference verified on GPUs0–3, including clean worker exit. No registered world-model pair; native raw predictions are not controller-clipped."
+
+[environments.vla.dreamzero]
+path = "environment/vla/dreamzero"
+status = "installed_native_pending"
+scope = "vla"
+package_profile = "dreamzero-inference"
+notes = "Isolated from Isaac-GR00T: DreamZero owns a different groot package. Installation and weight acquisition verified; native model inference still pending."
+
+[environments.world_models.cosmos3_droid_joint_fd]
+path = "environment/verification/cosmos_fd_v1"
+status = "native_verified"
+scope = "world_model"
+package_profile = "cosmos_framework_droid"
+notes = "Community anshks best-iter5600 absolute-joint checkpoint, distinct from 16x10 EEF FD. Four recorded-command AR chunks verified; VLA-pair admission remains pending."
+
+[environments.world_models.worldgym]
+path = "environment/world_models/worldgym"
+status = "shared"
+scope = "world_model"
+package_profile = "worldgym"
+notes = "Symlink to the OpenVLA/base environment. The unified executor starts this as a separate persistent WM worker; each VLA keeps its own environment."
+
+[environments.world_models.gigaworld1]
+path = "environment/world_models/gigaworld1"
+status = "external"
+scope = "world_model"
+package_profile = "gigaworld1"
+notes = "Project-local runtime slot; install separately or explicitly override the environment registry. Source defaults to third_party/giga-world-1; GIGAWORLD1_REPO can select an external checkout."
+
+[environments.world_models.ctrl_world]
+path = "environment/world_models/ctrl_world"
+status = "isolated"
+scope = "world_model"
+package_profile = "ctrl_world"
+notes = "Official Ctrl-World runtime; Python 3.11, Torch 2.7.1, Diffusers 0.34.0."
+
+[environments.world_models.ge_sim_v2]
+path = "environment/world_models/ge_sim_v2"
+status = "isolated"
+scope = "world_model"
+package_profile = "ge_sim_v2"
+notes = "Official GE-Sim 2.0 client/server; G01 + OmniPicker, 3 views, 16-D action and Pose-Expert state."
+
+[environments.world_models.cosmos3_nano]
+path = "environment/world_models/cosmos3_nano"
+status = "isolated"
+scope = "world_model"
+package_profile = "cosmos3_nano"
+notes = "Generic NVIDIA Cosmos3-Nano Diffusers base runtime; not the released DROID post-trained checkpoint."
+
+[environments.world_models.cosmos3_nano_droid_fd]
+path = "environment/world_models/cosmos3_nano_droid_fd"
+status = "isolated"
+scope = "world_model"
+package_profile = "cosmos3_nano_droid_fd"
+notes = "Cosmos Framework runtime for the released 20k-EMA DROID forward-dynamics checkpoint; raw 16x10 DROID action protocol. The runtime layer reuses the project-local cosmos3_nano Torch/CUDA packages."
+
+[environments.world_models.a2world]
+path = "environment/world_models/a2world"
+status = "ready"
+scope = "world_model"
+package_profile = "a2world"
+notes = "Official A2World runtime; multi-view video-only output, 20-step 14-D action chunks, optional LIBERO history conditioning."
+
+[environments.world_models.tau0_wm_simulator]
+path = "environment/world_models/tau0_wm_simulator"
+status = "isolated"
+scope = "world_model"
+package_profile = "tau0_wm_simulator"
+notes = "Official τ₀-WM Action-Conditioned Video Simulator; Wan2.2-TI2V-5B runtime, websocket server/client, simulator-only checkpoint."
+
+[environments.world_models.iws]
+path = "environment/world_models/iws"
+status = "native_verified"
+scope = "world_model"
+package_profile = "iws-pusht-cam1"
+notes = "Official PushT camera_1 sample: 20 predictions with observed-joint official FK conditioning and generated-latent feedback verified; FP32 math SDPA compatibility profile. No generic DROID pair or task-quality approval."
+
+[environments.world_models.dreamdojo]
+path = "environment/world_models/dreamdojo"
+status = "native_verified"
+scope = "world_model"
+package_profile = "dreamdojo-2b-gr1"
+notes = "2B GR1 native sample generated 12 future frames with 35 sampling steps on GPU1; clean worker exit, strict learned-tensor coverage and current official tokenizer byte identity verified. Torch2.7/forward-only Flash inference profile, one chunk per reset only; not 14B/distilled, a policy pair or quality approval."
+
+[environments.world_models.playworld]
+path = "environment/world_models/playworld"
+status = "native_verified"
+scope = "world_model"
+package_profile = "playworld-svd"
+notes = "Official PlayWorld/OpenWorld SVD route generated three-view benchmark-initialized hold and synthetic x+2cm probes on GPU2. Not a recorded trajectory, later AR model, policy pair or quality approval."
+
+[environments.world_models.dreamtrue]
+path = "environment/world_models/dreamtrue"
+status = "native_verified"
+scope = "world_model"
+package_profile = "dreamtrue-threeview-vace14b"
+notes = "Official 50-step dual-LoRA generation produced three 44-frame 240x320 views. Requires rendered geometry, not raw vector actions. First smoke saved all videos but needed SIGTERM during interpreter shutdown; explicit model release and a separate teardown diagnostic are tracked in its model guide. No policy-pair or quality acceptance."
+
+[environments.world_models.irasim]
+path = "environment/world_models/irasim"
+status = "native_verified"
+scope = "world_model"
+package_profile = "irasim-languagetable-frame-ada"
+notes = "Official public Language-Table Frame-Ada checkpoint and bundled sample generated 15 future frames with 50 steps on GPU0, clean worker exit. Presentation FPS is not calibrated physical time. Not the v2 LIBERO ranking experiment."

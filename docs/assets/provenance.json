@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "purpose": "README presentation assets; not a task-success claim",
+  "assets": [
+    {
+      "path": "docs/assets/banner.png",
+      "sha256": "fffe75e13eb245e190fc5fd006a6383ca8ed516652b8c46aeb43e74efece5917"
+    },
+    {
+      "path": "docs/assets/framework.svg",
+      "sha256": "32c84bcded00079ed28095507e6dbbcb33dae6ad7c6e45882d03393a358405ee"
+    },
+    {
+      "path": "docs/assets/framework.png",
+      "sha256": "285e2da7afdf5c7ca4c950fd7edff49ae2416fa9b546ff7ec8a679b2d5f0c367"
+    },
+    {
+      "path": "docs/assets/demos/groot-cosmos.gif",
+      "sha256": "67475c32e896984ddca16d874c490a3cf7ebe78da4d39474aa50bda4ba92dd37"
+    },
+    {
+      "path": "docs/assets/demos/groot-cosmos.mp4",
+      "sha256": "e67a3d67f891891f607c871604cb3957276bbbb00b78b2faf381c9817add3c7f"
+    },
+    {
+      "path": "docs/assets/demos/cosmos-droid-task.gif",
+      "sha256": "3d37d7c2cf3f321376d435c428bd7d816fbb6143641896a84cc8952dee95140a"
+    },
+    {
+      "path": "docs/assets/demos/cosmos-droid-task.mp4",
+      "sha256": "4fdff3e008865ed79ba52bb640de8ef1339a82cd62629ab73e2ad413f636466e"
+    },
+    {
+      "path": "docs/assets/demos/cosmos-droid-long.png",
+      "sha256": "927a0cc2bdb81aa19870cb9f437a0dcd9054a2206d0702e12e166b4195430b0a"
+    },
+    {
+      "path": "docs/assets/demos/cosmos-droid-long.mp4",
+      "sha256": "f1ce7a1169143df061f9e0d71e812657bce67257db1d8d651d9b89b5ca93670f"
+    }
+  ],
+  "banner": {
+    "tool": "built-in image_gen",
+    "use_case": "logo-brand",
+    "prompt": "Premium ultrawide open-source robotics README banner. Exact title VLAWorldEval; subtitle Policies meet world models. Midnight navy, cyan/electric blue and restrained coral; clean left-side sans-serif typography, right-side translucent video-frame stack and abstract action trajectory. Minimal top-tier robotics project branding. No experimental images, metrics, claims, logos or watermark.",
+    "scientific_evidence": false
+  },
+  "framework": {
+    "format": "editable SVG",
+    "authoring": "code-native SVG; rendered with FFmpeg to framework.png for README compatibility, with a clickable SVG source",
+    "scientific_evidence": false,
+    "style_reference": "https://arxiv.org/pdf/2610.20442",
+    "design": "Original editable vector illustration: four icon-led pastel modules; visual conditioning, action bridge, generated-observation feedback, and reference-only scoring. No upstream artwork copied."
+  },
+  "demo": {
+    "source": "results/experiments/long_groot_cosmos_20261012/attempt_20261012T061045_451121Z_6a8aaf6e6684/loop_integrated_long/episode_000000/seed_000/views/droid.cosmos_composite.mp4",
+    "source_sha256": "82496875a8747650dac17c3af9de805d01e45f5809dbedc97ac51c1a6fffd221",
+    "mode": "VLA x WM autoregressive loop",
+    "policy": "GR00T N1.5 OXE-DROID",
+    "world_model": "Cosmos DROID EEF FD community 20k EMA",
+    "dataset": "DROID",
+    "episode": 0,
+    "seed": 0,
+    "frames": 321,
+    "source_fps": 15,
+    "duration_seconds": 21.4,
+    "content": "Initial context plus generated future, not recorded ground truth",
+    "task_success_verified": false,
+    "physical_action_following_verified": false,
+    "mp4_conversion": "Full duration at original15FPS, H264 CRF28 yuv420p faststart",
+    "gif_conversion": "Full duration, 3 FPS, width300, 48-color Bayer palette",
+    "license_notice": "Derived model/data media; applicable upstream terms are not replaced by the framework MIT license",
+    "instruction": "Pour the contents of the yellow cup into the bowl"
+  },
+  "featured_demo": {
+    "source": "results/checkpoint_capability_v1/budget400_v1/batched_v1/runs/cosmos20k_success_003557_seed0/droid.cosmos_composite_prediction_vs_reference.mp4",
+    "source_sha256": "fc20f26f5033e0175008ce5ab59392152e10cd269f6b83896c2ed1fda744f293",
+    "mode": "recorded-action native WM replay; not VLA inference",
+    "checkpoint": "Cosmos DROID EEF FD community20k EMA",
+    "instruction": "Put all the bottles and the orange plushie surrounding the white plate on the white plate",
+    "dataset": "DROID",
+    "episode": 3557,
+    "seed": 0,
+    "vla_calls": 0,
+    "world_model_calls": 60,
+    "source_fps": 15,
+    "source_frames": 961,
+    "duration_seconds": 64.0666666667,
+    "source_episode_frames": 975,
+    "source_frame_range": [
+      0,
+      960
+    ],
+    "unscored_tail_transitions": 14,
+    "temporal_policy": "All complete16-action chunks; no synthetic time extension, no spliced episodes, no repeated playback",
+    "prediction_side": "left",
+    "recorded_reference_side": "right",
+    "reference_used_for_inference": false,
+    "task_success_verified": false,
+    "qualitative_review": "Recorded reference shows the objects being placed on the plate. Generated future differs from the reference and is not certified as successful robot execution.",
+    "mp4_conversion": "Entire saved comparison, header labels added; original15FPS, H264 CRF28 yuv420p faststart",
+    "gif_conversion": "Full-duration preview; 2FPS, width480, 48-color Bayer palette",
+    "selection": "Illustrative presentation selection after inspecting saved outputs; not a random evaluation sample or a model-quality estimate",
+    "license_notice": "Recorded reference and derived predictions retain applicable source data/model terms; not relicensed as MIT framework code"
+  },
+  "long_demo": {
+    "source": "results/checkpoint_capability_v1/budget400_v1/persistent_v1/studies/batch0001/runs/cosmos20k_success_025513_seed0/droid.cosmos_composite_prediction_vs_reference.mp4",
+    "source_sha256": "f0b340c54890de4fa982a94c69fcf6b9ba2a0f0861fc3472968d372d02089000",
+    "mode": "recorded-action native WM replay; not VLA inference",
+    "checkpoint": "Cosmos DROID EEF FD community20k EMA",
+    "instruction": "Move the blocks to the left and then straighten the cloth",
+    "dataset": "DROID",
+    "episode": 25513,
+    "seed": 0,
+    "vla_calls": 0,
+    "world_model_calls": 130,
+    "source_fps": 15,
+    "source_frames": 2081,
+    "duration_seconds": 138.7333333333,
+    "source_episode_frames": 2091,
+    "source_frame_range": [0, 2080],
+    "unscored_tail_transitions": 10,
+    "temporal_policy": "All complete16-action chunks; no synthetic time extension, no spliced episodes, no repeated playback",
+    "prediction_side": "left",
+    "recorded_reference_side": "right",
+    "reference_used_for_inference": false,
+    "task_success_verified": false,
+    "qualitative_review": "Long-horizon generated drift is retained, not edited out. Recorded reference is not a claim of generated task success.",
+    "mp4_conversion": "Entire saved comparison, header labels added; original15FPS, H264 CRF28 yuv420p faststart",
+    "poster_conversion": "Frame at60 seconds, width960; clickable poster, not an additional generated video",
+    "selection": "Illustrative long-horizon presentation selection; not a random evaluation sample or a model-quality estimate",
+    "license_notice": "Recorded reference and derived predictions retain applicable source data/model terms; not relicensed as MIT framework code"
+  }
+}

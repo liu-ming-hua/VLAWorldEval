@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "suite_id": "openvla_worldgym_v1",
+  "pair_manifest": "configs/pairs/openvla__worldgym.json",
+  "dataset": {
+    "root": "datasets/worldgym/official/bridge/test",
+    "episodes": [
+      2
+    ],
+    "start_frame": 0,
+    "fps": 20,
+    "tail_policy": "drop_incomplete_chunk",
+    "instruction": "put the eggplant in the pot"
+  },
+  "runtime": {
+    "vla_environment": "vla.openvla",
+    "world_model_environment": "world_models.worldgym",
+    "vla_gpus": [
+      0
+    ],
+    "world_model_gpus": [
+      1
+    ],
+    "execution": "persistent_isolated_workers",
+    "scheduling": "sequential_vla_world_model",
+    "max_process_memory_gib_per_gpu": 20,
+    "vla_memory_gib": 18,
+    "world_model_checkpoint": "checkpoints/world_models/worldgym/checkpoint/mixed_openx_9robots_20frames_0p1actiondropout_580ksteps.pt"
+  },
+  "sampling": {
+    "num_inference_steps": 10,
+    "guidance": 3,
+    "shift": 1,
+    "image_size": 256,
+    "resolution": "256",
+    "diffusion_cache": false,
+    "torch_compile": false
+  },
+  "seeds": [
+    0
+  ],
+  "output_root": "results/experiments/openvla_worldgym_v1",
+  "experiments": [
+    {
+      "id": "wm_real_smoke",
+      "mode": "wm_replay",
+      "action_source": "official_worldgym_actions",
+      "state_provider": "none",
+      "chunks": 3
+    },
+    {
+      "id": "loop_smoke",
+      "mode": "policy_loop",
+      "action_source": "vla",
+      "state_provider": "none",
+      "chunks": 3
+    },
+    {
+      "id": "loop_long",
+      "mode": "policy_loop",
+      "action_source": "vla",
+      "state_provider": "none",
+      "chunks": 80
+    }
+  ]
+}

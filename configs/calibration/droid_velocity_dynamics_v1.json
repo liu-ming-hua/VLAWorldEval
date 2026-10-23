@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "name": "droid_velocity_to_next_measured_eef_v1",
+  "input": {
+    "representation": "action.cartesian_velocity",
+    "dimension": 6,
+    "rate_hz": 15.0
+  },
+  "output": {
+    "representation": "next_observation_cartesian_pose_delta_xyz_rpy",
+    "dimension": 6
+  },
+  "model": {
+    "type": "full_affine",
+    "coefficient_layout": "[velocity_0..5,bias] x [delta_xyz,delta_rpy]",
+    "coefficients": [
+      [0.01322209159124189, -0.00004811199845985317, -0.0012528776201959808, 0.0004215963724415323, -0.004999243598423693, 0.0007748197814205301],
+      [-0.00021519647730961476, 0.022854409540858735, -0.0010346076062823417, 0.005134825137479237, -0.0010514447484656715, 0.009830518190581615],
+      [0.001980047138623335, -0.00006733742962662896, 0.02011197545764852, 0.0010444233823723875, -0.007613130228908511, 0.0002653559081143376],
+      [-0.0005270151504943394, 0.0016456340749893261, -0.0004363284754939959, 0.03618586739676149, 0.0038433290596613426, -0.004434926713475112],
+      [-0.0026700315833064997, 0.00001734770787680925, -0.002429043260209621, -0.0020051877002647813, 0.03589306144349446, 0.00048731172222960016],
+      [-0.00020953898051945342, 0.0028258089224982488, 0.00009435169832479453, -0.0012038289493486746, 0.0014373357500310198, 0.04580832650735407],
+      [-0.00036295061760268206, 0.00001673841402715575, -0.0016107191343213646, -0.000379229732683425, 0.0028453604509830624, 0.0001374161023397765]
+    ]
+  },
+  "fit": {
+    "dataset": "datasets/cosmos3_droid/success",
+    "transitions": 500000,
+    "episodes": 1853,
+    "files": 2,
+    "training_split": "episode_index % 5 != 0",
+    "report": "results/analysis/droid_action_state_gap_v1/summary.json",
+    "generated_on": "2026-10-11"
+  },
+  "limitations": [
+    "This is an M1 analytical baseline, not the proposed StateBridge model.",
+    "The fit is episode-disjoint but not scene-disjoint.",
+    "Euler deltas are accumulated in DROID component space before conversion to the Cosmos pose convention."
+  ]
+}

@@ -1,0 +1,35 @@
+# Source distributions must not accidentally include model/data/cache assets.
+prune .cache
+prune .archive
+prune .uv-cache
+prune environment
+prune checkpoints
+prune datasets
+prune sample_data
+prune results
+prune third_party
+prune models
+prune build
+prune .git
+# Re-include only declarative environment files after pruning actual venvs.
+include environment/registry.toml
+recursive-include environment/locks *.txt *.in
+recursive-include environment/requirements *.txt
+recursive-include configs *.json *.yaml *.md
+recursive-include scripts *.sh *.py *.patch
+recursive-include tests *.py
+recursive-include docs *.md
+recursive-include .github *.yml *.yaml
+include README_CN.md CONTRIBUTING.md LICENSE LICENSE_SCOPE.md
+include .gitignore
+include adapters/README.md cli/README.md evaluation/README.md scripts/README.md
+include datasets/README.md checkpoints/README.md
+include datasets/*/manifest.json datasets/cosmos3_droid/README.md
+global-exclude *.pt *.safetensors *.mp4 *.npz *.pyc
+# Reviewed, bounded README media only; never a wildcard over experiment videos.
+include docs/assets/banner.png docs/assets/framework.svg
+include docs/assets/framework.png
+include docs/assets/demos/groot-cosmos.gif docs/assets/demos/groot-cosmos.mp4
+include docs/assets/demos/cosmos-droid-task.gif docs/assets/demos/cosmos-droid-task.mp4
+include docs/assets/demos/cosmos-droid-long.png docs/assets/demos/cosmos-droid-long.mp4
+include docs/assets/provenance.json docs/assets/reference-results.json

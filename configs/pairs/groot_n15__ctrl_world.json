@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "pair_id": "groot_n15__ctrl_world_droid_v2",
+  "seed": 0,
+  "vla": {
+    "adapter": "GrootN15Adapter",
+    "image_size": [
+      256,
+      256
+    ],
+    "view_mapping": {
+      "video.exterior_image_1": "droid.exterior_1",
+      "video.exterior_image_2": "droid.exterior_2",
+      "video.wrist_image": "droid.wrist"
+    },
+    "view_mode": "mapping",
+    "squeeze_single_frame": true,
+    "state_schema": "droid_eef_rpy_gripper_v1",
+    "action": {
+      "dimension": 7,
+      "horizon": 16,
+      "representation": "cartesian_velocity_xyz_rpy+absolute_gripper",
+      "frame": "droid_controller",
+      "semantics": "velocity_command_with_absolute_gripper",
+      "rate_hz": 15,
+      "normalization": "groot_n15_oxe_droid_decoded",
+      "components": [
+        "dx",
+        "dy",
+        "dz",
+        "droll",
+        "dpitch",
+        "dyaw",
+        "gripper_position"
+      ]
+    }
+  },
+  "action_bridge": {
+    "name": "droid_policy_to_ctrl_world_v2",
+    "source": {
+      "dimension": 7,
+      "horizon": 16,
+      "representation": "cartesian_velocity_xyz_rpy+absolute_gripper",
+      "frame": "droid_controller",
+      "semantics": "velocity_command_with_absolute_gripper",
+      "rate_hz": 15,
+      "normalization": "groot_n15_oxe_droid_decoded",
+      "components": [
+        "dx",
+        "dy",
+        "dz",
+        "droll",
+        "dpitch",
+        "dyaw",
+        "gripper_position"
+      ]
+    },
+    "target": {
+      "dimension": 7,
+      "horizon": 5,
+      "representation": "xyz_rpy_gripper",
+      "frame": "droid_robot_base",
+      "semantics": "absolute_eef_target",
+      "rate_hz": 5,
+      "normalization": "raw_metric_adapter_normalizes",
+      "temporal_layout": "inclusive"
+    },
+    "config": {
+      "action_normalization": "none",
+      "requires_current_eef_pose": true,
+      "dynamics_calibration": "configs/calibration/droid_velocity_dynamics_v1.json"
+    }
+  },
+  "view_bridge": {
+    "name": "droid_ctrl_views_v1",
+    "output_views": [
+      "droid.exterior_1",
+      "droid.exterior_2",
+      "droid.wrist"
+    ],
+    "config": {}
+  },
+  "world_model": {
+    "adapter": "CtrlWorldAdapter",
+    "action": {
+      "dimension": 7,
+      "horizon": 5,
+      "representation": "xyz_rpy_gripper",
+      "frame": "droid_robot_base",
+      "semantics": "absolute_eef_target",
+      "rate_hz": 5,
+      "normalization": "raw_metric_adapter_normalizes",
+      "temporal_layout": "inclusive"
+    },
+    "video": {
+      "fps": 5,
+      "frames_per_chunk": 5,
+      "temporal_layout": "inclusive"
+    },
+    "view_mode": "stack",
+    "squeeze_single_frame": true,
+    "view_mapping": {
+      "exterior_1": "droid.exterior_1",
+      "exterior_2": "droid.exterior_2",
+      "wrist": "droid.wrist"
+    },
+    "output_views": [
+      "droid.exterior_1",
+      "droid.exterior_2",
+      "droid.wrist"
+    ]
+  },
+  "state_provider": {
+    "type": "integrated_action_target",
+    "state_schema": "droid_eef_rpy_gripper_v1",
+    "config": {
+      "action": "native",
+      "requires_embodiment_integrator": true,
+      "output_components": [
+        "state.eef_position",
+        "state.eef_rotation",
+        "state.gripper_position"
+      ]
+    }
+  },
+  "metadata": {
+    "status": "experimental",
+    "dataset": "DROID",
+    "warning": "Ctrl v2: inclusive action/video windows at source ticks0,3,6,9,12; advance12/15 seconds. Stitch first4 nonfinal and all5 final predicted frames. Recurrent state is a command proxy. Playback5Hz matches source time; model fps conditioning remains7."
+  }
+}

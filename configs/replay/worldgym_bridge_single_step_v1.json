@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "environment": "world_models.worldgym",
+  "module": "adapters.world_models.worldgym", "adapter": "WorldGymAdapter",
+  "kwargs": {
+    "checkpoint_path": {"project_path": "checkpoints/world_models/worldgym/checkpoint/mixed_openx_9robots_20frames_0p1actiondropout_580ksteps.pt"},
+    "num_inference_steps": 10, "default_cfg": 3.0, "use_pixel_rope": false
+  },
+  "gpus": [0], "memory_gib": 20, "seed": 0,
+  "action": {"dimension": 10, "horizon": 1, "representation": "worldgym_bridge10", "frame": "bridge_native",
+    "semantics": "official_packed_action", "rate_hz": 20, "normalization": "official_arr_0", "temporal_layout": "future"},
+  "video": {"fps": 20, "frames_per_chunk": 1, "temporal_layout": "future"},
+  "output_views": ["primary"], "reset_operation": "reset", "instruction_conditioning": false,
+  "worker_options": {"startup_timeout_seconds": 900, "request_timeout_seconds": 900, "shutdown_grace_seconds": 30}
+}

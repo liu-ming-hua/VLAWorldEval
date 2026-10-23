@@ -1,0 +1,4 @@
+# Build tools for NATTEN 0.21.7 against the already installed Torch ABI.
+cmake==4.1.0
+ninja==1.13.0
+packaging==26.3

@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "study_id": "droid_positive_controls_v1",
+  "dataset": "datasets/cosmos3_droid/success",
+  "episodes": [0, 351, 365, 795, 903],
+  "start_frame": 15,
+  "comparison_source_ticks": 240,
+  "fps": 15,
+  "seed": 0,
+  "policies": ["pi0", "pi05", "pi0_fast_droid", "groot_n17_droid"],
+  "world_models": ["ctrl", "cosmos"],
+  "allowed_gpus": [0, 1, 2, 3],
+  "memory_gib": {"ctrl": 24, "cosmos": 16, "vla": 20},
+  "state_provider": "integrated_action_target",
+  "quality_gate": "evidence_bound_manual_review_required",
+  "train_overlap": "unknown"
+}

@@ -1,0 +1,15 @@
+{
+  "model": "WorldGym",
+  "dataset": "WorldGym official sample_data/bridge",
+  "source": "https://github.com/world-model-eval/world-model-eval",
+  "source_commit": "709665b29f5c95124e7dbc05b0d4d47cd353de97",
+  "source_path": "sample_data/bridge",
+  "local_path": "datasets/worldgym/official/bridge",
+  "protocol": "official WorldGym Bridge-format sample; MP4 observation plus NPZ action",
+  "splits": {
+    "train": 9,
+    "test": 1
+  },
+  "action_shape": "[T,10]",
+  "status": "official sample available"
+}

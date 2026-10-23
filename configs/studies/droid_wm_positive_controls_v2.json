@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "study_id": "droid_wm_positive_controls_v2",
+  "dataset": "datasets/cosmos3_droid/success",
+  "episodes": [0, 351, 365, 795, 903],
+  "start_frame": 15,
+  "fps": 15,
+  "seed": 0,
+  "allowed_gpus": [0, 1, 2, 3],
+  "reused_study": "results/studies/droid_positive_controls_v1",
+  "reuse_models": ["ctrl", "cosmos"],
+  "additional_existing_model": "cosmos_joint_fd",
+  "native_replay_config": "configs/replay/cosmos_joint_droid_native_v1.json",
+  "native_action_horizon": 32,
+  "native_num_inference_steps": 30,
+  "common_comparison_source_ticks": 224,
+  "experiments": ["single_chunk", "all_complete_action_chunks"],
+  "incomplete_tail": "drop_and_report_no_padding",
+  "controller": "recorded_actions_only_no_vla",
+  "review_boundary": "assistant_visual_rejection_is_not_human_approval",
+  "train_overlap": "unknown"
+}

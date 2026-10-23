@@ -1,0 +1,18 @@
+{
+  "schema_version": 2,
+  "environment": "world_models.dreamtrue",
+  "module": "adapters.world_models.dreamtrue",
+  "adapter": "DreamTrueAdapter",
+  "kwargs": {
+    "checkpoint_path": {"project_path": "checkpoints/world_models/dreamtrue/wmvideo/checkpoint-wmvideo.safetensors"},
+    "base_model_path": {"project_path": "checkpoints/world_models/dreamtrue/Wan-AI/Wan2.1-VACE-14B"},
+    "repo_path": {"project_path": "third_party/dreamtrue"},
+    "cpu_offload": true, "vram_limit": 18
+  },
+  "gpus": [3], "memory_gib": 16, "seed": 0,
+  "action": {"kind": "structured", "protocol": "dreamtrue.rendered_geometry.threeviews.v1"},
+  "video": {"fps": 5, "frames_per_chunk": 44, "temporal_layout": "inclusive"},
+  "output_views": ["head", "hand_left", "hand_right"],
+  "reset_operation": "reset", "instruction_conditioning": false,
+  "worker_options": {"startup_timeout_seconds": 120, "request_timeout_seconds": 3600, "shutdown_grace_seconds": 120}
+}

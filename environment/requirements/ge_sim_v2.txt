@@ -1,0 +1,21 @@
+# GE-Sim 2.0 client + GPU world-model server dependencies.
+# The server is isolated because its official stack is not guaranteed to be
+# compatible with the VLA environments in this project.
+numpy
+requests
+pillow
+opencv-python-headless
+torch>=2.7,<2.8
+torchvision>=0.22,<0.23
+einops
+scipy
+matplotlib
+pyyaml
+huggingface_hub
+pin
+diffusers
+transformers
+accelerate
+safetensors
+sentencepiece
+protobuf

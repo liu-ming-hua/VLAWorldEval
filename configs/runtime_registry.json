@@ -1,0 +1,826 @@
+{
+  "schema_version": 1,
+  "models": {
+    "vlas": {
+      "OpenVLAAdapter": {
+        "module": "adapters.vla.openvla",
+        "environment": "vla.openvla",
+        "distributed": false,
+        "kwargs": {
+          "model_name_or_path": {
+            "project_path": "checkpoints/vla/openvla-7b"
+          }
+        },
+        "assets": {
+          "checkpoint": {
+            "project_path": "checkpoints/vla/openvla-7b"
+          },
+          "config": {
+            "project_path": "checkpoints/vla/openvla-7b/config.json"
+          },
+          "index": {
+            "project_path": "checkpoints/vla/openvla-7b/model.safetensors.index.json"
+          }
+        }
+      },
+      "SpatialVLAAdapter": {
+        "module": "adapters.vla.spatialvla",
+        "environment": "vla.spatialvla",
+        "distributed": false,
+        "kwargs": {
+          "model_name": {
+            "project_path": "checkpoints/vla/spatialvla-4b-224-pt"
+          }
+        },
+        "assets": {
+          "checkpoint": {
+            "project_path": "checkpoints/vla/spatialvla-4b-224-pt"
+          },
+          "config": {
+            "project_path": "checkpoints/vla/spatialvla-4b-224-pt/config.json"
+          },
+          "index": {
+            "project_path": "checkpoints/vla/spatialvla-4b-224-pt/model.safetensors.index.json"
+          }
+        }
+      },
+      "OctoAdapter": {
+        "module": "adapters.vla.octo",
+        "environment": "vla.octo",
+        "distributed": false,
+        "kwargs": {
+          "model_name": {
+            "project_path": "checkpoints/vla/octo-base-1.5"
+          }
+        },
+        "assets": {
+          "checkpoint": {
+            "project_path": "checkpoints/vla/octo-base-1.5"
+          },
+          "orbax": {
+            "project_path": "checkpoints/vla/octo-base-1.5/300000/default/checkpoint"
+          }
+        }
+      },
+      "RT1Adapter": {
+        "module": "adapters.vla.rt1",
+        "environment": "vla.rt1",
+        "distributed": false,
+        "kwargs": {
+          "checkpoint_path": {
+            "project_path": "checkpoints/vla/rt1-x/rt_1_x_tf_trained_for_002272480_step"
+          },
+          "text_encoder_path": {
+            "project_path": "checkpoints/vla/rt1-x/universal_sentence_encoder_large_v5"
+          }
+        },
+        "assets": {
+          "checkpoint": {
+            "project_path": "checkpoints/vla/rt1-x/rt_1_x_tf_trained_for_002272480_step/saved_model.pb"
+          },
+          "variables_index": {
+            "project_path": "checkpoints/vla/rt1-x/rt_1_x_tf_trained_for_002272480_step/variables/variables.index"
+          },
+          "variables_data": {
+            "project_path": "checkpoints/vla/rt1-x/rt_1_x_tf_trained_for_002272480_step/variables/variables.data-00000-of-00001"
+          },
+          "policy_spec": {
+            "project_path": "checkpoints/vla/rt1-x/rt_1_x_tf_trained_for_002272480_step/policy_specs.pbtxt"
+          },
+          "text_encoder": {
+            "project_path": "checkpoints/vla/rt1-x/universal_sentence_encoder_large_v5/saved_model.pb"
+          },
+          "encoder_variables_index": {
+            "project_path": "checkpoints/vla/rt1-x/universal_sentence_encoder_large_v5/variables/variables.index"
+          },
+          "encoder_variables_data": {
+            "project_path": "checkpoints/vla/rt1-x/universal_sentence_encoder_large_v5/variables/variables.data-00000-of-00001"
+          }
+        }
+      },
+      "GrootN15Adapter": {
+        "module": "adapters.vla.groot",
+        "environment": "vla.groot_n15",
+        "distributed": false,
+        "kwargs": {
+          "model_path": {
+            "project_path": "checkpoints/vla/groot/n1.5-3b"
+          }
+        },
+        "assets": {
+          "config": {
+            "project_path": "checkpoints/vla/groot/n1.5-3b/config.json"
+          },
+          "index": {
+            "project_path": "checkpoints/vla/groot/n1.5-3b/model.safetensors.index.json"
+          }
+        }
+      },
+      "Pi0Adapter": {
+        "module": "adapters.vla.openpi",
+        "environment": "vla.openpi",
+        "distributed": false,
+        "kwargs": {
+          "checkpoint_path": {
+            "project_path": "checkpoints/vla/openpi/pi0-droid"
+          }
+        },
+        "assets": {
+          "checkpoint": {
+            "project_path": "checkpoints/vla/openpi/pi0-droid"
+          },
+          "parameters": {
+            "project_path": "checkpoints/vla/openpi/pi0-droid/params"
+          },
+          "normalization": {
+            "project_path": "checkpoints/vla/openpi/pi0-droid/assets/droid/norm_stats.json"
+          }
+        }
+      },
+      "Pi05Adapter": {
+        "module": "adapters.vla.openpi",
+        "environment": "vla.openpi",
+        "distributed": false,
+        "kwargs": {
+          "checkpoint_path": {
+            "project_path": "checkpoints/vla/openpi/pi05-droid"
+          }
+        },
+        "assets": {
+          "checkpoint": {
+            "project_path": "checkpoints/vla/openpi/pi05-droid"
+          },
+          "parameters": {
+            "project_path": "checkpoints/vla/openpi/pi05-droid/params"
+          },
+          "normalization": {
+            "project_path": "checkpoints/vla/openpi/pi05-droid/assets/droid/norm_stats.json"
+          }
+        }
+      },
+      "GrootN17Adapter": {
+        "module": "adapters.vla.groot",
+        "environment": "vla.groot_n17",
+        "distributed": false,
+        "kwargs": {
+          "model_path": {
+            "project_path": "checkpoints/vla/groot/n1.7-3b"
+          }
+        },
+        "assets": {
+          "config": {
+            "project_path": "checkpoints/vla/groot/n1.7-3b/config.json"
+          },
+          "index": {
+            "project_path": "checkpoints/vla/groot/n1.7-3b/model.safetensors.index.json"
+          }
+        }
+      },
+      "GrootN17DroidAdapter": {
+        "module": "adapters.vla.groot",
+        "environment": "vla.groot_n17",
+        "distributed": false,
+        "kwargs": {
+          "model_path": {
+            "project_path": "checkpoints/vla/groot/n1.7-droid"
+          }
+        },
+        "assets": {
+          "config": {
+            "project_path": "checkpoints/vla/groot/n1.7-droid/config.json"
+          },
+          "index": {
+            "project_path": "checkpoints/vla/groot/n1.7-droid/model.safetensors.index.json"
+          }
+        }
+      },
+      "Pi0FastDroidAdapter": {
+        "module": "adapters.vla.openpi",
+        "environment": "vla.openpi",
+        "distributed": false,
+        "kwargs": {
+          "checkpoint_path": {
+            "project_path": "checkpoints/vla/openpi/pi0-fast-droid"
+          }
+        },
+        "assets": {
+          "checkpoint": {
+            "project_path": "checkpoints/vla/openpi/pi0-fast-droid"
+          },
+          "parameters": {
+            "project_path": "checkpoints/vla/openpi/pi0-fast-droid/params"
+          },
+          "normalization": {
+            "project_path": "checkpoints/vla/openpi/pi0-fast-droid/assets/droid/norm_stats.json"
+          },
+          "fast_tokenizer": {
+            "project_path": "checkpoints/vla/openpi/fast-tokenizer/processor_config.json"
+          },
+          "official_source": {
+            "project_path": "checkpoints/vla/openpi/pi0-fast-droid/.vlaworldeval-official-source.json"
+          }
+        }
+      }
+    },
+    "world_models": {
+      "WorldGymAdapter": {
+        "module": "adapters.world_models.worldgym",
+        "environment": "world_models.worldgym",
+        "distributed": false,
+        "kwargs": {
+          "checkpoint_path": {
+            "runtime_path": "world_model_checkpoint"
+          },
+          "default_cfg": {
+            "sampling": "guidance"
+          },
+          "use_pixel_rope": false,
+          "num_inference_steps": {
+            "sampling": "num_inference_steps"
+          }
+        },
+        "assets": {
+          "checkpoint": {
+            "runtime_path": "world_model_checkpoint"
+          },
+          "runtime_manifest": {
+            "project_path": "third_party/worldgym_runtime/runtime.json"
+          },
+          "runtime_network": {
+            "project_path": "third_party/worldgym_runtime/worldgym_runtime/model.py"
+          },
+          "vae_config": {
+            "project_path": "checkpoints/world_models/worldgym/vae/sd3_vae/config.json"
+          },
+          "vae_weights": {
+            "project_path": "checkpoints/world_models/worldgym/vae/sd3_vae/diffusion_pytorch_model.safetensors"
+          }
+        }
+      },
+      "Cosmos3NanoDroidFDAdapter": {
+        "module": "adapters.world_models.cosmos3_nano_droid_fd",
+        "environment": "world_models.cosmos3_nano_droid_fd",
+        "distributed": true,
+        "kwargs": {
+          "model_path": {
+            "runtime_path": "world_model_checkpoint"
+          },
+          "runtime_dir": {
+            "suite_path": "workers/cosmos_runtime"
+          },
+          "num_inference_steps": {
+            "sampling": "num_inference_steps"
+          },
+          "guidance": {
+            "sampling": "guidance"
+          },
+          "shift": {
+            "sampling": "shift"
+          },
+          "resolution": {
+            "sampling": "resolution"
+          },
+          "diffusion_cache": {
+            "sampling": "diffusion_cache"
+          },
+          "use_torch_compile": {
+            "sampling": "torch_compile"
+          }
+        },
+        "assets": {
+          "checkpoint": {
+            "runtime_path": "world_model_checkpoint"
+          },
+          "vae": {
+            "project_path": "checkpoints/world_models/cosmos3_nano_droid_fd/vae/Wan2.2_VAE.pth"
+          },
+          "tokenizer_vocab": {
+            "project_path": "checkpoints/world_models/cosmos3_nano_droid_fd/text_tokenizer/vocab.json"
+          },
+          "tokenizer_merges": {
+            "project_path": "checkpoints/world_models/cosmos3_nano_droid_fd/text_tokenizer/merges.txt"
+          },
+          "tokenizer_config": {
+            "project_path": "checkpoints/world_models/cosmos3_nano_droid_fd/text_tokenizer/tokenizer_config.json"
+          },
+          "framework": {
+            "project_path": "third_party/cosmos-framework/cosmos_framework/inference/model.py"
+          }
+        }
+      },
+      "DreamDojoAdapter": {
+        "module": "adapters.world_models.dreamdojo",
+        "environment": "world_models.dreamdojo",
+        "distributed": false,
+        "kwargs": {
+          "checkpoint_path": {"project_path": "checkpoints/world_models/dreamdojo/2B_GR1_post-train"},
+          "assets_path": {"project_path": "checkpoints/world_models/dreamdojo"},
+          "repo_path": {"project_path": "third_party/dreamdojo"},
+          "num_inference_steps": 35,
+          "guidance": 0
+        },
+        "assets": {
+          "checkpoint": {"project_path": "checkpoints/world_models/dreamdojo/2B_GR1_post-train"},
+          "manifest": {"project_path": "checkpoints/world_models/dreamdojo/.vlaworldeval-download.json"},
+          "tokenizer": {"project_path": "checkpoints/world_models/dreamdojo/tokenizer"},
+          "text_encoder": {"project_path": "checkpoints/world_models/dreamdojo/reason"},
+          "source": {"project_path": "third_party/dreamdojo/cosmos_predict2/_src/predict2/inference/video2world.py"}
+        }
+      },
+      "IWSAdapter": {
+        "module": "adapters.world_models.iws",
+        "environment": "world_models.iws",
+        "distributed": false,
+        "kwargs": {
+          "checkpoint_path": {"project_path": "checkpoints/world_models/iws/pusht_cam1/checkpoints/best.ckpt"},
+          "repo_path": {"project_path": "third_party/iws"}
+        },
+        "assets": {
+          "checkpoint": {"project_path": "checkpoints/world_models/iws/pusht_cam1/checkpoints/best.ckpt"},
+          "hydra": {"project_path": "checkpoints/world_models/iws/pusht_cam1/.hydra/config.yaml"},
+          "checkpoint_manifest": {"project_path": "checkpoints/world_models/iws/.vlaworldeval-download.json"}
+        }
+      },
+      "PlayWorldAdapter": {
+        "module": "adapters.world_models.playworld",
+        "environment": "world_models.playworld",
+        "distributed": false,
+        "kwargs": {
+          "checkpoint_path": {"project_path": "checkpoints/world_models/playworld/wm/checkpoint-120000.pt"},
+          "svd_model_path": {"project_path": "checkpoints/world_models/playworld/svd"},
+          "clip_model_path": {"project_path": "checkpoints/world_models/playworld/clip"},
+          "repo_path": {"project_path": "third_party/playworld"},
+          "action_downsample": 3,
+          "num_inference_steps": 4,
+          "decode_chunk_size": 5
+        },
+        "assets": {
+          "checkpoint": {"project_path": "checkpoints/world_models/playworld/wm/checkpoint-120000.pt"},
+          "svd": {"project_path": "checkpoints/world_models/playworld/svd"},
+          "clip": {"project_path": "checkpoints/world_models/playworld/clip"},
+          "source": {"project_path": "third_party/playworld/openworld/world_models/vidwm_world_model.py"}
+        }
+      },
+      "DreamTrueAdapter": {
+        "module": "adapters.world_models.dreamtrue",
+        "environment": "world_models.dreamtrue",
+        "distributed": false,
+        "kwargs": {
+          "checkpoint_path": {"project_path": "checkpoints/world_models/dreamtrue/wmvideo/checkpoint-wmvideo.safetensors"},
+          "base_model_path": {"project_path": "checkpoints/world_models/dreamtrue/Wan-AI/Wan2.1-VACE-14B"},
+          "repo_path": {"project_path": "third_party/dreamtrue"}
+        },
+        "assets": {
+          "lora": {"project_path": "checkpoints/world_models/dreamtrue/wmvideo/checkpoint-wmvideo.safetensors"},
+          "base": {"project_path": "checkpoints/world_models/dreamtrue/Wan-AI/Wan2.1-VACE-14B"},
+          "source": {"project_path": "third_party/dreamtrue/wmvideo/Script/Demo/inference_demo_v2v_vace.py"}
+        }
+      },
+      "IRASimAdapter": {
+        "module": "adapters.world_models.irasim",
+        "environment": "world_models.irasim",
+        "distributed": false,
+        "kwargs": {
+          "checkpoint_path": {"project_path": "checkpoints/world_models/irasim/languagetable_frame_ada.pt"},
+          "vae_model_path": {"project_path": "checkpoints/world_models/irasim/sdxl_vae"},
+          "repo_path": {"project_path": "third_party/irasim"},
+          "num_inference_steps": 50
+        },
+        "assets": {
+          "checkpoint": {"project_path": "checkpoints/world_models/irasim/languagetable_frame_ada.pt"},
+          "vae": {"project_path": "checkpoints/world_models/irasim/sdxl_vae/vae/config.json"},
+          "provenance": {"project_path": "checkpoints/world_models/irasim/checkpoint.json"},
+          "source": {"project_path": "third_party/irasim/models/irasim.py"}
+        }
+      },
+      "CtrlWorldAdapter": {
+        "module": "adapters.world_models.ctrl_world",
+        "environment": "world_models.ctrl_world",
+        "distributed": false,
+        "kwargs": {
+          "svd_model_path": {
+            "project_path": "checkpoints/world_models/ctrl_world/svd"
+          },
+          "clip_model_path": {
+            "project_path": "checkpoints/world_models/ctrl_world/clip"
+          },
+          "checkpoint_path": {
+            "runtime_path": "world_model_checkpoint"
+          },
+          "repo_path": {
+            "project_path": "third_party/ctrl-world"
+          },
+          "num_inference_steps": {
+            "sampling": "num_inference_steps"
+          },
+          "guidance_scale": {
+            "sampling": "guidance"
+          },
+          "prompt": "__instruction_supplied_on_reset__"
+        },
+        "assets": {
+          "checkpoint": {
+            "runtime_path": "world_model_checkpoint"
+          },
+          "svd": {
+            "project_path": "checkpoints/world_models/ctrl_world/svd"
+          },
+          "clip": {
+            "project_path": "checkpoints/world_models/ctrl_world/clip"
+          },
+          "statistics": {
+            "project_path": "third_party/ctrl-world/dataset_meta_info/droid/stat.json"
+          }
+        }
+      }
+    }
+  },
+  "datasets": {
+    "worldgym_bridge": {
+      "module": "evaluation.datasets.worldgym",
+      "loader": "load_worldgym_episode",
+      "arguments": {
+        "root": "root",
+        "episode": "episode",
+        "start": "start",
+        "chunks": "chunks",
+        "horizon": "horizon",
+        "fps": "fps",
+        "instruction": "instruction",
+        "replay": "replay"
+      }
+    },
+    "droid": {
+      "module": "evaluation.datasets.droid",
+      "loader": "load_droid_episode",
+      "arguments": {
+        "root": "root",
+        "episode_index": "episode",
+        "start": "start",
+        "chunks": "chunks",
+        "fps": "fps"
+      }
+    },
+    "droid_openpi": {
+      "module": "evaluation.datasets.droid",
+      "loader": "load_openpi_droid_episode",
+      "arguments": {
+        "root": "root",
+        "episode_index": "episode",
+        "start": "start",
+        "chunks": "chunks",
+        "fps": "fps"
+      }
+    },
+    "droid_groot_n17": {
+      "module": "evaluation.datasets.droid",
+      "loader": "load_groot_n17_droid_episode",
+      "arguments": {
+        "root": "root",
+        "episode_index": "episode",
+        "start": "start",
+        "chunks": "chunks",
+        "fps": "fps"
+      }
+    },
+    "droid_ctrl_openpi": {
+      "module": "evaluation.datasets.droid",
+      "loader": "load_openpi_ctrl_episode",
+      "arguments": {
+        "root": "root",
+        "episode_index": "episode",
+        "start": "start",
+        "chunks": "chunks",
+        "fps": "fps"
+      }
+    },
+    "droid_ctrl_groot_n15": {
+      "module": "evaluation.datasets.droid",
+      "loader": "load_groot_n15_ctrl_episode",
+      "arguments": {
+        "root": "root",
+        "episode_index": "episode",
+        "start": "start",
+        "chunks": "chunks",
+        "fps": "fps"
+      }
+    },
+    "droid_ctrl_groot_n17": {
+      "module": "evaluation.datasets.droid",
+      "loader": "load_groot_n17_ctrl_episode",
+      "arguments": {
+        "root": "root",
+        "episode_index": "episode",
+        "start": "start",
+        "chunks": "chunks",
+        "fps": "fps"
+      }
+    }
+  },
+  "pairs": [
+    {
+      "id": "openx_worldgym",
+      "vlas": [
+        "OpenVLAAdapter",
+        "SpatialVLAAdapter",
+        "OctoAdapter",
+        "RT1Adapter"
+      ],
+      "world_model": "WorldGymAdapter",
+      "dataset": "worldgym_bridge",
+      "sampling_constraints": {
+        "image_size": 256,
+        "resolution": "256",
+        "torch_compile": false
+      },
+      "replay_actions": [
+        "official_worldgym_actions"
+      ],
+      "state_providers": [
+        "none"
+      ],
+      "replay_transforms": {
+        "official_worldgym_actions": "identity"
+      },
+      "provenance": {
+        "git_sources": [
+          "world-model-eval"
+        ],
+        "files": {
+          "vae_config": "checkpoints/world_models/worldgym/vae/sd3_vae/config.json",
+          "runtime_manifest": "third_party/worldgym_runtime/runtime.json",
+          "runtime_model": "third_party/worldgym_runtime/worldgym_runtime/model.py",
+          "runtime_diffusion": "third_party/worldgym_runtime/worldgym_runtime/diffusion.py",
+          "runtime_vae": "third_party/worldgym_runtime/worldgym_runtime/vae.py",
+          "runtime_runner": "third_party/worldgym_runtime/worldgym_runtime/world_model.py"
+        },
+        "source_files": [
+          "evaluation/datasets/worldgym.py",
+          "vlaworldeval/worldgym_runtime.py",
+          "adapters/actions/bridge.py"
+        ]
+      }
+    },
+    {
+      "id": "groot_cosmos_droid",
+      "vlas": [
+        "GrootN15Adapter"
+      ],
+      "world_model": "Cosmos3NanoDroidFDAdapter",
+      "dataset": "droid",
+      "sampling_constraints": {
+        "image_size": 480,
+        "resolution": "480",
+        "torch_compile": false
+      },
+      "replay_actions": [
+        "dataset_pose_derived",
+        "shuffle_valid_dataset_actions",
+        "zero_translation_identity_rotation_preserve_gripper"
+      ],
+      "replay_transforms": {
+        "dataset_pose_derived": "identity",
+        "shuffle_valid_dataset_actions": "shuffle_rows",
+        "zero_translation_identity_rotation_preserve_gripper": "zero_xyz_identity_rot6d"
+      },
+      "state_providers": [
+        "hold_initial",
+        "integrated_action_target"
+      ],
+      "provenance": {
+        "git_sources": [
+          "cosmos-framework",
+          "isaac-groot-n15"
+        ],
+        "files": {
+          "vla_config": "checkpoints/vla/groot/n1.5-3b/config.json",
+          "vla_weight_index": "checkpoints/vla/groot/n1.5-3b/model.safetensors.index.json",
+          "cosmos_compatibility_patch": "scripts/setup/patches/cosmos_framework_py311_torch27.patch"
+        },
+        "wm_files": {
+          "wm_config": "config.json",
+          "wm_weight_index": "model.safetensors.index.json"
+        },
+        "action_bridge_files": [
+          "dynamics_calibration"
+        ],
+        "source_files": [
+          "evaluation/datasets/droid.py"
+        ]
+      }
+    },
+    {
+      "id": "openpi_cosmos_droid",
+      "vlas": [
+        "Pi0Adapter",
+        "Pi05Adapter",
+        "Pi0FastDroidAdapter"
+      ],
+      "world_model": "Cosmos3NanoDroidFDAdapter",
+      "dataset": "droid_openpi",
+      "sampling_constraints": {
+        "image_size": 480,
+        "resolution": "480",
+        "torch_compile": false
+      },
+      "replay_actions": [
+        "dataset_pose_derived"
+      ],
+      "replay_transforms": {
+        "dataset_pose_derived": "identity"
+      },
+      "state_providers": [
+        "integrated_action_target"
+      ],
+      "provenance": {
+        "git_sources": [
+          "cosmos-framework",
+          "openpi"
+        ],
+        "files": {
+          "cosmos_compatibility_patch": "scripts/setup/patches/cosmos_framework_py311_torch27.patch"
+        },
+        "wm_files": {
+          "wm_config": "config.json",
+          "wm_weight_index": "model.safetensors.index.json"
+        },
+        "action_bridge_files": [
+          "kinematics"
+        ],
+        "source_files": [
+          "evaluation/datasets/droid.py",
+          "adapters/actions/openpi_droid.py"
+        ]
+      }
+    },
+    {
+      "id": "groot_n17_cosmos_droid",
+      "vlas": [
+        "GrootN17Adapter",
+        "GrootN17DroidAdapter"
+      ],
+      "world_model": "Cosmos3NanoDroidFDAdapter",
+      "dataset": "droid_groot_n17",
+      "sampling_constraints": {
+        "image_size": 480,
+        "resolution": "480",
+        "torch_compile": false
+      },
+      "replay_actions": [
+        "dataset_pose_derived"
+      ],
+      "replay_transforms": {
+        "dataset_pose_derived": "identity"
+      },
+      "state_providers": [
+        "integrated_action_target",
+        "pilworld_action_target"
+      ],
+      "provenance": {
+        "git_sources": [
+          "cosmos-framework",
+          "isaac-groot-n17"
+        ],
+        "files": {
+          "cosmos_compatibility_patch": "scripts/setup/patches/cosmos_framework_py311_torch27.patch"
+        },
+        "wm_files": {
+          "wm_config": "config.json",
+          "wm_weight_index": "model.safetensors.index.json"
+        },
+        "action_bridge_files": [
+          "kinematics"
+        ],
+        "source_files": [
+          "evaluation/datasets/droid.py",
+          "adapters/actions/openpi_droid.py",
+          "adapters/actions/groot_n17_droid.py"
+        ]
+      },
+      "evaluation_modes": [
+        "policy_loop",
+        "pilworld"
+      ]
+    },
+    {
+      "id": "droid_ctrl_openpi",
+      "vlas": [
+        "Pi0Adapter",
+        "Pi05Adapter",
+        "Pi0FastDroidAdapter"
+      ],
+      "world_model": "CtrlWorldAdapter",
+      "dataset": "droid_ctrl_openpi",
+      "dataset_source_fps": 15,
+      "sampling_constraints": {
+        "image_size": 320,
+        "resolution": "320x192",
+        "torch_compile": false
+      },
+      "replay_actions": [
+        "dataset_pose_derived"
+      ],
+      "replay_transforms": {
+        "dataset_pose_derived": "identity"
+      },
+      "state_providers": [
+        "integrated_action_target"
+      ],
+      "provenance": {
+        "git_sources": [
+          "ctrl-world",
+          "openpi"
+        ],
+        "action_bridge_files": [
+          "kinematics"
+        ],
+        "source_files": [
+          "evaluation/datasets/droid.py",
+          "adapters/actions/droid_ctrl.py",
+          "adapters/observations/droid.py"
+        ]
+      }
+    },
+    {
+      "id": "droid_ctrl_groot_n15",
+      "vlas": [
+        "GrootN15Adapter"
+      ],
+      "world_model": "CtrlWorldAdapter",
+      "dataset": "droid_ctrl_groot_n15",
+      "dataset_source_fps": 15,
+      "sampling_constraints": {
+        "image_size": 320,
+        "resolution": "320x192",
+        "torch_compile": false
+      },
+      "replay_actions": [
+        "dataset_pose_derived"
+      ],
+      "replay_transforms": {
+        "dataset_pose_derived": "identity"
+      },
+      "state_providers": [
+        "integrated_action_target"
+      ],
+      "provenance": {
+        "git_sources": [
+          "ctrl-world",
+          "isaac-groot-n15"
+        ],
+        "action_bridge_files": [
+          "dynamics_calibration"
+        ],
+        "source_files": [
+          "evaluation/datasets/droid.py",
+          "adapters/actions/droid_ctrl.py",
+          "adapters/observations/droid.py"
+        ]
+      }
+    },
+    {
+      "id": "droid_ctrl_groot_n17",
+      "vlas": [
+        "GrootN17Adapter",
+        "GrootN17DroidAdapter"
+      ],
+      "world_model": "CtrlWorldAdapter",
+      "dataset": "droid_ctrl_groot_n17",
+      "dataset_source_fps": 15,
+      "sampling_constraints": {
+        "image_size": 320,
+        "resolution": "320x192",
+        "torch_compile": false
+      },
+      "replay_actions": [
+        "dataset_pose_derived"
+      ],
+      "replay_transforms": {
+        "dataset_pose_derived": "identity"
+      },
+      "state_providers": [
+        "integrated_action_target",
+        "pilworld_action_target"
+      ],
+      "provenance": {
+        "git_sources": [
+          "ctrl-world",
+          "isaac-groot-n17"
+        ],
+        "action_bridge_files": [
+          "kinematics"
+        ],
+        "source_files": [
+          "evaluation/datasets/droid.py",
+          "adapters/actions/droid_ctrl.py",
+          "adapters/observations/droid.py",
+          "adapters/actions/groot_n17_droid.py"
+        ]
+      },
+      "evaluation_modes": [
+        "policy_loop",
+        "pilworld"
+      ]
+    }
+  ]
+}

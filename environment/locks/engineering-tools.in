@@ -1,0 +1,3 @@
+# Explicit code-quality tooling; not required for model inference.
+pytest==9.1.1
+ruff==0.16.9

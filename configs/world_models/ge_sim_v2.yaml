@@ -1,0 +1,16 @@
+# Project-local GE-Sim 2.0 server configuration.
+# Released checkpoint: G01 + OmniPicker, community v2.0.1, distilled 2B.
+checkpoint: checkpoints/world_models/ge_sim_v2/checkpoints/gesim_community_v2.0.1_g01op_distill_2B
+
+device: cuda
+dtype: bfloat16
+num_inference_steps: 4
+distilled_sampling: true
+distill_sigma_schedule: [1.0, 0.9375, 0.8333, 0.625]
+
+# Optional CUDA extensions. The baseline stays portable; enable after the
+# matching kernels are installed.
+liger_norm: false
+liger_layernorm: false
+triton_rope: false
+sparge_attention: false

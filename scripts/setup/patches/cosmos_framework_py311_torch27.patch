@@ -1,0 +1,205 @@
+--- a/cosmos_framework/inference/model.py
++++ b/cosmos_framework/inference/model.py
+@@ -14,12 +14,112 @@
+ import torch.distributed.checkpoint as dcp
+ import transformers
+ from torch.distributed.checkpoint.filesystem import FileSystemReader
+-from torch.distributed.checkpoint.hf_storage import (
+-    CUSTOM_METADATA_KEY,
+-    SAVED_OFFSETS_KEY,
+-    HuggingFaceStorageReader,
+-    _HFStorageInfo,
+-)
++try:
++    from torch.distributed.checkpoint.hf_storage import (
++        CUSTOM_METADATA_KEY,
++        SAVED_OFFSETS_KEY,
++        HuggingFaceStorageReader,
++        _HFStorageInfo,
++    )
++except ModuleNotFoundError:  # Torch 2.7 compatibility for the local Cosmos3 training env.
++    # Torch 2.7 exposes only the private `_hf_storage` reader, while the current official
++    # Cosmos Framework uses the public reader added in newer Torch releases.  The framework's
++    # Diffusers path needs local safetensors slices, so provide the small compatible reader here
++    # instead of forcing installation of an incompatible CUDA/Torch stack.
++    from dataclasses import dataclass
++
++    from torch.distributed.checkpoint.metadata import BytesStorageMetadata
++    from torch.distributed.checkpoint.storage import StorageReader
++    from torch.distributed.checkpoint.planner import LoadPlan, LoadPlanner
++    from torch.futures import Future
++
++    CUSTOM_METADATA_KEY = "dcp_metadata"
++    SAVED_OFFSETS_KEY = "saved_offsets"
++
++    @dataclass(frozen=True)
++    class _HFStorageInfo:
++        relative_path: str
++        shape: torch.Size
++        dtype: torch.dtype
++
++    class HuggingFaceStorageReader(StorageReader):
++        """Local safetensors reader compatible with the newer HF DCP API."""
++
++        def __init__(self, path: str) -> None:
++            self.path = Path(path)
++            self.storage_data = {}
++            self.load_id = str(self.path)
++
++        def reset(self, checkpoint_id=None) -> None:
++            if checkpoint_id is not None:
++                self.path = Path(checkpoint_id)
++            self.load_id = str(self.path)
++
++        def set_up_storage_reader(self, metadata, is_coordinator: bool) -> None:
++            self.storage_data = metadata.storage_data or {}
++            return None
++
++        def prepare_local_plan(self, plan: LoadPlan) -> LoadPlan:
++            return plan
++
++        def prepare_global_plan(self, plans: list[LoadPlan]) -> list[LoadPlan]:
++            return plans
++
++        @classmethod
++        def validate_checkpoint_id(cls, checkpoint_id) -> bool:
++            return Path(checkpoint_id).is_dir()
++
++        def read_metadata(self):
++            from safetensors import safe_open
++            from safetensors.torch import _getdtype
++
++            index_path = self.path / "model.safetensors.index.json"
++            with index_path.open() as f:
++                index = json.load(f)
++            tensors, storage = {}, {}
++            files = {}
++            for key, name in index["weight_map"].items():
++                files.setdefault(name, []).append(key)
++            for name, keys in files.items():
++                with safe_open(str(self.path / name), framework="pt") as handle:
++                    for key in keys:
++                        value = handle.get_slice(key)
++                        shape = torch.Size(value.get_shape())
++                        dtype = _getdtype(value.get_dtype())
++                        offsets = torch.Size([0] * len(shape))
++                        tensors[key] = TensorStorageMetadata(
++                            properties=TensorProperties(dtype=dtype), size=shape,
++                            chunks=[ChunkStorageMetadata(offsets=offsets, sizes=shape)],
++                        )
++                        storage[MetadataIndex(key, offsets)] = _HFStorageInfo(name, shape, dtype)
++            metadata = Metadata(
++                state_dict_metadata=tensors,
++                storage_data=storage,
++            )
++            metadata.storage_meta = StorageMeta(load_id=self.load_id)
++            return metadata
++
++        def read_data(self, plan: LoadPlan, planner: LoadPlanner) -> Future[None]:
++            from safetensors import safe_open
++
++            per_file: dict[str, list] = {}
++            for request in plan.items:
++                info = self.storage_data[request.storage_index]
++                per_file.setdefault(info.relative_path, []).append(request)
++            for relative_path, requests in per_file.items():
++                with safe_open(str(self.path / relative_path), framework="pt") as handle:
++                    for request in requests:
++                        slices = tuple(
++                            slice(offset, offset + length)
++                            for offset, length in zip(request.storage_offsets, request.lengths)
++                        )
++                        tensor = handle.get_slice(request.storage_index.fqn)[slices]
++                        target = planner.resolve_tensor(request).detach()
++                        target.copy_(tensor)
++                        planner.commit_tensor(request, target)
++            future: Future[None] = Future()
++            future.set_result(None)
++            return future
+ from torch.distributed.checkpoint.metadata import (
+     STORAGE_TYPES,
+     ChunkStorageMetadata,
+--- a/cosmos_framework/model/generator/mot/attention.py
++++ b/cosmos_framework/model/generator/mot/attention.py
+@@ -7,7 +7,12 @@
+ from typing import Any
+ 
+ import torch
+-from torch.fx.experimental.symbolic_shapes import guard_or_true
++try:
++    from torch.fx.experimental.symbolic_shapes import guard_or_true
++except ImportError:
++    def guard_or_true(value):
++        """Eager-only compatibility; symbolic compilation requires newer Torch."""
++        return bool(value)
+ from torch.nn.attention.flex_attention import BlockMask
+ 
+ from cosmos_framework.model.attention import (
+--- a/cosmos_framework/model/generator/mot/context_parallel_utils.py
++++ b/cosmos_framework/model/generator/mot/context_parallel_utils.py
+@@ -37,7 +37,12 @@
+ import torch.distributed as dist
+ from torch.distributed.device_mesh import DeviceMesh
+ from torch.distributed.tensor import DTensor, Partial, Replicate, Shard
+-from torch.fx.experimental.symbolic_shapes import guard_or_false
++try:
++    from torch.fx.experimental.symbolic_shapes import guard_or_false
++except ImportError:
++    def guard_or_false(value):
++        """Eager-only compatibility; symbolic compilation requires newer Torch."""
++        return bool(value)
+ 
+ from cosmos_framework.utils import distributed
+ from cosmos_framework.model.generator.mot.attention import SplitInfo
+--- a/cosmos_framework/data/generator/sequence_packing/runtime.py
++++ b/cosmos_framework/data/generator/sequence_packing/runtime.py
+@@ -8,7 +8,12 @@
+ from typing import Any, List, Tuple
+ 
+ import torch
+-from torch.fx.experimental.symbolic_shapes import guard_or_true
++try:
++    from torch.fx.experimental.symbolic_shapes import guard_or_true
++except ImportError:
++    def guard_or_true(value):
++        """Eager-only compatibility; symbolic compilation requires newer Torch."""
++        return bool(value)
+ 
+ from cosmos_framework.utils import log
+ 
+--- a/cosmos_framework/inference/inference.py
++++ b/cosmos_framework/inference/inference.py
+@@ -7,7 +7,7 @@
+ from collections.abc import Callable, Generator, Iterable, MutableMapping
+ from dataclasses import dataclass
+ from pathlib import Path
+-from typing import TYPE_CHECKING, Any, Literal, Sequence, TypeVar, cast, override
++from typing import TYPE_CHECKING, Any, Literal, Sequence, TypeVar, cast
+ 
+ import attrs
+ import cattrs
+@@ -18,7 +18,7 @@
+ from qwen_vl_utils.vision_process import smart_nframes
+ from torch.utils._pytree import tree_map_only
+ from torch.utils.data import Dataset
+-from typing_extensions import Self
++from typing_extensions import Self, override
+ 
+ from cosmos_framework.configs.base.defaults.compile import CompileConfig
+ from cosmos_framework.configs.base.defaults.parallelism import ParallelismConfig
+--- a/cosmos_framework/inference/args.py
++++ b/cosmos_framework/inference/args.py
+@@ -6,11 +6,11 @@
+ import os
+ from functools import cache
+ from pathlib import Path
+-from typing import TYPE_CHECKING, Annotated, Any, ClassVar, Literal, Self, Sequence, cast, override
++from typing import TYPE_CHECKING, Annotated, Any, ClassVar, Literal, Self, Sequence, cast
+ 
+ import pydantic
+ import pynvml
+-from typing_extensions import assert_never
++from typing_extensions import assert_never, override
+ from tyro.conf import Suppress
+ 
+ from cosmos_framework.inference.common.args import (

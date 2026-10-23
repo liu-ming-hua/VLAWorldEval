@@ -1,0 +1,10 @@
+{
+  "model": "tau-0-WM Simulator",
+  "source_repository": "https://github.com/sii-research/tau-0-wm",
+  "source_commit": "a3e4c0f",
+  "source_path": "datasets/tau0_wm/taco_play/sample_episode_000000",
+  "local_path": "datasets/tau0_wm/taco_play/sample_episode_000000",
+  "protocol": "local TacoPlay provenance sample; synchronized static/gripper views; 7-D absolute action; not compatible with the downloaded simulator checkpoint (20-D relative-EEF API)",
+  "action_shape": [null, 7],
+  "camera_order": ["rgb_static", "rgb_gripper"]
+}

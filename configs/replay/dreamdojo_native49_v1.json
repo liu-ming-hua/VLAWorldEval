@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "environment": "world_models.dreamdojo",
+  "module": "adapters.world_models.dreamdojo", "adapter": "DreamDojoAdapter",
+  "kwargs": {
+    "checkpoint_path": {"project_path": "checkpoints/world_models/dreamdojo"},
+    "assets_path": {"project_path": "checkpoints/world_models/dreamdojo"},
+    "repo_path": {"project_path": "third_party/dreamdojo"},
+    "device": "cuda:0", "num_inference_steps": 35, "seed": 0,
+    "native_multiround": true
+  },
+  "gpus": [0], "memory_gib": 22, "seed": 0,
+  "action": {
+    "dimension": 384, "horizon": 12, "representation": "dreamdojo_gr1_slots384",
+    "frame": "gr1_joint_coordinates", "semantics": "official_normalized_four_frame_block_deltas_with_initial_state_key",
+    "rate_hz": 10, "normalization": "official_minmax_then_block_delta", "temporal_layout": "future"
+  },
+  "video": {"fps": 10, "frames_per_chunk": 12, "temporal_layout": "future"},
+  "output_views": ["ego_view"], "reset_operation": "reset", "instruction_conditioning": false,
+  "worker_options": {"startup_timeout_seconds": 900, "request_timeout_seconds": 900, "shutdown_grace_seconds": 30}
+}

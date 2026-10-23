@@ -1,0 +1,15 @@
+# Existing real-inference-validated RT-1-X environment overrides.
+# tf-agents 0.19 metadata pins TFP ~=0.23 and typing-extensions==4.5;
+# the project's shared Torch 2.6 / TF 2.21 stack uses these versions instead.
+# This is a documented compatibility override, not upstream's unmodified stack.
+tensorflow-probability==0.24.0
+typing-extensions==4.16.0
+# TF-Agents declares gym<=0.23.0; real inference uses this patch release.
+gym==0.23.1
+# Rendering is not used by SavedModel inference; pin the optional renderer
+# explicitly rather than inheriting TF-Agents' legacy training dependency.
+pygame==2.6.1
+ml-dtypes==0.5.4
+# SavedModel dependencies still import pkg_resources, absent in the latest
+# setuptools. Pin the version from the real-inference-validated RT-1 stack.
+setuptools==80.10.2

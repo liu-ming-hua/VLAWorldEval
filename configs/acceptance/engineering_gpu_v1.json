@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {"id": "groot_n15_cosmos_resource_bounded", "suite": "configs/experiments/engineering_groot_cosmos_v1.json",
+     "smoke": ["wm_real_smoke", "loop_integrated_smoke"], "long": ["loop_integrated_long"], "seeds": [0]}
+  ]
+}

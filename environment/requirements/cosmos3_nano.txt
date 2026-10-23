@@ -1,0 +1,17 @@
+# NVIDIA Cosmos3-Nano Diffusers generator environment.
+# Keep this isolated: Cosmos3 action generation requires the newer Diffusers
+# and Transformers stack and a large BF16 model.
+numpy
+pillow
+av
+imageio
+requests
+torch>=2.7,<2.8
+torchvision>=0.22,<0.23
+diffusers>=0.40.0
+transformers>=5.11.0
+accelerate
+safetensors>=0.8.0
+sentencepiece
+protobuf
+pyyaml

@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "environment": "world_models.cosmos3_nano_droid_fd",
+  "module": "adapters.world_models.cosmos3_droid_native",
+  "adapter": "Cosmos3DroidFDNativeAdapter",
+  "kwargs": {
+    "model_path": {"project_path": "checkpoints/world_models/cosmos3_nano_droid_fd/community_jere_mybao_v1_20k_ema"},
+    "runtime_dir": {"suite_path": "runtime"},
+    "num_inference_steps": 30, "guidance": 1.0, "shift": 10.0,
+    "resolution": "480", "diffusion_cache": false, "use_torch_compile": false,
+    "seed": 0
+  },
+  "gpus": [0, 1, 2, 3], "memory_gib": 16, "seed": 0,
+  "action": {
+    "dimension": 10, "horizon": 16,
+    "representation": "framewise_delta_xyz+opencv_rot6d+flipped_gripper",
+    "frame": "droid_cosmos_opencv", "semantics": "delta",
+    "rate_hz": 15, "normalization": "none_raw_metric", "temporal_layout": "future"
+  },
+  "video": {"fps": 15, "frames_per_chunk": 16, "temporal_layout": "future"},
+  "output_views": ["droid.cosmos_composite"], "reset_operation": "reset",
+  "instruction_conditioning": false,
+  "worker_options": {"startup_timeout_seconds": 900, "request_timeout_seconds": 900, "shutdown_grace_seconds": 30}
+}

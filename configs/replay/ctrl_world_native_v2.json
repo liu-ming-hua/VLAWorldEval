@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "environment": "world_models.ctrl_world",
+  "module": "adapters.world_models.ctrl_world",
+  "adapter": "CtrlWorldAdapter",
+  "kwargs": {
+    "svd_model_path": {
+      "project_path": "checkpoints/world_models/ctrl_world/svd"
+    },
+    "clip_model_path": {
+      "project_path": "checkpoints/world_models/ctrl_world/clip"
+    },
+    "checkpoint_path": {
+      "project_path": "checkpoints/world_models/ctrl_world/ctrl_world/checkpoint-10000.pt"
+    },
+    "repo_path": {
+      "project_path": "third_party/ctrl-world"
+    },
+    "num_inference_steps": 50
+  },
+  "gpus": [
+    0
+  ],
+  "memory_gib": 20,
+  "seed": 0,
+  "action": {
+    "dimension": 7,
+    "horizon": 5,
+    "representation": "xyz_rpy_gripper",
+    "frame": "droid_robot_base",
+    "semantics": "absolute_eef_state",
+    "rate_hz": 5,
+    "normalization": "raw_metric_adapter_normalizes",
+    "temporal_layout": "inclusive"
+  },
+  "video": {
+    "fps": 5,
+    "frames_per_chunk": 5,
+    "temporal_layout": "inclusive"
+  },
+  "output_views": [
+    "exterior_1",
+    "exterior_2",
+    "wrist"
+  ],
+  "reset_operation": "reset_official_replay",
+  "instruction_conditioning": true,
+  "worker_options": {
+    "startup_timeout_seconds": 900,
+    "request_timeout_seconds": 900,
+    "shutdown_grace_seconds": 30
+  }
+}

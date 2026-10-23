@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "suite_id": "groot_n15_ctrl_world_droid_v1",
+  "pair_manifest": "configs/pairs/groot_n15__ctrl_world.json",
+  "dataset": {
+    "root": "datasets/cosmos3_droid/success",
+    "episodes": [
+      0
+    ],
+    "start_frame": 30,
+    "fps": 15,
+    "tail_policy": "drop_incomplete_chunk"
+  },
+  "runtime": {
+    "vla_environment": "vla.groot_n15",
+    "world_model_environment": "world_models.ctrl_world",
+    "vla_gpus": [
+      0
+    ],
+    "world_model_gpus": [
+      0
+    ],
+    "vla_memory_gib": 20,
+    "world_model_worker_options": {
+      "shutdown_grace_seconds": 30
+    },
+    "execution": "persistent_isolated_workers",
+    "scheduling": "sequential_vla_world_model",
+    "max_process_memory_gib_per_gpu": 32,
+    "world_model_checkpoint": "checkpoints/world_models/ctrl_world/ctrl_world/checkpoint-10000.pt"
+  },
+  "sampling": {
+    "num_inference_steps": 50,
+    "guidance": 1,
+    "shift": 1,
+    "image_size": 320,
+    "resolution": "320x192",
+    "diffusion_cache": false,
+    "torch_compile": false
+  },
+  "seeds": [
+    0
+  ],
+  "output_root": "results/experiments/groot_n15_ctrl_world_droid_v1",
+  "experiments": [
+    {
+      "id": "loop_smoke",
+      "mode": "policy_loop",
+      "action_source": "vla",
+      "state_provider": "integrated_action_target",
+      "chunks": 2
+    },
+    {
+      "id": "loop_long",
+      "mode": "policy_loop",
+      "action_source": "vla",
+      "state_provider": "integrated_action_target",
+      "chunks": 20
+    }
+  ]
+}

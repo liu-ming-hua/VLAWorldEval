@@ -1,0 +1,18 @@
+{
+  "study_id": "cosmos_horizon_v1",
+  "episodes": [0, 351, 365, 795, 903],
+  "start_frame": 15,
+  "fps": 15,
+  "horizon_source_ticks": [32, 64, 128],
+  "new_seeds": [1, 2],
+  "allowed_gpus": [0, 1, 2, 3],
+  "reference_study": "results/studies/droid_positive_controls_v1",
+  "joint_study": "results/studies/droid_wm_positive_controls_v2/joint_fd",
+  "environment": "environment/verification/cosmos_fd_v1",
+  "models": ["eef", "joint"],
+  "selection": "All five previously frozen episodes; no generated-outcome selection",
+  "reuse": "Historical seed0 full AR; short windows are dependent prefixes, not independent replications",
+  "quality_gate": "Conservative source-aligned visual screening; pixel errors or motion do not automatically admit tasks",
+  "state_intervention": "none; joint retains last-command target proxy",
+  "train_overlap": "unknown"
+}

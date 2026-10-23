@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "ee_link": "panda_link8",
+  "joint_origins_xyz": [[0,0,0.333],[0,0,0],[0,-0.316,0],[0.0825,0,0],[-0.0825,0.384,0],[0,0,0],[0.088,0,0]],
+  "joint_origin_roll": [0,-1.5707963267948966,1.5707963267948966,1.5707963267948966,-1.5707963267948966,1.5707963267948966,1.5707963267948966],
+  "tip_translation": [0,0,0.107],
+  "joint_limits_lower": [-2.8973,-1.7628,-2.8973,-3.0718,-2.8973,-0.0175,-2.8973],
+  "joint_limits_upper": [2.8973,1.7628,2.8973,-0.0698,2.8973,3.7525,2.8973],
+  "sources": [
+    "https://github.com/droid-dataset/droid/blob/main/droid/robot_ik/franka/panda.xml",
+    "https://github.com/facebookresearch/fairo/blob/main/polymetis/polymetis/conf/robot_model/franka_panda.yaml"
+  ],
+  "note": "Numerical geometry facts, not copied network code. Validate FK against the selected episode's measured poses before inference; no hand/tool offset is silently added. Upstream URLs are mutable references, not an immutable source pin."
+}

@@ -1,0 +1,20 @@
+{
+  "study_id": "ctrl_official_timing_v2",
+  "dataset": "datasets/cosmos3_droid/success",
+  "source_study": "results/studies/droid_positive_controls_v1",
+  "start_frame": 15,
+  "fps": 15,
+  "seed": 0,
+  "allowed_gpus": [0, 1, 2, 3],
+  "cases": [
+    {"id": "ctrl_ep795_smoke", "episode": 795, "gpus": [1], "chunks": 1},
+    {"id": "ctrl_ep795", "episode": 795, "gpus": [1]},
+    {"id": "ctrl_ep0", "episode": 0, "gpus": [0]},
+    {"id": "ctrl_ep351", "episode": 351, "gpus": [0]},
+    {"id": "ctrl_ep365", "episode": 365, "gpus": [2]},
+    {"id": "ctrl_ep903", "episode": 903, "gpus": [3]}
+  ],
+  "interventions": "real RGB reanchor on ctrl_ep795 only; no new measured state",
+  "protocol": "inclusive5_waypoints_stride3_advance12; upstream per-camera VAE encode/decode",
+  "task_success": null
+}
