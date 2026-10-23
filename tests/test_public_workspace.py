@@ -281,11 +281,16 @@ def test_hf_download_never_overwrites_different_legacy_weights(tmp_path, monkeyp
     assert not (directory / MANIFEST).exists()
 
 
-def test_bad_core_option_fails_before_installation():
+@pytest.mark.parametrize("flag", ["CORE_DEV", "CORE_DROID", "CORE_OFFLINE"])
+@pytest.mark.parametrize("uv_available", [False, True])
+def test_bad_core_option_fails_before_installation(flag, uv_available):
     result = subprocess.run(["bash", "scripts/setup/core.sh"], cwd=ROOT,
-                            env={**os.environ, "CORE_DEV": "typo"},
+                            env={**os.environ, flag: "typo",
+                                 "UV_BIN": sys.executable if uv_available else "/missing-test-uv"},
                             capture_output=True, text=True, timeout=10)
-    assert result.returncode != 0 and "no environment changes" in result.stderr
+    assert result.returncode != 0
+    assert f"{flag} must be 0 or 1" in result.stderr
+    assert "no environment changes" in result.stderr
 
 
 def test_giga_repository_override_is_explicit_and_validated(tmp_path, monkeypatch):

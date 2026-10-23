@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+# Validate user options before checking tools or touching an environment.
+for task_flag in CORE_OFFLINE CORE_DROID CORE_DEV; do
+  if [[ "${!task_flag:-0}" != "0" && "${!task_flag:-0}" != "1" ]]; then
+    echo "${task_flag} must be 0 or 1 (no environment changes made)" >&2
+    exit 1
+  fi
+done
 UV_BIN="${UV_BIN:-$(command -v uv || true)}"
 if [[ -z "${UV_BIN}" || ! -x "${UV_BIN}" ]]; then
   echo "uv unavailable; set UV_BIN to its executable path" >&2
@@ -13,12 +20,6 @@ export UV_INDEX_URL="${PYPI_MIRROR:-https://pypi.tuna.tsinghua.edu.cn/simple}"
 export UV_HTTP_TIMEOUT="${UV_HTTP_TIMEOUT:-600}"
 export UV_PYTHON_DOWNLOADS=never
 CORE_PYTHON="${CORE_PYTHON:-3.11}"
-for task_flag in CORE_OFFLINE CORE_DROID CORE_DEV; do
-  if [[ "${!task_flag:-0}" != "0" && "${!task_flag:-0}" != "1" ]]; then
-    echo "${task_flag} must be 0 or 1 (no environment changes made)" >&2
-    exit 1
-  fi
-done
 ENV_DIR="${ROOT_DIR}/environment/core"
 OFFLINE_ARGS=()
 if [[ "${CORE_OFFLINE:-0}" == "1" ]]; then
