@@ -293,6 +293,30 @@ def test_bad_core_option_fails_before_installation(flag, uv_available):
     assert "no environment changes" in result.stderr
 
 
+@pytest.mark.parametrize("relocated", [False, True])
+def test_workspace_templates_support_prefix_and_pip_target_layouts(tmp_path, monkeypatch, relocated):
+    from pathlib import PurePosixPath
+    import vlaworldeval.workspace as module
+
+    installed = tmp_path / "prefix/lib/site-packages"
+    contents = {"configs/runtime_registry.json": b"{}",
+                "environment/registry.toml": b"[environments]\n"}
+    records = [PurePosixPath("../../share/vlaworldeval") / name for name in contents]
+    for name, record in zip(contents, records):
+        path = installed / ("share/vlaworldeval/" + name if relocated else str(record))
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(contents[name])
+
+    class Distribution:
+        files = records
+
+        def locate_file(self, record):
+            return installed / str(record)
+
+    monkeypatch.setattr(module.metadata, "distribution", lambda name: Distribution())
+    assert module.template_files() == contents
+
+
 def test_giga_repository_override_is_explicit_and_validated(tmp_path, monkeypatch):
     monkeypatch.setenv("GIGAWORLD1_REPO", str(tmp_path))
     assert gigaworld1_source() == tmp_path.resolve()

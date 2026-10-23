@@ -20,7 +20,12 @@ def template_files() -> dict[str, bytes]:
             relative = name.split(prefix, 1)[1]
             if Path(relative).is_absolute() or ".." in Path(relative).parts:
                 raise ValueError(f"Unsafe distribution template: {relative}")
-            files[relative] = distribution.locate_file(record).read_bytes()
+            location = distribution.locate_file(record)
+            if not location.is_file():
+                # pip --target relocates data files under target/share but
+                # retains their original prefix-relative paths in RECORD.
+                location = distribution.locate_file(prefix + relative)
+            files[relative] = location.read_bytes()
     if not files:  # Editable installation: resources remain in the source tree.
         source = Path(__file__).resolve().parents[1]
         for folder, patterns in (("configs", ("*.json", "*.yaml")),
