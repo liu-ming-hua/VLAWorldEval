@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[2]
 def test_language_manuals_have_matching_pages_and_no_mixed_root_notes():
     english = {p.name for p in (ROOT / "docs/en").glob("*.md")}
     chinese = {p.name for p in (ROOT / "docs/zh").glob("*.md")}
-    assert english == chinese and len(english) == 12
+    assert english == chinese and len(english) == 14
     assert {p.name for p in (ROOT / "docs").glob("*.md")} == {"README.md"}
     for language, other in (("en", "zh"), ("zh", "en")):
         for name in english:

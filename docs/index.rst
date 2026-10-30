@@ -38,6 +38,8 @@ Read :doc:`en/workflows` to execute them, and :doc:`en/reliability` before inter
 
    en/README
    en/quickstart
+   en/first-rollout
+   en/support
    en/installation
    en/compatibility
    en/models
@@ -56,6 +58,8 @@ Read :doc:`en/workflows` to execute them, and :doc:`en/reliability` before inter
 
    zh/README
    zh/quickstart
+   zh/first-rollout
+   zh/support
    zh/installation
    zh/compatibility
    zh/models

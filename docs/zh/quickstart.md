@@ -2,6 +2,9 @@
 
 [手册首页](README.md) / 快速开始 · [English](../en/quickstart.md)
 
+
+从全新环境安装到真实模型验收，使用[固定复现流程](first-rollout.md)。
+
 ## 1 · 检查轻量核心
 
 在源码根目录执行，需要 Python 3.11、uv 和 FFmpeg：

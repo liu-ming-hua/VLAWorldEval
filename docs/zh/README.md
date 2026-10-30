@@ -35,3 +35,6 @@
 声明来源：[模型目录](../../configs/model_catalog.json)、
 [运行注册表](../../configs/runtime_registry.json)、
 [环境注册表](../../environment/registry.toml)。
+
+- [全新安装与真实模型验收](first-rollout.md)
+- [逐组合验证证据](support.md)

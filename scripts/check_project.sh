@@ -43,6 +43,7 @@ fi
 echo "[5/5] project metadata"
 "${PYTHON_BIN}" -m cli validate >/dev/null
 "${PYTHON_BIN}" scripts/checks/docs.py
+"${PYTHON_BIN}" scripts/acceptance/support_evidence.py --check
 "${PYTHON_BIN}" scripts/checks/test_suite.py --json > .cache/quality/test-inventory.json
 
 echo "Project checks passed."

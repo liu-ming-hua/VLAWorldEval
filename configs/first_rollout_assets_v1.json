@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "example": "openvla_worldgym_bridge_v1",
+  "identity_kind": "maintainer_content_sha256_not_upstream_release_attestation",
+  "files": {
+    "checkpoints/vla/openvla-7b/added_tokens.json": {
+      "size": 21,
+      "sha256": "ab43123267b190cb7990bc9f2ae4ad32dcb7ed029fb0fccb1b4e062c6f54a2a1"
+    },
+    "checkpoints/vla/openvla-7b/config.json": {
+      "size": 60712,
+      "sha256": "edd5c5cf6d7927e07465cf086ebe41f7b3ec8f3b128a51f71d6db14dad7ad8b1"
+    },
+    "checkpoints/vla/openvla-7b/configuration_prismatic.py": {
+      "size": 5865,
+      "sha256": "68cc5ae34f1b46af3168d8d479cb81bb776965653453fd904aa8eefb6c8f9f68"
+    },
+    "checkpoints/vla/openvla-7b/generation_config.json": {
+      "size": 136,
+      "sha256": "67fbe17b12e8beb5be98eb911483971cc78589e51a37ac0cce9cd499d06a8bf1"
+    },
+    "checkpoints/vla/openvla-7b/model-00001-of-00003.safetensors": {
+      "size": 6948961960,
+      "sha256": "10d8636256018712c5e5c823d12e22b5797f99bb721bd123bf6bf2379892be85"
+    },
+    "checkpoints/vla/openvla-7b/model-00002-of-00003.safetensors": {
+      "size": 6971232040,
+      "sha256": "2050b14f21d48904d269f48d5a980fecea87cd7b36641d9b0f015e72d1fe216a"
+    },
+    "checkpoints/vla/openvla-7b/model-00003-of-00003.safetensors": {
+      "size": 1162406824,
+      "sha256": "ea65305a1577f36f721965bf84c8caec0a948ce7ce84d754701637376c531fef"
+    },
+    "checkpoints/vla/openvla-7b/model.safetensors.index.json": {
+      "size": 94764,
+      "sha256": "b3a4516f74a609422002e265e542c23ddf11e54c2b781e1c0d4e23e5181f3fd0"
+    },
+    "checkpoints/vla/openvla-7b/modeling_prismatic.py": {
+      "size": 26062,
+      "sha256": "9ce241c5ca09a4bed73654d0ca509baaff0fc5887d0bdd62e360ca8254f7794a"
+    },
+    "checkpoints/vla/openvla-7b/preprocessor_config.json": {
+      "size": 1650,
+      "sha256": "bd024783fb785cbdfe35b710b621c5e8678d4c157a9ba625675e67d40d1757da"
+    },
+    "checkpoints/vla/openvla-7b/processing_prismatic.py": {
+      "size": 12718,
+      "sha256": "06563586bbc73d36501a14a231a3174904ede830d33174d0c625ece8e931ef1e"
+    },
+    "checkpoints/vla/openvla-7b/processor_config.json": {
+      "size": 130,
+      "sha256": "167e026d8121f6cb0bf5c18310b97ba8139152f970822bb3824213bd37dc7a76"
+    },
+    "checkpoints/vla/openvla-7b/special_tokens_map.json": {
+      "size": 552,
+      "sha256": "cb90ee5cf5793aa444039af9795b00db59d3fef8942e7eca9cf1990bab370d61"
+    },
+    "checkpoints/vla/openvla-7b/tokenizer.json": {
+      "size": 1842976,
+      "sha256": "8f5e2869e1807b8bb3c7717a294539c37e9de5d728ad60e31ef57e83cc5ea527"
+    },
+    "checkpoints/vla/openvla-7b/tokenizer.model": {
+      "size": 499723,
+      "sha256": "9e556afd44213b6bd1be2b850ebbbd98f5481437a8021afaf58ee7fb1818d347"
+    },
+    "checkpoints/vla/openvla-7b/tokenizer_config.json": {
+      "size": 1192,
+      "sha256": "f5f1d3ed015ebb71cf11686ff00bc8e0c25957bbf3952f95312cecc9b168fbea"
+    },
+    "checkpoints/world_models/worldgym/checkpoint/mixed_openx_9robots_20frames_0p1actiondropout_580ksteps.pt": {
+      "size": 9727371838,
+      "sha256": "7acbf6702265e53909283ecdd4b3ddc2517f9fea460cf700369a076f2dfad182"
+    },
+    "checkpoints/world_models/worldgym/vae/sd3_vae/config.json": {
+      "size": 739,
+      "sha256": "2b82cf4cf6728bb2b411199c437c16ce61a82265ebd8461d66600073c8470ee4"
+    },
+    "checkpoints/world_models/worldgym/vae/sd3_vae/diffusion_pytorch_model.fp16.safetensors": {
+      "size": 167666654,
+      "sha256": "f9b67a279283625caee39d61eacb5324243848477b4eb535355eaaa8423d4e09"
+    },
+    "checkpoints/world_models/worldgym/vae/sd3_vae/diffusion_pytorch_model.safetensors": {
+      "size": 167666654,
+      "sha256": "f9b67a279283625caee39d61eacb5324243848477b4eb535355eaaa8423d4e09"
+    },
+    "datasets/worldgym/official/bridge/test/000000002.mp4": {
+      "size": 103196,
+      "sha256": "64d01ecc97a83e379474471d10787de6e56be0ed9c792dd3eea2f1a4920ae8d1"
+    },
+    "datasets/worldgym/official/bridge/test/000000002.npz": {
+      "size": 1144,
+      "sha256": "71b51e11ad5d7a43d8258294bff0691d4522223b4684cf80ffea8b1253aa30a5"
+    }
+  }
+}

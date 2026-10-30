@@ -144,6 +144,36 @@ DreamDojo、IWS、PlayWorld、DreamTrue、IRASim 与 Giga-World-1。
 
 [输入输出与训练域 →](docs/zh/models.md) · [如何选择组合 →](docs/zh/compatibility.md)
 
+### 验证证据
+
+下表由版本化证据生成。`historical_pass` 表示历史真实运行及产物复核通过，不代表当前代码、当前机器或物理可靠性通过；`not_verified` 表示没有相应证据。所有组合的官方数值一致性尚未认证。
+
+<!-- support-evidence:start -->
+| 组合 | 干净安装 | 真实闭环 | 历史 chunk 数 | 状态来源 |
+| --- | --- | --- | ---: | --- |
+| groot_n15__cosmos3_nano_droid_fd_v1 | not_verified | historical_pass | 20 | integrated_action_target |
+| groot_n15__ctrl_world_droid_v2 | not_verified | not_verified | — | integrated_action_target |
+| groot_n17__cosmos3_nano_droid_fd_v1 | not_verified | historical_pass | 20 | integrated_action_target |
+| groot_n17__ctrl_world_droid_v2 | not_verified | not_verified | — | integrated_action_target |
+| groot_n17_droid__cosmos3_nano_droid_fd_v1 | not_verified | historical_pass | 8 | integrated_action_target |
+| groot_n17_droid__ctrl_world_droid_v2 | not_verified | not_verified | — | integrated_action_target |
+| octo__worldgym_bridge_v1 | not_verified | historical_pass | 100 | none |
+| openvla__worldgym_bridge_v1 | historical_pass | historical_pass | 400 | none |
+| pi05__cosmos3_nano_droid_fd_v1 | not_verified | historical_pass | 20 | integrated_action_target |
+| pi05__ctrl_world_droid_v2 | not_verified | not_verified | — | integrated_action_target |
+| pi0__cosmos3_nano_droid_fd_v1 | not_verified | historical_pass | 20 | integrated_action_target |
+| pi0__ctrl_world_droid_v2 | not_verified | not_verified | — | integrated_action_target |
+| pi0_fast_droid__cosmos3_nano_droid_fd_v1 | not_verified | historical_pass | 8 | integrated_action_target |
+| pi0_fast_droid__ctrl_world_droid_v2 | not_verified | not_verified | — | integrated_action_target |
+| rt1_x__worldgym_bridge_v1 | not_verified | historical_pass | 400 | none |
+| spatialvla__worldgym_bridge_v1 | not_verified | historical_pass | 100 | none |
+<!-- support-evidence:end -->
+
+**真实模型验收：**[全新环境安装 → 固定20步 OpenVLA × WorldGym 闭环](docs/zh/first-rollout.md)。
+
+
+[证据说明](docs/zh/support.md) · `python -m cli support`
+
 ## 原生域参考结果
 
 已有运行的配对预测指标，**不是跨域排行榜**。LPIPS 越低、SSIM 越高表示图像更接近，不代表物理正确。

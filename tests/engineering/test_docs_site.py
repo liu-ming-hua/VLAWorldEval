@@ -17,7 +17,7 @@ def test_site_nav_covers_the_existing_manual_without_a_parallel_content_tree():
     assert config["html_theme"] == "pydata_sphinx_theme"
     assert config["html_search_language"] == "zh"
     nav = (ROOT / "docs/_templates/manual-nav.html").read_text()
-    entries = set(re.findall(r"\('([A-Za-z_]+)',", nav))
+    entries = set(re.findall(r"\('([A-Za-z_-]+)',", nav))
     for language in ("en", "zh"):
         assert entries == {p.stem for p in (ROOT / "docs" / language).glob("*.md")}
     assert "pydata-sphinx-theme==" in (ROOT / "environment/requirements/docs.txt").read_text()

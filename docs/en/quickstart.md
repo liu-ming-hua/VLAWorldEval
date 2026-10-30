@@ -2,6 +2,9 @@
 
 [Manual](README.md) / Quick start · [简体中文](../zh/quickstart.md)
 
+
+For a complete, fixed real-model installation and acceptance run, use [the reproducible recipe](first-rollout.md).
+
 ## 1 · Check the lightweight core
 
 From the source root, with Python 3.11, uv and FFmpeg available:

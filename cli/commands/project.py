@@ -114,3 +114,10 @@ def doctor(args, root):
         else format_diagnostics(report)
     )
     return 0 if report["ok"] else 2
+
+
+def support(args, root):
+    from evaluation.reporting.support import support_report
+
+    print_json(support_report(root))
+    return 0

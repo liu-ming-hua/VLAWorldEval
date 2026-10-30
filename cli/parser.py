@@ -49,6 +49,7 @@ def build_parser(root):
     configure_parser.add_argument("--budget-gib", type=float)
     configure_parser.add_argument("--vla-budget-gib", type=float)
     configure_parser.add_argument("--chunks", type=int)
+    subparsers.add_parser("support", help="published per-pair validation evidence; no model loading")
     subparsers.add_parser("models", help="list catalogued VLA and world-model adapters")
     cleanup_parser = subparsers.add_parser(
         "cleanup-results",

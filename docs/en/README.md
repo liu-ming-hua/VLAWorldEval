@@ -36,3 +36,6 @@ Commands assume the source root; model environments are installed only when expl
 Reference data: [model catalog](../../configs/model_catalog.json),
 [runtime registry](../../configs/runtime_registry.json),
 [environment registry](../../environment/registry.toml).
+
+- [Fresh installation with real models](first-rollout.md)
+- [Per-pair validation evidence](support.md)

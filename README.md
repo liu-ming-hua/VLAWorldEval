@@ -147,6 +147,36 @@ Their native protocols and readiness differ; catalog presence does not enable ar
 
 [Input/output and training domains →](docs/en/models.md) · [Pair selection →](docs/en/compatibility.md)
 
+### Validation evidence
+
+Generated from versioned evidence. `historical_pass` means a historical real run with re-audited artifacts, not current-source validation, machine readiness or physical reliability. `not_verified` means no qualifying evidence. Official numerical parity remains unverified for all pairs.
+
+<!-- support-evidence:start -->
+| Pair | Fresh install | Real-weight loop | Historical chunks | State source |
+| --- | --- | --- | ---: | --- |
+| groot_n15__cosmos3_nano_droid_fd_v1 | not_verified | historical_pass | 20 | integrated_action_target |
+| groot_n15__ctrl_world_droid_v2 | not_verified | not_verified | — | integrated_action_target |
+| groot_n17__cosmos3_nano_droid_fd_v1 | not_verified | historical_pass | 20 | integrated_action_target |
+| groot_n17__ctrl_world_droid_v2 | not_verified | not_verified | — | integrated_action_target |
+| groot_n17_droid__cosmos3_nano_droid_fd_v1 | not_verified | historical_pass | 8 | integrated_action_target |
+| groot_n17_droid__ctrl_world_droid_v2 | not_verified | not_verified | — | integrated_action_target |
+| octo__worldgym_bridge_v1 | not_verified | historical_pass | 100 | none |
+| openvla__worldgym_bridge_v1 | historical_pass | historical_pass | 400 | none |
+| pi05__cosmos3_nano_droid_fd_v1 | not_verified | historical_pass | 20 | integrated_action_target |
+| pi05__ctrl_world_droid_v2 | not_verified | not_verified | — | integrated_action_target |
+| pi0__cosmos3_nano_droid_fd_v1 | not_verified | historical_pass | 20 | integrated_action_target |
+| pi0__ctrl_world_droid_v2 | not_verified | not_verified | — | integrated_action_target |
+| pi0_fast_droid__cosmos3_nano_droid_fd_v1 | not_verified | historical_pass | 8 | integrated_action_target |
+| pi0_fast_droid__ctrl_world_droid_v2 | not_verified | not_verified | — | integrated_action_target |
+| rt1_x__worldgym_bridge_v1 | not_verified | historical_pass | 400 | none |
+| spatialvla__worldgym_bridge_v1 | not_verified | historical_pass | 100 | none |
+<!-- support-evidence:end -->
+
+**Real-model acceptance:** [Fresh installation → fixed 20-step OpenVLA × WorldGym rollout](docs/en/first-rollout.md).
+
+
+[Evidence guide](docs/en/support.md) · `python -m cli support`
+
 ## Native-domain reference results
 
 Paired prediction metrics from existing runs; **not a cross-domain leaderboard**.

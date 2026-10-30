@@ -1,0 +1,3951 @@
+{
+  "schema_version": 1,
+  "pairs": {
+    "pi0__cosmos3_nano_droid_fd_v1": {
+      "real_weight_loop": {
+        "status": "historical_pass",
+        "attempt": "attempt_20261012T113658_029209Z_7f0571f38559",
+        "report": "results/delivery/pi0_cosmos_3gpu_validation_v2_20261012.json",
+        "report_sha256": "a2bac2496c6b95e570dec21f10b9f70aa67ee19c7bfd24d6db31192354879893",
+        "artifact_rechecked_at": "2026-10-30T13:24:25.667010+00:00",
+        "pair_contract": {
+          "pair_id": "pi0__cosmos3_nano_droid_fd_v1",
+          "vla": {
+            "adapter": "Pi0Adapter",
+            "view_mapping": {
+              "observation/exterior_image_1_left": "droid.exterior_1",
+              "observation/wrist_image_left": "droid.wrist"
+            },
+            "view_mode": "mapping",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 8,
+              "horizon": 10,
+              "representation": "normalized_joint_velocity+absolute_closed_gripper",
+              "frame": "droid_panda_controller",
+              "semantics": "normalized_joint_velocity_with_absolute_gripper",
+              "rate_hz": 15.0,
+              "normalization": "openpi_droid_decoded",
+              "components": [
+                "joint_velocity_1",
+                "joint_velocity_2",
+                "joint_velocity_3",
+                "joint_velocity_4",
+                "joint_velocity_5",
+                "joint_velocity_6",
+                "joint_velocity_7",
+                "gripper_closed"
+              ]
+            },
+            "state_schema": "droid_openpi_joint_gripper_eef_v1",
+            "output_views": [],
+            "image_size": null,
+            "video": null
+          },
+          "world_model": {
+            "adapter": "Cosmos3NanoDroidFDAdapter",
+            "view_mapping": {
+              "single_view": "droid.cosmos_composite"
+            },
+            "view_mode": "single",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 10,
+              "horizon": 16,
+              "representation": "framewise_delta_xyz+opencv_rot6d+flipped_gripper",
+              "frame": "droid_cosmos_opencv",
+              "semantics": "delta",
+              "rate_hz": 15.0,
+              "normalization": "none_raw_metric",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "rot6d_0",
+                "rot6d_1",
+                "rot6d_2",
+                "rot6d_3",
+                "rot6d_4",
+                "rot6d_5",
+                "gripper_open"
+              ]
+            },
+            "state_schema": null,
+            "output_views": [
+              "droid.cosmos_composite"
+            ],
+            "image_size": null,
+            "video": {
+              "fps": 15,
+              "frames_per_chunk": 16
+            }
+          },
+          "action_bridge": {
+            "name": "openpi_to_cosmos3_droid_v1",
+            "source": {
+              "dimension": 8,
+              "horizon": 10,
+              "representation": "normalized_joint_velocity+absolute_closed_gripper",
+              "frame": "droid_panda_controller",
+              "semantics": "normalized_joint_velocity_with_absolute_gripper",
+              "rate_hz": 15.0,
+              "normalization": "openpi_droid_decoded",
+              "components": [
+                "joint_velocity_1",
+                "joint_velocity_2",
+                "joint_velocity_3",
+                "joint_velocity_4",
+                "joint_velocity_5",
+                "joint_velocity_6",
+                "joint_velocity_7",
+                "gripper_closed"
+              ]
+            },
+            "target": {
+              "dimension": 10,
+              "horizon": 16,
+              "representation": "framewise_delta_xyz+opencv_rot6d+flipped_gripper",
+              "frame": "droid_cosmos_opencv",
+              "semantics": "delta",
+              "rate_hz": 15.0,
+              "normalization": "none_raw_metric",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "rot6d_0",
+                "rot6d_1",
+                "rot6d_2",
+                "rot6d_3",
+                "rot6d_4",
+                "rot6d_5",
+                "gripper_open"
+              ]
+            },
+            "config": {
+              "kinematics": "configs/kinematics/droid_panda_link8_v1.json",
+              "joint_delta_per_control_tick": 0.2,
+              "tail_policy": "zero_velocity_hold_gripper"
+            }
+          },
+          "state_provider": {
+            "type": "integrated_action_target",
+            "state_schema": "droid_openpi_joint_gripper_eef_v1",
+            "config": {
+              "action": "native",
+              "requires_embodiment_integrator": true
+            }
+          },
+          "view_bridge": {
+            "name": "droid_cosmos_composite_v1",
+            "config": {
+              "views": {
+                "exterior_1": "droid.exterior_1",
+                "exterior_2": "droid.exterior_2",
+                "wrist": "droid.wrist",
+                "composite": "droid.cosmos_composite"
+              }
+            },
+            "output_views": [
+              "droid.cosmos_composite",
+              "droid.exterior_1",
+              "droid.exterior_2",
+              "droid.wrist"
+            ]
+          },
+          "schema_version": 1,
+          "seed": 0,
+          "metadata": {
+            "status": "experimental_protocol_registered_not_full_wm_validated",
+            "dataset": "DROID",
+            "world_model_domain": "droid_lerobot",
+            "initial_state_source": "dataset_ground_truth",
+            "warning": "Ideal DROID controller target proxy, not measured or video-predicted state. Clip joint commands, binarize 1=closed gripper, scale 0.2 rad/control tick and saturate joint limits. Execute all native steps then zero-velocity hold for the remaining Cosmos steps. Gripper is flipped once to Cosmos 1=open. FK admission checks measured EEF against link8 across the episode. No contact/lag model."
+          }
+        },
+        "max_chunks": 20,
+        "jobs": [
+          {
+            "id": "loop_smoke",
+            "episode": 0,
+            "seed": 0,
+            "completed_chunks": 2,
+            "vla_calls": 2,
+            "world_model_calls": 2
+          },
+          {
+            "id": "loop_long",
+            "episode": 0,
+            "seed": 0,
+            "completed_chunks": 20,
+            "vla_calls": 20,
+            "world_model_calls": 20
+          }
+        ],
+        "artifact_hashes": [
+          {
+            "directory": "results/experiments/pi0_cosmos_droid_3gpu_v1/attempt_20261012T113658_029209Z_7f0571f38559/loop_smoke/episode_000000/seed_000",
+            "metadata_sha256": "c9135474b7deb3c32089044af292f5d2c92808276c9cc27110ad8bc52694c37a",
+            "actions_sha256": "765a6234fd31008c16bab9011d4898efee6c188c0b3623122744cfe3c5014535"
+          },
+          {
+            "directory": "results/experiments/pi0_cosmos_droid_3gpu_v1/attempt_20261012T113658_029209Z_7f0571f38559/loop_long/episode_000000/seed_000",
+            "metadata_sha256": "a5497277ea24ccb2b9b2c898fb5cf63524266e63e5480a72d9062bc552ebf344",
+            "actions_sha256": "f46634f137d27eb6d7dad8a77f74f054616bcbac5672356cabadf7fbaa5fa2b1"
+          }
+        ],
+        "loaded_models": {
+          "vla": {
+            "module": "adapters.vla.openpi",
+            "adapter": "Pi0Adapter",
+            "kwargs": {
+              "checkpoint_path": "checkpoints/vla/openpi/pi0-droid"
+            }
+          },
+          "world_model": {
+            "module": "adapters.world_models.cosmos3_nano_droid_fd",
+            "adapter": "Cosmos3NanoDroidFDAdapter",
+            "kwargs": {
+              "model_path": "checkpoints/world_models/cosmos3_nano_droid_fd/community_jere_mybao_v1_20k_ema",
+              "runtime_dir": "results/experiments/pi0_cosmos_droid_3gpu_v1/attempt_20261012T113658_029209Z_7f0571f38559/workers/cosmos_runtime",
+              "num_inference_steps": 30,
+              "guidance": 1,
+              "shift": 10,
+              "resolution": "480",
+              "diffusion_cache": false,
+              "use_torch_compile": false
+            }
+          }
+        },
+        "package_versions": [
+          {
+            "adapter": "Pi0Adapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "diffusers": "0.33.1",
+              "jax": "0.5.3",
+              "torch": "2.7.1",
+              "transformers": "4.53.2"
+            }
+          },
+          {
+            "adapter": "Cosmos3NanoDroidFDAdapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "transformers": "4.57.1",
+              "torch": "2.7.1",
+              "diffusers": "0.39.0"
+            }
+          }
+        ],
+        "source_version": "Historical execution; report hash identifies evidence, not current code validation",
+        "checkpoint_identity": "Recorded paths; full checkpoint digests not asserted by this historical receipt"
+      }
+    },
+    "groot_n17__cosmos3_nano_droid_fd_v1": {
+      "real_weight_loop": {
+        "status": "historical_pass",
+        "attempt": "attempt_20261012T122114_347137Z_fd8d696da353",
+        "report": "results/delivery/groot_n17_cosmos_other_pairs_20261012.json",
+        "report_sha256": "75df62b2c84eb2d8b16cb1926a45b0bec7432bdbcfde4f0adb5456fefa9468a1",
+        "artifact_rechecked_at": "2026-10-30T13:24:26.295085+00:00",
+        "pair_contract": {
+          "pair_id": "groot_n17__cosmos3_nano_droid_fd_v1",
+          "vla": {
+            "adapter": "GrootN17Adapter",
+            "view_mapping": {
+              "exterior_image_1_left": "droid.exterior_1",
+              "wrist_image_left": "droid.wrist"
+            },
+            "view_mode": "mapping",
+            "squeeze_single_frame": false,
+            "action": {
+              "dimension": 17,
+              "horizon": 40,
+              "representation": "decoded_absolute_eef9d+gripper+joint_position",
+              "frame": "droid_panda_base",
+              "semantics": "absolute_target",
+              "rate_hz": 15.0,
+              "normalization": "official_groot_n17_decoded",
+              "components": []
+            },
+            "state_schema": "groot_n17_droid_joint_eef9d_v1",
+            "output_views": [],
+            "image_size": null,
+            "video": null,
+            "history_offsets": [
+              -15,
+              0
+            ]
+          },
+          "world_model": {
+            "adapter": "Cosmos3NanoDroidFDAdapter",
+            "view_mapping": {
+              "single_view": "droid.cosmos_composite"
+            },
+            "view_mode": "single",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 10,
+              "horizon": 16,
+              "representation": "framewise_delta_xyz+opencv_rot6d+flipped_gripper",
+              "frame": "droid_cosmos_opencv",
+              "semantics": "delta",
+              "rate_hz": 15.0,
+              "normalization": "none_raw_metric",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "rot6d_0",
+                "rot6d_1",
+                "rot6d_2",
+                "rot6d_3",
+                "rot6d_4",
+                "rot6d_5",
+                "gripper_open"
+              ]
+            },
+            "state_schema": null,
+            "output_views": [
+              "droid.cosmos_composite"
+            ],
+            "image_size": null,
+            "video": {
+              "fps": 15,
+              "frames_per_chunk": 16
+            },
+            "history_offsets": [
+              0
+            ]
+          },
+          "action_bridge": {
+            "name": "groot_n17_to_cosmos3_droid_v1",
+            "source": {
+              "dimension": 17,
+              "horizon": 40,
+              "representation": "decoded_absolute_eef9d+gripper+joint_position",
+              "frame": "droid_panda_base",
+              "semantics": "absolute_target",
+              "rate_hz": 15.0,
+              "normalization": "official_groot_n17_decoded",
+              "components": []
+            },
+            "target": {
+              "dimension": 10,
+              "horizon": 16,
+              "representation": "framewise_delta_xyz+opencv_rot6d+flipped_gripper",
+              "frame": "droid_cosmos_opencv",
+              "semantics": "delta",
+              "rate_hz": 15.0,
+              "normalization": "none_raw_metric",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "rot6d_0",
+                "rot6d_1",
+                "rot6d_2",
+                "rot6d_3",
+                "rot6d_4",
+                "rot6d_5",
+                "gripper_open"
+              ]
+            },
+            "config": {
+              "kinematics": "configs/kinematics/droid_panda_link8_v1.json",
+              "execute_prefix": 16
+            }
+          },
+          "state_provider": {
+            "type": "integrated_action_target",
+            "state_schema": "groot_n17_droid_joint_eef9d_v1",
+            "config": {
+              "action": "native",
+              "requires_embodiment_integrator": true
+            }
+          },
+          "view_bridge": {
+            "name": "droid_cosmos_composite_v1",
+            "config": {
+              "views": {
+                "exterior_1": "droid.exterior_1",
+                "exterior_2": "droid.exterior_2",
+                "wrist": "droid.wrist",
+                "composite": "droid.cosmos_composite"
+              }
+            },
+            "output_views": [
+              "droid.cosmos_composite",
+              "droid.exterior_1",
+              "droid.exterior_2",
+              "droid.wrist"
+            ]
+          },
+          "schema_version": 1,
+          "seed": 0,
+          "metadata": {
+            "status": "experimental",
+            "initial_state_source": "dataset_ground_truth",
+            "warning": "Official get_action decodes relative training predictions into absolute targets. Execute only first 16 joint targets, discard 24 tail steps on replanning, ignore redundant EEF action head. State is ideal target proxy, history uses real initial [-15,0] frames then generated history."
+          }
+        },
+        "max_chunks": 20,
+        "jobs": [
+          {
+            "id": "loop_smoke",
+            "episode": 0,
+            "seed": 0,
+            "completed_chunks": 2,
+            "vla_calls": 2,
+            "world_model_calls": 2
+          },
+          {
+            "id": "loop_long",
+            "episode": 0,
+            "seed": 0,
+            "completed_chunks": 20,
+            "vla_calls": 20,
+            "world_model_calls": 20
+          }
+        ],
+        "artifact_hashes": [
+          {
+            "directory": "results/experiments/groot_n17_cosmos_droid_3gpu_v1/attempt_20261012T122114_347137Z_fd8d696da353/loop_smoke/episode_000000/seed_000",
+            "metadata_sha256": "2f646402c21dc18aad1c8f948ffd8c213f4403f68b3e4fb4fee98492883f8c1b",
+            "actions_sha256": "6e55b7e2f0c98ab9bdcf2e5278a3b52cd53ff9eb96af0e68ea5e2159fc8a5278"
+          },
+          {
+            "directory": "results/experiments/groot_n17_cosmos_droid_3gpu_v1/attempt_20261012T122114_347137Z_fd8d696da353/loop_long/episode_000000/seed_000",
+            "metadata_sha256": "52245bc4fd9590e53b5f49885e1b193615628080f9256c85d4c0e88851377fac",
+            "actions_sha256": "a28195604fed4d50ede1231d05b9847bb0c957323b571585959ee8381307f894"
+          }
+        ],
+        "loaded_models": {
+          "vla": {
+            "module": "adapters.vla.groot",
+            "adapter": "GrootN17Adapter",
+            "kwargs": {
+              "model_path": "checkpoints/vla/groot/n1.7-3b"
+            }
+          },
+          "world_model": {
+            "module": "adapters.world_models.cosmos3_nano_droid_fd",
+            "adapter": "Cosmos3NanoDroidFDAdapter",
+            "kwargs": {
+              "model_path": "checkpoints/world_models/cosmos3_nano_droid_fd/community_jere_mybao_v1_20k_ema",
+              "runtime_dir": "results/experiments/groot_n17_cosmos_droid_3gpu_v1/attempt_20261012T122114_347137Z_fd8d696da353/workers/cosmos_runtime",
+              "num_inference_steps": 30,
+              "guidance": 1,
+              "shift": 10,
+              "resolution": "480",
+              "diffusion_cache": false,
+              "use_torch_compile": false
+            }
+          }
+        },
+        "package_versions": [
+          {
+            "adapter": "GrootN17Adapter",
+            "python": "3.10.18 (main, Sep  2 2025, 14:19:37) [Clang 20.1.4 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "diffusers": "0.35.1",
+              "transformers": "4.57.3",
+              "torch": "2.7.1+cu128"
+            }
+          },
+          {
+            "adapter": "Cosmos3NanoDroidFDAdapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "transformers": "4.57.1",
+              "torch": "2.7.1",
+              "diffusers": "0.39.0"
+            }
+          }
+        ],
+        "source_version": "Historical execution; report hash identifies evidence, not current code validation",
+        "checkpoint_identity": "Recorded paths; full checkpoint digests not asserted by this historical receipt"
+      }
+    },
+    "pi0__ctrl_world_droid_v1": {
+      "real_weight_loop": {
+        "status": "historical_pass",
+        "attempt": "attempt_20261012T122807_208722Z_e4dfc5e1f7ee",
+        "report": "results/delivery/pi0_ctrl_other_pairs_20261012.json",
+        "report_sha256": "2893f689822e10d467e26f19cf1d00fdab709ec01bf3c97e7ec98e69bdecc046",
+        "artifact_rechecked_at": "2026-10-30T13:24:26.721063+00:00",
+        "pair_contract": {
+          "pair_id": "pi0__ctrl_world_droid_v1",
+          "vla": {
+            "adapter": "Pi0Adapter",
+            "view_mapping": {
+              "observation/exterior_image_1_left": "droid.exterior_1",
+              "observation/wrist_image_left": "droid.wrist"
+            },
+            "view_mode": "mapping",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 8,
+              "horizon": 10,
+              "representation": "normalized_joint_velocity+absolute_closed_gripper",
+              "frame": "droid_panda_controller",
+              "semantics": "normalized_joint_velocity_with_absolute_gripper",
+              "rate_hz": 15.0,
+              "normalization": "openpi_droid_decoded",
+              "components": [
+                "joint_velocity_1",
+                "joint_velocity_2",
+                "joint_velocity_3",
+                "joint_velocity_4",
+                "joint_velocity_5",
+                "joint_velocity_6",
+                "joint_velocity_7",
+                "gripper_closed"
+              ]
+            },
+            "state_schema": "droid_openpi_joint_gripper_eef_v1",
+            "output_views": [],
+            "image_size": null,
+            "video": null,
+            "history_offsets": null
+          },
+          "world_model": {
+            "adapter": "CtrlWorldAdapter",
+            "view_mapping": {
+              "exterior_1": "droid.exterior_1",
+              "exterior_2": "droid.exterior_2",
+              "wrist": "droid.wrist"
+            },
+            "view_mode": "stack",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 7,
+              "horizon": 5,
+              "representation": "xyz_rpy_gripper",
+              "frame": "droid_robot_base",
+              "semantics": "absolute_eef_target",
+              "rate_hz": 5.0,
+              "normalization": "raw_metric_adapter_normalizes",
+              "components": []
+            },
+            "state_schema": null,
+            "output_views": [
+              "droid.exterior_1",
+              "droid.exterior_2",
+              "droid.wrist"
+            ],
+            "image_size": null,
+            "video": {
+              "fps": 7,
+              "frames_per_chunk": 5
+            },
+            "history_offsets": null
+          },
+          "action_bridge": {
+            "name": "droid_policy_to_ctrl_world_v1",
+            "source": {
+              "dimension": 8,
+              "horizon": 10,
+              "representation": "normalized_joint_velocity+absolute_closed_gripper",
+              "frame": "droid_panda_controller",
+              "semantics": "normalized_joint_velocity_with_absolute_gripper",
+              "rate_hz": 15.0,
+              "normalization": "openpi_droid_decoded",
+              "components": [
+                "joint_velocity_1",
+                "joint_velocity_2",
+                "joint_velocity_3",
+                "joint_velocity_4",
+                "joint_velocity_5",
+                "joint_velocity_6",
+                "joint_velocity_7",
+                "gripper_closed"
+              ]
+            },
+            "target": {
+              "dimension": 7,
+              "horizon": 5,
+              "representation": "xyz_rpy_gripper",
+              "frame": "droid_robot_base",
+              "semantics": "absolute_eef_target",
+              "rate_hz": 5.0,
+              "normalization": "raw_metric_adapter_normalizes",
+              "components": []
+            },
+            "config": {
+              "kinematics": "configs/kinematics/droid_panda_link8_v1.json",
+              "joint_delta_per_control_tick": 0.2,
+              "tail_policy": "zero_velocity_hold_gripper"
+            }
+          },
+          "state_provider": {
+            "type": "integrated_action_target",
+            "state_schema": "droid_openpi_joint_gripper_eef_v1",
+            "config": {
+              "action": "native",
+              "requires_embodiment_integrator": true
+            }
+          },
+          "view_bridge": {
+            "name": "droid_ctrl_views_v1",
+            "config": {},
+            "output_views": [
+              "droid.exterior_1",
+              "droid.exterior_2",
+              "droid.wrist"
+            ]
+          },
+          "schema_version": 1,
+          "seed": 0,
+          "metadata": {
+            "status": "experimental",
+            "dataset": "DROID",
+            "warning": "Execute 15 controller ticks, supply absolute EEF targets at ticks 3,6,9,12,15. Ctrl video playback is 7 FPS; control waypoints are 5Hz, source data/policy commands 15Hz. Initial measured EEF seeds official sparse history; prompt supplied on reset. Recurrent state is proxy."
+          }
+        },
+        "max_chunks": 20,
+        "jobs": [
+          {
+            "id": "loop_smoke",
+            "episode": 0,
+            "seed": 0,
+            "completed_chunks": 2,
+            "vla_calls": 2,
+            "world_model_calls": 2
+          },
+          {
+            "id": "loop_long",
+            "episode": 0,
+            "seed": 0,
+            "completed_chunks": 20,
+            "vla_calls": 20,
+            "world_model_calls": 20
+          }
+        ],
+        "artifact_hashes": [
+          {
+            "directory": "results/experiments/pi0_ctrl_world_droid_v1/attempt_20261012T122807_208722Z_e4dfc5e1f7ee/loop_smoke/episode_000000/seed_000",
+            "metadata_sha256": "2f82b0940fc8beea6e4622caf4eb7fc9d34fdd2926a42982d5556f7ba5c07fc3",
+            "actions_sha256": "436fe73dce43e6a6cfc457de4f4f14bc021239238f5cee798f1211389f6e0f4a"
+          },
+          {
+            "directory": "results/experiments/pi0_ctrl_world_droid_v1/attempt_20261012T122807_208722Z_e4dfc5e1f7ee/loop_long/episode_000000/seed_000",
+            "metadata_sha256": "aa8c467dfcb0a4b816bc3c6c4e87241f68a75ca370c107daa2feb2ad988f96c8",
+            "actions_sha256": "6d7ef464d621dbf523fae838cfe5be1ad9534b6780d5a6651d0f4f36f84675d1"
+          }
+        ],
+        "loaded_models": {
+          "vla": {
+            "module": "adapters.vla.openpi",
+            "adapter": "Pi0Adapter",
+            "kwargs": {
+              "checkpoint_path": "checkpoints/vla/openpi/pi0-droid"
+            }
+          },
+          "world_model": {
+            "module": "adapters.world_models.ctrl_world",
+            "adapter": "CtrlWorldAdapter",
+            "kwargs": {
+              "svd_model_path": "checkpoints/world_models/ctrl_world/svd",
+              "clip_model_path": "checkpoints/world_models/ctrl_world/clip",
+              "checkpoint_path": "checkpoints/world_models/ctrl_world/ctrl_world/checkpoint-10000.pt",
+              "repo_path": "third_party/ctrl-world",
+              "num_inference_steps": 50,
+              "guidance_scale": 1,
+              "prompt": "__instruction_supplied_on_reset__"
+            }
+          }
+        },
+        "package_versions": [
+          {
+            "adapter": "Pi0Adapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "diffusers": "0.33.1",
+              "jax": "0.5.3",
+              "torch": "2.7.1",
+              "transformers": "4.53.2"
+            }
+          },
+          {
+            "adapter": "CtrlWorldAdapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "transformers": "4.48.1",
+              "torch": "2.7.1",
+              "diffusers": "0.34.0"
+            }
+          }
+        ],
+        "source_version": "Historical execution; report hash identifies evidence, not current code validation",
+        "checkpoint_identity": "Recorded paths; full checkpoint digests not asserted by this historical receipt"
+      }
+    },
+    "groot_n15__cosmos3_nano_droid_fd_v1": {
+      "real_weight_loop": {
+        "status": "historical_pass",
+        "attempt": "attempt_20261012T061045_451121Z_6a8aaf6e6684",
+        "report": "results/delivery/long_groot_cosmos_20261012_report.json",
+        "report_sha256": "8a0c3472da5894d162271cce25c00e1f5441588d4a9a947379033ab6128880b0",
+        "artifact_rechecked_at": "2026-10-30T13:24:26.999526+00:00",
+        "pair_contract": {
+          "pair_id": "groot_n15__cosmos3_nano_droid_fd_v1",
+          "vla": {
+            "adapter": "GrootN15Adapter",
+            "view_mapping": {
+              "video.exterior_image_1": "droid.exterior_1",
+              "video.exterior_image_2": "droid.exterior_2",
+              "video.wrist_image": "droid.wrist"
+            },
+            "view_mode": "mapping",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 7,
+              "horizon": 16,
+              "representation": "cartesian_velocity_xyz_rpy+absolute_gripper",
+              "frame": "droid_controller",
+              "semantics": "velocity_command_with_absolute_gripper",
+              "rate_hz": 15.0,
+              "normalization": "groot_n15_oxe_droid_decoded",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "droll",
+                "dpitch",
+                "dyaw",
+                "gripper_position"
+              ]
+            },
+            "state_schema": "droid_eef_rpy_gripper_v1",
+            "output_views": [],
+            "image_size": [
+              256,
+              256
+            ],
+            "video": null
+          },
+          "world_model": {
+            "adapter": "Cosmos3NanoDroidFDAdapter",
+            "view_mapping": {
+              "single_view": "droid.cosmos_composite"
+            },
+            "view_mode": "single",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 10,
+              "horizon": 16,
+              "representation": "framewise_delta_xyz+opencv_rot6d+flipped_gripper",
+              "frame": "droid_cosmos_opencv",
+              "semantics": "delta",
+              "rate_hz": 15.0,
+              "normalization": "none_raw_metric",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "rot6d_0",
+                "rot6d_1",
+                "rot6d_2",
+                "rot6d_3",
+                "rot6d_4",
+                "rot6d_5",
+                "gripper_closed"
+              ]
+            },
+            "state_schema": null,
+            "output_views": [
+              "droid.cosmos_composite"
+            ],
+            "image_size": null,
+            "video": {
+              "fps": 15,
+              "frames_per_chunk": 16
+            }
+          },
+          "action_bridge": {
+            "name": "groot_n15_to_cosmos3_droid_v1",
+            "source": {
+              "dimension": 7,
+              "horizon": 16,
+              "representation": "cartesian_velocity_xyz_rpy+absolute_gripper",
+              "frame": "droid_controller",
+              "semantics": "velocity_command_with_absolute_gripper",
+              "rate_hz": 15.0,
+              "normalization": "groot_n15_oxe_droid_decoded",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "droll",
+                "dpitch",
+                "dyaw",
+                "gripper_position"
+              ]
+            },
+            "target": {
+              "dimension": 10,
+              "horizon": 16,
+              "representation": "framewise_delta_xyz+opencv_rot6d+flipped_gripper",
+              "frame": "droid_cosmos_opencv",
+              "semantics": "delta",
+              "rate_hz": 15.0,
+              "normalization": "none_raw_metric",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "rot6d_0",
+                "rot6d_1",
+                "rot6d_2",
+                "rot6d_3",
+                "rot6d_4",
+                "rot6d_5",
+                "gripper_closed"
+              ]
+            },
+            "config": {
+              "action_normalization": "none",
+              "requires_current_eef_pose": true,
+              "dynamics_calibration": "configs/calibration/droid_velocity_dynamics_v1.json"
+            }
+          },
+          "state_provider": {
+            "type": "integrated_action_target",
+            "state_schema": "droid_eef_rpy_gripper_v1",
+            "config": {
+              "action": "native",
+              "requires_embodiment_integrator": true,
+              "output_components": [
+                "state.eef_position",
+                "state.eef_rotation",
+                "state.gripper_position"
+              ]
+            }
+          },
+          "view_bridge": {
+            "name": "droid_cosmos_composite_v1",
+            "config": {
+              "views": {
+                "exterior_1": "droid.exterior_1",
+                "exterior_2": "droid.exterior_2",
+                "wrist": "droid.wrist",
+                "composite": "droid.cosmos_composite"
+              }
+            },
+            "output_views": [
+              "droid.cosmos_composite",
+              "droid.exterior_1",
+              "droid.exterior_2",
+              "droid.wrist"
+            ]
+          },
+          "schema_version": 1,
+          "seed": 0,
+          "metadata": {
+            "status": "protocol_declared_official_checkpoint",
+            "dataset": "DROID",
+            "world_model_domain": "droid_lerobot",
+            "initial_state_source": "dataset_ground_truth",
+            "view_protocol": "The observation loader must retain three independent DROID views and derive droid.cosmos_composite as wrist on top with half-resolution exterior views below. Generated composites must be split back before the next GR00T query.",
+            "warning": "GR00T's decoded eef_position_delta/eef_rotation_delta match DROID action.cartesian_velocity statistics. The action bridge predicts the resulting pose trajectory from the current measured/predicted EEF pose before constructing Cosmos framewise deltas. The released 20k EMA DROID FD checkpoint consumes those deltas in raw metric units; quantile normalization or clipping is out of distribution."
+          }
+        },
+        "max_chunks": 20,
+        "jobs": [
+          {
+            "id": "loop_integrated_long",
+            "episode": 0,
+            "seed": 0,
+            "completed_chunks": 20,
+            "vla_calls": 20,
+            "world_model_calls": 20
+          }
+        ],
+        "artifact_hashes": [
+          {
+            "directory": "results/experiments/long_groot_cosmos_20261012/attempt_20261012T061045_451121Z_6a8aaf6e6684/loop_integrated_long/episode_000000/seed_000",
+            "metadata_sha256": "983a146e1f8f77a0f0c32e92d38660aa7288b186214ff848d783e6100204b8d6",
+            "actions_sha256": "38b9ea7c105c5df1ec0a73ef0b453d52f11206eaf5eeda06c2777e28ef0473ce"
+          }
+        ],
+        "loaded_models": {
+          "vla": {
+            "module": "adapters.vla.groot",
+            "adapter": "GrootN15Adapter",
+            "kwargs": {
+              "model_path": "checkpoints/vla/groot/n1.5-3b"
+            }
+          },
+          "world_model": {
+            "module": "adapters.world_models.cosmos3_nano_droid_fd",
+            "adapter": "Cosmos3NanoDroidFDAdapter",
+            "kwargs": {
+              "model_path": "checkpoints/world_models/cosmos3_nano_droid_fd/community_jere_mybao_v1_20k_ema",
+              "runtime_dir": "results/experiments/long_groot_cosmos_20261012/attempt_20261012T061045_451121Z_6a8aaf6e6684/workers/cosmos_runtime",
+              "num_inference_steps": 30,
+              "guidance": 1.0,
+              "shift": 10.0,
+              "resolution": "480",
+              "diffusion_cache": false,
+              "use_torch_compile": false
+            }
+          }
+        },
+        "package_versions": [
+          {
+            "adapter": "GrootN15Adapter",
+            "python": "3.10.18 (main, Sep  2 2025, 14:19:37) [Clang 20.1.4 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "tensorflow": "2.15.0",
+              "torch": "2.5.1",
+              "diffusers": "0.30.2",
+              "transformers": "4.51.3"
+            }
+          },
+          {
+            "adapter": "Cosmos3NanoDroidFDAdapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "transformers": "4.57.1",
+              "torch": "2.7.1",
+              "diffusers": "0.39.0"
+            }
+          }
+        ],
+        "source_version": "Historical execution; report hash identifies evidence, not current code validation",
+        "checkpoint_identity": "Recorded paths; full checkpoint digests not asserted by this historical receipt"
+      }
+    },
+    "openvla__worldgym_bridge_v1": {
+      "real_weight_loop": {
+        "status": "historical_pass",
+        "attempt": "attempt_20261012T054208_399547Z_b988e32ff89e",
+        "report": "results/delivery/long_openvla_20261012_report.json",
+        "report_sha256": "306d2547197620dc39060021a1a573e3d18afa48e4dd5cd162ea3f94d6e6dbe0",
+        "artifact_rechecked_at": "2026-10-30T13:24:27.174378+00:00",
+        "pair_contract": {
+          "pair_id": "openvla__worldgym_bridge_v1",
+          "vla": {
+            "adapter": "OpenVLAAdapter",
+            "view_mapping": {
+              "single_view": "bridge.primary"
+            },
+            "view_mode": "single",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 10,
+              "horizon": 1,
+              "representation": "worldgym_bridge_xyz_rpy_gripper_reserved3",
+              "frame": "bridge_openx",
+              "semantics": "delta",
+              "rate_hz": 20.0,
+              "normalization": "legacy_adapter_worldgym_bridge_rescale",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "droll",
+                "dpitch",
+                "dyaw",
+                "gripper",
+                "reserved0",
+                "reserved1",
+                "reserved2"
+              ]
+            },
+            "state_schema": null,
+            "output_views": [],
+            "image_size": [
+              256,
+              256
+            ],
+            "video": null
+          },
+          "world_model": {
+            "adapter": "WorldGymAdapter",
+            "view_mapping": {
+              "single_view": "bridge.primary"
+            },
+            "view_mode": "single",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 10,
+              "horizon": 1,
+              "representation": "worldgym_bridge_xyz_rpy_gripper_reserved3",
+              "frame": "bridge_openx",
+              "semantics": "delta",
+              "rate_hz": 20.0,
+              "normalization": "legacy_adapter_worldgym_bridge_rescale",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "droll",
+                "dpitch",
+                "dyaw",
+                "gripper",
+                "reserved0",
+                "reserved1",
+                "reserved2"
+              ]
+            },
+            "state_schema": null,
+            "output_views": [
+              "bridge.primary"
+            ],
+            "image_size": null,
+            "video": {
+              "fps": 20,
+              "frames_per_chunk": 1
+            }
+          },
+          "action_bridge": {
+            "name": "identity",
+            "source": {
+              "dimension": 10,
+              "horizon": 1,
+              "representation": "worldgym_bridge_xyz_rpy_gripper_reserved3",
+              "frame": "bridge_openx",
+              "semantics": "delta",
+              "rate_hz": 20.0,
+              "normalization": "legacy_adapter_worldgym_bridge_rescale",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "droll",
+                "dpitch",
+                "dyaw",
+                "gripper",
+                "reserved0",
+                "reserved1",
+                "reserved2"
+              ]
+            },
+            "target": {
+              "dimension": 10,
+              "horizon": 1,
+              "representation": "worldgym_bridge_xyz_rpy_gripper_reserved3",
+              "frame": "bridge_openx",
+              "semantics": "delta",
+              "rate_hz": 20.0,
+              "normalization": "legacy_adapter_worldgym_bridge_rescale",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "droll",
+                "dpitch",
+                "dyaw",
+                "gripper",
+                "reserved0",
+                "reserved1",
+                "reserved2"
+              ]
+            },
+            "config": {}
+          },
+          "state_provider": {
+            "type": "none",
+            "state_schema": "not_required",
+            "config": {}
+          },
+          "view_bridge": {
+            "name": "identity",
+            "config": {},
+            "output_views": []
+          },
+          "schema_version": 1,
+          "seed": 0,
+          "metadata": {
+            "dataset": "WorldGym upstream Bridge test sample",
+            "warning": "Native actions here mean current adapter outputs (already converted 10-D), not raw network 7-D. 20 FPS describes official video indexing/playback, not verified physical controller rate."
+          }
+        },
+        "max_chunks": 400,
+        "jobs": [
+          {
+            "id": "loop_long",
+            "episode": 2,
+            "seed": 0,
+            "completed_chunks": 400,
+            "vla_calls": 400,
+            "world_model_calls": 400
+          }
+        ],
+        "artifact_hashes": [
+          {
+            "directory": "results/experiments/long_openvla_20261012/attempt_20261012T054208_399547Z_b988e32ff89e/loop_long/episode_000002/seed_000",
+            "metadata_sha256": "1ee6d3ece518ea54a7ebc46ff1277b57a2d086ac7c25022bb815407ffe35a195",
+            "actions_sha256": "03b46a690757659ebcc2733e8b63d1e4d05fc6be4e65003b6add53436a52452d"
+          }
+        ],
+        "loaded_models": {
+          "vla": {
+            "module": "adapters.vla.openvla",
+            "adapter": "OpenVLAAdapter",
+            "kwargs": {
+              "model_name_or_path": "checkpoints/vla/openvla-7b"
+            }
+          },
+          "world_model": {
+            "module": "adapters.world_models.worldgym",
+            "adapter": "WorldGymAdapter",
+            "kwargs": {
+              "checkpoint_path": "checkpoints/world_models/worldgym/checkpoint/mixed_openx_9robots_20frames_0p1actiondropout_580ksteps.pt",
+              "default_cfg": 3,
+              "use_pixel_rope": false,
+              "num_inference_steps": 10
+            }
+          }
+        },
+        "package_versions": [
+          {
+            "adapter": "OpenVLAAdapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "diffusers": "0.35.1",
+              "transformers": "4.49.0",
+              "torch": "2.6.0"
+            }
+          },
+          {
+            "adapter": "WorldGymAdapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "diffusers": "0.35.1",
+              "transformers": "4.49.0",
+              "torch": "2.6.0"
+            }
+          }
+        ],
+        "source_version": "Historical execution; report hash identifies evidence, not current code validation",
+        "checkpoint_identity": "Recorded paths; full checkpoint digests not asserted by this historical receipt"
+      },
+      "fresh_install": {
+        "status": "historical_pass",
+        "started_at": "2026-10-30T13:42:54.537104+00:00",
+        "report": "results/delivery/first_rollout_p0_final_20261030/report.json",
+        "report_sha256": "fafa991dadda428c181ca2f272abf42860dd21eca947bb0937633184800d750b",
+        "wheel_sha256": "0337a6428feb281ec4603b1d739b362ea8e1479628ea4819b642ce32b06af40d",
+        "asset_lock_sha256": "059ba001501946887796c588bf7688d9de06626057d7b7b0f27d16173936a3f1",
+        "framework_source": {
+          "files": [
+            "adapters/__init__.py",
+            "adapters/actions/__init__.py",
+            "adapters/actions/base.py",
+            "adapters/actions/bridge.py",
+            "adapters/actions/droid.py",
+            "adapters/actions/droid_ctrl.py",
+            "adapters/actions/groot_n17_droid.py",
+            "adapters/actions/openpi_droid.py",
+            "adapters/backends/__init__.py",
+            "adapters/backends/cosmos.py",
+            "adapters/backends/cosmos_actions.py",
+            "adapters/base.py",
+            "adapters/environment.py",
+            "adapters/observations/__init__.py",
+            "adapters/observations/base.py",
+            "adapters/observations/droid.py",
+            "adapters/plugins.py",
+            "adapters/vla/__init__.py",
+            "adapters/vla/_protocol.py",
+            "adapters/vla/cosmos_droid.py",
+            "adapters/vla/dreamzero.py",
+            "adapters/vla/groot.py",
+            "adapters/vla/octo.py",
+            "adapters/vla/openpi.py",
+            "adapters/vla/openvla.py",
+            "adapters/vla/rt1.py",
+            "adapters/vla/smolvla.py",
+            "adapters/vla/spatialvla.py",
+            "adapters/world_models/__init__.py",
+            "adapters/world_models/a2world.py",
+            "adapters/world_models/cosmos3_droid_joint_fd.py",
+            "adapters/world_models/cosmos3_droid_native.py",
+            "adapters/world_models/cosmos3_nano.py",
+            "adapters/world_models/cosmos3_nano_droid_fd.py",
+            "adapters/world_models/ctrl_world.py",
+            "adapters/world_models/dreamdojo.py",
+            "adapters/world_models/dreamtrue.py",
+            "adapters/world_models/ge_sim_v2.py",
+            "adapters/world_models/giga_world_1.py",
+            "adapters/world_models/gigaworld1.py",
+            "adapters/world_models/irasim.py",
+            "adapters/world_models/iws.py",
+            "adapters/world_models/playworld.py",
+            "adapters/world_models/tau0_wm_simulator.py",
+            "adapters/world_models/worldgym.py",
+            "cli/__init__.py",
+            "cli/__main__.py",
+            "cli/commands/__init__.py",
+            "cli/commands/execution.py",
+            "cli/commands/project.py",
+            "cli/commands/reports.py",
+            "cli/commands/studies.py",
+            "cli/commands/verification.py",
+            "cli/commands/workspace.py",
+            "cli/main.py",
+            "cli/output.py",
+            "cli/parser.py",
+            "evaluation/__init__.py",
+            "evaluation/contracts.py",
+            "evaluation/datasets/__init__.py",
+            "evaluation/datasets/cosmos_reference.py",
+            "evaluation/datasets/ctrl_world.py",
+            "evaluation/datasets/dreamdojo.py",
+            "evaluation/datasets/dreamtrue.py",
+            "evaluation/datasets/droid.py",
+            "evaluation/datasets/episode.py",
+            "evaluation/datasets/irasim.py",
+            "evaluation/datasets/irasim_reference.py",
+            "evaluation/datasets/iws.py",
+            "evaluation/datasets/native_archives.py",
+            "evaluation/datasets/native_reference.py",
+            "evaluation/datasets/playworld.py",
+            "evaluation/datasets/success_samples.py",
+            "evaluation/datasets/trials.py",
+            "evaluation/datasets/video.py",
+            "evaluation/datasets/worldgym.py",
+            "evaluation/evaluator.py",
+            "evaluation/execution/__init__.py",
+            "evaluation/execution/admission.py",
+            "evaluation/execution/batch_session.py",
+            "evaluation/execution/client.py",
+            "evaluation/execution/droid_study.py",
+            "evaluation/execution/executor.py",
+            "evaluation/execution/native_batch_benchmark.py",
+            "evaluation/execution/native_batch_stream.py",
+            "evaluation/execution/native_replay.py",
+            "evaluation/execution/native_stream.py",
+            "evaluation/execution/native_study.py",
+            "evaluation/execution/policy_check.py",
+            "evaluation/execution/reliability.py",
+            "evaluation/execution/transport.py",
+            "evaluation/execution/worker.py",
+            "evaluation/execution/worker_session.py",
+            "evaluation/execution/workflow.py",
+            "evaluation/factories.py",
+            "evaluation/manifests.py",
+            "evaluation/modes.py",
+            "evaluation/planning/__init__.py",
+            "evaluation/planning/capabilities.py",
+            "evaluation/planning/catalog.py",
+            "evaluation/planning/checkpoint.py",
+            "evaluation/planning/configuration.py",
+            "evaluation/planning/cosmos.py",
+            "evaluation/planning/cosmos_events.py",
+            "evaluation/planning/cosmos_horizon.py",
+            "evaluation/planning/ctrl_validation.py",
+            "evaluation/planning/diagnostics.py",
+            "evaluation/planning/droid_study.py",
+            "evaluation/planning/experiments.py",
+            "evaluation/planning/inventory.py",
+            "evaluation/planning/native_batches.py",
+            "evaluation/planning/native_reference.py",
+            "evaluation/planning/native_subset.py",
+            "evaluation/planning/registry.py",
+            "evaluation/planning/registry_schema.py",
+            "evaluation/reporting/__init__.py",
+            "evaluation/reporting/artifact_checks.py",
+            "evaluation/reporting/artifacts.py",
+            "evaluation/reporting/checkpoint_metrics.py",
+            "evaluation/reporting/cosmos_events.py",
+            "evaluation/reporting/cosmos_horizon.py",
+            "evaluation/reporting/cosmos_temporal_review.py",
+            "evaluation/reporting/ctrl_validation.py",
+            "evaluation/reporting/image_feedback.py",
+            "evaluation/reporting/metric_store.py",
+            "evaluation/reporting/motion.py",
+            "evaluation/reporting/motion_detector.py",
+            "evaluation/reporting/native_reference.py",
+            "evaluation/reporting/perceptual.py",
+            "evaluation/reporting/positive_controls.py",
+            "evaluation/reporting/pusht_observer.py",
+            "evaluation/reporting/regression_report.py",
+            "evaluation/reporting/replay_metrics.py",
+            "evaluation/reporting/results.py",
+            "evaluation/reporting/scoring.py",
+            "evaluation/reporting/support.py",
+            "evaluation/reporting/task_scores.py",
+            "evaluation/reporting/video_diagnostics.py",
+            "evaluation/state_providers.py",
+            "evaluation/timeline.py",
+            "evaluation/validation/__init__.py",
+            "evaluation/validation/acceptance.py",
+            "evaluation/validation/asset_inventory.py",
+            "evaluation/validation/ctrl_reference.py",
+            "evaluation/validation/documentation.py",
+            "evaluation/validation/engineering.py",
+            "evaluation/validation/environment_audit.py",
+            "evaluation/validation/native_runtime.py",
+            "evaluation/validation/perceptual.py",
+            "evaluation/validation/safetensors.py",
+            "vlaworldeval/__init__.py",
+            "vlaworldeval/archive.py",
+            "vlaworldeval/asset_lock.py",
+            "vlaworldeval/assets.py",
+            "vlaworldeval/atomic_json.py",
+            "vlaworldeval/cache.py",
+            "vlaworldeval/demo.py",
+            "vlaworldeval/gdown_client.py",
+            "vlaworldeval/http_download.py",
+            "vlaworldeval/maintenance.py",
+            "vlaworldeval/openpi_mirror.py",
+            "vlaworldeval/paths.py",
+            "vlaworldeval/reference_asset.py",
+            "vlaworldeval/workspace.py",
+            "vlaworldeval/worldgym_runtime.py"
+          ],
+          "sha256": "a77df9c315f35fcf64e3ee2bb22aac2150ab859e8ead7d817268acc419265c73"
+        },
+        "assets_reused": true,
+        "package_cache_allowed": true,
+        "cold_asset_download_verified": false
+      },
+      "latest_fresh_loop": {
+        "status": "historical_pass",
+        "attempt": "attempt_20261030T134334_891173Z_801bfa28a976",
+        "report": "results/delivery/first_rollout_p0_final_20261030/evaluate.stdout",
+        "report_sha256": "cd1072890c57f734f414e6e7504c7434f6fdc345d264e7e00fe2ad30e676096f",
+        "artifact_rechecked_at": "2026-10-30T13:45:08.223278+00:00",
+        "pair_contract": {
+          "pair_id": "openvla__worldgym_bridge_v1",
+          "vla": {
+            "adapter": "OpenVLAAdapter",
+            "view_mapping": {
+              "single_view": "bridge.primary"
+            },
+            "view_mode": "single",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 10,
+              "horizon": 1,
+              "representation": "worldgym_bridge_xyz_rpy_gripper_reserved3",
+              "frame": "bridge_openx",
+              "semantics": "delta",
+              "rate_hz": 20.0,
+              "normalization": "legacy_adapter_worldgym_bridge_rescale",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "droll",
+                "dpitch",
+                "dyaw",
+                "gripper",
+                "reserved0",
+                "reserved1",
+                "reserved2"
+              ],
+              "temporal_layout": "future"
+            },
+            "state_schema": null,
+            "output_views": [],
+            "image_size": [
+              256,
+              256
+            ],
+            "video": null,
+            "history_offsets": null
+          },
+          "world_model": {
+            "adapter": "WorldGymAdapter",
+            "view_mapping": {
+              "single_view": "bridge.primary"
+            },
+            "view_mode": "single",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 10,
+              "horizon": 1,
+              "representation": "worldgym_bridge_xyz_rpy_gripper_reserved3",
+              "frame": "bridge_openx",
+              "semantics": "delta",
+              "rate_hz": 20.0,
+              "normalization": "legacy_adapter_worldgym_bridge_rescale",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "droll",
+                "dpitch",
+                "dyaw",
+                "gripper",
+                "reserved0",
+                "reserved1",
+                "reserved2"
+              ],
+              "temporal_layout": "future"
+            },
+            "state_schema": null,
+            "output_views": [
+              "bridge.primary"
+            ],
+            "image_size": null,
+            "video": {
+              "fps": 20,
+              "frames_per_chunk": 1,
+              "temporal_layout": "future"
+            },
+            "history_offsets": null
+          },
+          "action_bridge": {
+            "name": "identity",
+            "source": {
+              "dimension": 10,
+              "horizon": 1,
+              "representation": "worldgym_bridge_xyz_rpy_gripper_reserved3",
+              "frame": "bridge_openx",
+              "semantics": "delta",
+              "rate_hz": 20.0,
+              "normalization": "legacy_adapter_worldgym_bridge_rescale",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "droll",
+                "dpitch",
+                "dyaw",
+                "gripper",
+                "reserved0",
+                "reserved1",
+                "reserved2"
+              ],
+              "temporal_layout": "future"
+            },
+            "target": {
+              "dimension": 10,
+              "horizon": 1,
+              "representation": "worldgym_bridge_xyz_rpy_gripper_reserved3",
+              "frame": "bridge_openx",
+              "semantics": "delta",
+              "rate_hz": 20.0,
+              "normalization": "legacy_adapter_worldgym_bridge_rescale",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "droll",
+                "dpitch",
+                "dyaw",
+                "gripper",
+                "reserved0",
+                "reserved1",
+                "reserved2"
+              ],
+              "temporal_layout": "future"
+            },
+            "config": {}
+          },
+          "state_provider": {
+            "type": "none",
+            "state_schema": "not_required",
+            "config": {}
+          },
+          "view_bridge": {
+            "name": "identity",
+            "config": {},
+            "output_views": []
+          },
+          "schema_version": 1,
+          "seed": 0,
+          "metadata": {
+            "dataset": "WorldGym upstream Bridge test sample",
+            "warning": "Native actions here mean current adapter outputs (already converted 10-D), not raw network 7-D. 20 FPS describes official video indexing/playback, not verified physical controller rate.",
+            "evaluation_mode": "policy_loop",
+            "pilworld_paper_reproduction": false
+          }
+        },
+        "max_chunks": 20,
+        "jobs": [
+          {
+            "id": "loop_long",
+            "episode": 2,
+            "seed": 0,
+            "completed_chunks": 20,
+            "vla_calls": 20,
+            "world_model_calls": 20
+          }
+        ],
+        "artifact_hashes": [
+          {
+            "directory": "results/delivery/first_rollout_p0_final_20261030/rollouts/attempt_20261030T134334_891173Z_801bfa28a976/loop_long/episode_000002/seed_000",
+            "metadata_sha256": "bcf74ddf74a1ed7ec84aa7cd0e70c0a57886b41fbef98a9c971e4715cf7415d4",
+            "actions_sha256": "a35739a1225f9860ad5be517c2ae80a7b51b91c2ccace0d72775c933ed7c64b1"
+          }
+        ],
+        "loaded_models": {
+          "vla": {
+            "module": "adapters.vla.openvla",
+            "adapter": "OpenVLAAdapter",
+            "kwargs": {
+              "model_name_or_path": "checkpoints/vla/openvla-7b"
+            }
+          },
+          "world_model": {
+            "module": "adapters.world_models.worldgym",
+            "adapter": "WorldGymAdapter",
+            "kwargs": {
+              "checkpoint_path": "checkpoints/world_models/worldgym/checkpoint/mixed_openx_9robots_20frames_0p1actiondropout_580ksteps.pt",
+              "default_cfg": 3,
+              "use_pixel_rope": false,
+              "num_inference_steps": 10
+            }
+          }
+        },
+        "package_versions": [
+          {
+            "adapter": "OpenVLAAdapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "diffusers": "0.35.1",
+              "transformers": "4.49.0",
+              "torch": "2.6.0"
+            }
+          },
+          {
+            "adapter": "WorldGymAdapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "diffusers": "0.35.1",
+              "transformers": "4.49.0",
+              "torch": "2.6.0"
+            }
+          }
+        ],
+        "source_version": "Historical execution; report hash identifies evidence, not current code validation",
+        "checkpoint_identity": "Recorded paths; full checkpoint digests not asserted by this historical receipt"
+      }
+    },
+    "groot_n17_droid__ctrl_world_droid_v1": {
+      "real_weight_loop": {
+        "status": "historical_pass",
+        "attempt": "attempt_20261013T082628_216335Z_b9786d6754cf",
+        "report": "results/delivery/groot_n17_droid_ctrl_retry2_20261013.json",
+        "report_sha256": "9c4b1d1cb099f20f509f07b286daec4717c59808fa6988306c7a8d8c36945ab9",
+        "artifact_rechecked_at": "2026-10-30T13:24:27.618181+00:00",
+        "pair_contract": {
+          "pair_id": "groot_n17_droid__ctrl_world_droid_v1",
+          "vla": {
+            "adapter": "GrootN17DroidAdapter",
+            "view_mapping": {
+              "exterior_image_1_left": "droid.exterior_1",
+              "wrist_image_left": "droid.wrist"
+            },
+            "view_mode": "mapping",
+            "squeeze_single_frame": false,
+            "action": {
+              "dimension": 17,
+              "horizon": 40,
+              "representation": "decoded_absolute_eef9d+gripper+joint_position",
+              "frame": "droid_panda_base",
+              "semantics": "absolute_target",
+              "rate_hz": 15.0,
+              "normalization": "official_groot_n17_decoded",
+              "components": []
+            },
+            "state_schema": "groot_n17_droid_joint_eef9d_v1",
+            "output_views": [],
+            "image_size": null,
+            "video": null,
+            "history_offsets": [
+              0
+            ]
+          },
+          "world_model": {
+            "adapter": "CtrlWorldAdapter",
+            "view_mapping": {
+              "exterior_1": "droid.exterior_1",
+              "exterior_2": "droid.exterior_2",
+              "wrist": "droid.wrist"
+            },
+            "view_mode": "stack",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 7,
+              "horizon": 5,
+              "representation": "xyz_rpy_gripper",
+              "frame": "droid_robot_base",
+              "semantics": "absolute_eef_target",
+              "rate_hz": 5.0,
+              "normalization": "raw_metric_adapter_normalizes",
+              "components": []
+            },
+            "state_schema": null,
+            "output_views": [
+              "droid.exterior_1",
+              "droid.exterior_2",
+              "droid.wrist"
+            ],
+            "image_size": null,
+            "video": {
+              "fps": 7,
+              "frames_per_chunk": 5
+            },
+            "history_offsets": [
+              0
+            ]
+          },
+          "action_bridge": {
+            "name": "droid_policy_to_ctrl_world_v1",
+            "source": {
+              "dimension": 17,
+              "horizon": 40,
+              "representation": "decoded_absolute_eef9d+gripper+joint_position",
+              "frame": "droid_panda_base",
+              "semantics": "absolute_target",
+              "rate_hz": 15.0,
+              "normalization": "official_groot_n17_decoded",
+              "components": []
+            },
+            "target": {
+              "dimension": 7,
+              "horizon": 5,
+              "representation": "xyz_rpy_gripper",
+              "frame": "droid_robot_base",
+              "semantics": "absolute_eef_target",
+              "rate_hz": 5.0,
+              "normalization": "raw_metric_adapter_normalizes",
+              "components": []
+            },
+            "config": {
+              "kinematics": "configs/kinematics/droid_panda_link8_v1.json",
+              "execute_prefix": 15
+            }
+          },
+          "state_provider": {
+            "type": "integrated_action_target",
+            "state_schema": "groot_n17_droid_joint_eef9d_v1",
+            "config": {
+              "action": "native",
+              "requires_embodiment_integrator": true
+            }
+          },
+          "view_bridge": {
+            "name": "droid_ctrl_views_v1",
+            "config": {},
+            "output_views": [
+              "droid.exterior_1",
+              "droid.exterior_2",
+              "droid.wrist"
+            ]
+          },
+          "schema_version": 1,
+          "seed": 0,
+          "metadata": {
+            "status": "experimental",
+            "warning": "Decoded absolute targets: execute first 15 joint targets, discard 25 on replanning. Initial source history [-15,0] at 15Hz is mapped to two [-5,0] 5Hz view slots; generated Ctrl frames are 5Hz controller steps but encoded at official 7FPS playback. Proxy state only.",
+            "checkpoint_variant": "groot_n17_droid",
+            "task_success_verified": false,
+            "evaluation_mode": "policy_loop",
+            "pilworld_paper_reproduction": false
+          }
+        },
+        "max_chunks": 8,
+        "jobs": [
+          {
+            "id": "loop_smoke",
+            "episode": 350,
+            "seed": 0,
+            "completed_chunks": 2,
+            "vla_calls": 2,
+            "world_model_calls": 2
+          },
+          {
+            "id": "loop_full_window",
+            "episode": 350,
+            "seed": 0,
+            "completed_chunks": 8,
+            "vla_calls": 8,
+            "world_model_calls": 8
+          }
+        ],
+        "artifact_hashes": [
+          {
+            "directory": "results/experiments/groot_n17_droid_ctrl_v1/attempt_20261013T082628_216335Z_b9786d6754cf/loop_smoke/episode_000350/seed_000",
+            "metadata_sha256": "44b5b32c541cad871fa5c2366d7057b33fb4e59473f5a91c2a99e2b9df09722c",
+            "actions_sha256": "bf4de18683d966264e0d7cc4415612c1b963b9c5edaeb08488f597d3a3f829fe"
+          },
+          {
+            "directory": "results/experiments/groot_n17_droid_ctrl_v1/attempt_20261013T082628_216335Z_b9786d6754cf/loop_full_window/episode_000350/seed_000",
+            "metadata_sha256": "b875d4a8b76e383d85bde792cbc3a471409d45d3d84b31d85ac09eeab0248a04",
+            "actions_sha256": "043ae2800a3ce6e8fc7f6eb6f100bffb6965879c645258137b644c5beb5fd464"
+          }
+        ],
+        "loaded_models": {
+          "vla": {
+            "module": "adapters.vla.groot",
+            "adapter": "GrootN17DroidAdapter",
+            "kwargs": {
+              "model_path": "checkpoints/vla/groot/n1.7-droid"
+            }
+          },
+          "world_model": {
+            "module": "adapters.world_models.ctrl_world",
+            "adapter": "CtrlWorldAdapter",
+            "kwargs": {
+              "svd_model_path": "checkpoints/world_models/ctrl_world/svd",
+              "clip_model_path": "checkpoints/world_models/ctrl_world/clip",
+              "checkpoint_path": "checkpoints/world_models/ctrl_world/ctrl_world/checkpoint-10000.pt",
+              "repo_path": "third_party/ctrl-world",
+              "num_inference_steps": 50,
+              "guidance_scale": 1,
+              "prompt": "__instruction_supplied_on_reset__"
+            }
+          }
+        },
+        "package_versions": [
+          {
+            "adapter": "GrootN17DroidAdapter",
+            "python": "3.10.18 (main, Sep  2 2025, 14:19:37) [Clang 20.1.4 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "diffusers": "0.35.1",
+              "transformers": "4.57.3",
+              "torch": "2.7.1+cu128"
+            }
+          },
+          {
+            "adapter": "CtrlWorldAdapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "transformers": "4.48.1",
+              "torch": "2.7.1",
+              "diffusers": "0.34.0"
+            }
+          }
+        ],
+        "source_version": "Historical execution; report hash identifies evidence, not current code validation",
+        "checkpoint_identity": "Recorded paths; full checkpoint digests not asserted by this historical receipt"
+      }
+    },
+    "groot_n17_droid__cosmos3_nano_droid_fd_v1": {
+      "real_weight_loop": {
+        "status": "historical_pass",
+        "attempt": "attempt_20261013T083009_576330Z_eabc66a08c3b",
+        "report": "results/delivery/groot_n17_droid_cosmos_retry1_20261013.json",
+        "report_sha256": "c8868c7c0fd086dccb1a411f78b97fdec977fdcb35ae8ceb100f0e900bc876f9",
+        "artifact_rechecked_at": "2026-10-30T13:24:28.186919+00:00",
+        "pair_contract": {
+          "pair_id": "groot_n17_droid__cosmos3_nano_droid_fd_v1",
+          "vla": {
+            "adapter": "GrootN17DroidAdapter",
+            "view_mapping": {
+              "exterior_image_1_left": "droid.exterior_1",
+              "wrist_image_left": "droid.wrist"
+            },
+            "view_mode": "mapping",
+            "squeeze_single_frame": false,
+            "action": {
+              "dimension": 17,
+              "horizon": 40,
+              "representation": "decoded_absolute_eef9d+gripper+joint_position",
+              "frame": "droid_panda_base",
+              "semantics": "absolute_target",
+              "rate_hz": 15.0,
+              "normalization": "official_groot_n17_decoded",
+              "components": []
+            },
+            "state_schema": "groot_n17_droid_joint_eef9d_v1",
+            "output_views": [],
+            "image_size": null,
+            "video": null,
+            "history_offsets": [
+              0
+            ]
+          },
+          "world_model": {
+            "adapter": "Cosmos3NanoDroidFDAdapter",
+            "view_mapping": {
+              "single_view": "droid.cosmos_composite"
+            },
+            "view_mode": "single",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 10,
+              "horizon": 16,
+              "representation": "framewise_delta_xyz+opencv_rot6d+flipped_gripper",
+              "frame": "droid_cosmos_opencv",
+              "semantics": "delta",
+              "rate_hz": 15.0,
+              "normalization": "none_raw_metric",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "rot6d_0",
+                "rot6d_1",
+                "rot6d_2",
+                "rot6d_3",
+                "rot6d_4",
+                "rot6d_5",
+                "gripper_open"
+              ]
+            },
+            "state_schema": null,
+            "output_views": [
+              "droid.cosmos_composite"
+            ],
+            "image_size": null,
+            "video": {
+              "fps": 15,
+              "frames_per_chunk": 16
+            },
+            "history_offsets": [
+              0
+            ]
+          },
+          "action_bridge": {
+            "name": "groot_n17_to_cosmos3_droid_v1",
+            "source": {
+              "dimension": 17,
+              "horizon": 40,
+              "representation": "decoded_absolute_eef9d+gripper+joint_position",
+              "frame": "droid_panda_base",
+              "semantics": "absolute_target",
+              "rate_hz": 15.0,
+              "normalization": "official_groot_n17_decoded",
+              "components": []
+            },
+            "target": {
+              "dimension": 10,
+              "horizon": 16,
+              "representation": "framewise_delta_xyz+opencv_rot6d+flipped_gripper",
+              "frame": "droid_cosmos_opencv",
+              "semantics": "delta",
+              "rate_hz": 15.0,
+              "normalization": "none_raw_metric",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "rot6d_0",
+                "rot6d_1",
+                "rot6d_2",
+                "rot6d_3",
+                "rot6d_4",
+                "rot6d_5",
+                "gripper_open"
+              ]
+            },
+            "config": {
+              "kinematics": "configs/kinematics/droid_panda_link8_v1.json",
+              "execute_prefix": 16
+            }
+          },
+          "state_provider": {
+            "type": "integrated_action_target",
+            "state_schema": "groot_n17_droid_joint_eef9d_v1",
+            "config": {
+              "action": "native",
+              "requires_embodiment_integrator": true
+            }
+          },
+          "view_bridge": {
+            "name": "droid_cosmos_composite_v1",
+            "config": {
+              "views": {
+                "exterior_1": "droid.exterior_1",
+                "exterior_2": "droid.exterior_2",
+                "wrist": "droid.wrist",
+                "composite": "droid.cosmos_composite"
+              }
+            },
+            "output_views": [
+              "droid.cosmos_composite",
+              "droid.exterior_1",
+              "droid.exterior_2",
+              "droid.wrist"
+            ]
+          },
+          "schema_version": 1,
+          "seed": 0,
+          "metadata": {
+            "status": "experimental",
+            "initial_state_source": "dataset_ground_truth",
+            "warning": "Official get_action decodes relative training predictions into absolute targets. Execute only first 16 joint targets, discard 24 tail steps on replanning, ignore redundant EEF action head. State is ideal target proxy, history uses real initial [-15,0] frames then generated history.",
+            "checkpoint_variant": "groot_n17_droid",
+            "task_success_verified": false,
+            "evaluation_mode": "policy_loop",
+            "pilworld_paper_reproduction": false
+          }
+        },
+        "max_chunks": 8,
+        "jobs": [
+          {
+            "id": "loop_smoke",
+            "episode": 350,
+            "seed": 0,
+            "completed_chunks": 2,
+            "vla_calls": 2,
+            "world_model_calls": 2
+          },
+          {
+            "id": "loop_full_window",
+            "episode": 350,
+            "seed": 0,
+            "completed_chunks": 8,
+            "vla_calls": 8,
+            "world_model_calls": 8
+          }
+        ],
+        "artifact_hashes": [
+          {
+            "directory": "results/experiments/groot_n17_droid_cosmos_v1/attempt_20261013T083009_576330Z_eabc66a08c3b/loop_smoke/episode_000350/seed_000",
+            "metadata_sha256": "717f0a56777155cef84ec99a4321331521b37aa2c6dc0576c55078e86bc1bcfc",
+            "actions_sha256": "0bd409b32ba970cbcb64c5068ef011f1a31df8b7e7f579043dd4c9754ebfbeaa"
+          },
+          {
+            "directory": "results/experiments/groot_n17_droid_cosmos_v1/attempt_20261013T083009_576330Z_eabc66a08c3b/loop_full_window/episode_000350/seed_000",
+            "metadata_sha256": "e0f7c87e8ab0af03490e5e873a3372074a0147c0133fa37490d1a2790950dc71",
+            "actions_sha256": "e2144173e60b5f8d0e2968d04c403524dfea8510f27f53583d0545b33a64b9c3"
+          }
+        ],
+        "loaded_models": {
+          "vla": {
+            "module": "adapters.vla.groot",
+            "adapter": "GrootN17DroidAdapter",
+            "kwargs": {
+              "model_path": "checkpoints/vla/groot/n1.7-droid"
+            }
+          },
+          "world_model": {
+            "module": "adapters.world_models.cosmos3_nano_droid_fd",
+            "adapter": "Cosmos3NanoDroidFDAdapter",
+            "kwargs": {
+              "model_path": "checkpoints/world_models/cosmos3_nano_droid_fd/community_jere_mybao_v1_20k_ema",
+              "runtime_dir": "results/experiments/groot_n17_droid_cosmos_v1/attempt_20261013T083009_576330Z_eabc66a08c3b/workers/cosmos_runtime",
+              "num_inference_steps": 30,
+              "guidance": 1,
+              "shift": 10,
+              "resolution": "480",
+              "diffusion_cache": false,
+              "use_torch_compile": false
+            }
+          }
+        },
+        "package_versions": [
+          {
+            "adapter": "GrootN17DroidAdapter",
+            "python": "3.10.18 (main, Sep  2 2025, 14:19:37) [Clang 20.1.4 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "diffusers": "0.35.1",
+              "transformers": "4.57.3",
+              "torch": "2.7.1+cu128"
+            }
+          },
+          {
+            "adapter": "Cosmos3NanoDroidFDAdapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "transformers": "4.57.1",
+              "torch": "2.7.1",
+              "diffusers": "0.39.0"
+            }
+          }
+        ],
+        "source_version": "Historical execution; report hash identifies evidence, not current code validation",
+        "checkpoint_identity": "Recorded paths; full checkpoint digests not asserted by this historical receipt"
+      }
+    },
+    "pi0_fast_droid__cosmos3_nano_droid_fd_v1": {
+      "real_weight_loop": {
+        "status": "historical_pass",
+        "attempt": "attempt_20261013T085046_951687Z_b601951c764c",
+        "report": "results/delivery/pi0_fast_droid_cosmos_20261013.json",
+        "report_sha256": "a051d4dbc50242722d404d56705b57b47725fa503b1b772fdddad31bf9de5df0",
+        "artifact_rechecked_at": "2026-10-30T13:24:28.751017+00:00",
+        "pair_contract": {
+          "pair_id": "pi0_fast_droid__cosmos3_nano_droid_fd_v1",
+          "vla": {
+            "adapter": "Pi0FastDroidAdapter",
+            "view_mapping": {
+              "observation/exterior_image_1_left": "droid.exterior_1",
+              "observation/wrist_image_left": "droid.wrist"
+            },
+            "view_mode": "mapping",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 8,
+              "horizon": 10,
+              "representation": "normalized_joint_velocity+absolute_closed_gripper",
+              "frame": "droid_panda_controller",
+              "semantics": "normalized_joint_velocity_with_absolute_gripper",
+              "rate_hz": 15.0,
+              "normalization": "openpi_droid_decoded",
+              "components": [
+                "joint_velocity_1",
+                "joint_velocity_2",
+                "joint_velocity_3",
+                "joint_velocity_4",
+                "joint_velocity_5",
+                "joint_velocity_6",
+                "joint_velocity_7",
+                "gripper_closed"
+              ]
+            },
+            "state_schema": "droid_openpi_joint_gripper_eef_v1",
+            "output_views": [],
+            "image_size": null,
+            "video": null,
+            "history_offsets": null
+          },
+          "world_model": {
+            "adapter": "Cosmos3NanoDroidFDAdapter",
+            "view_mapping": {
+              "single_view": "droid.cosmos_composite"
+            },
+            "view_mode": "single",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 10,
+              "horizon": 16,
+              "representation": "framewise_delta_xyz+opencv_rot6d+flipped_gripper",
+              "frame": "droid_cosmos_opencv",
+              "semantics": "delta",
+              "rate_hz": 15.0,
+              "normalization": "none_raw_metric",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "rot6d_0",
+                "rot6d_1",
+                "rot6d_2",
+                "rot6d_3",
+                "rot6d_4",
+                "rot6d_5",
+                "gripper_open"
+              ]
+            },
+            "state_schema": null,
+            "output_views": [
+              "droid.cosmos_composite"
+            ],
+            "image_size": null,
+            "video": {
+              "fps": 15,
+              "frames_per_chunk": 16
+            },
+            "history_offsets": null
+          },
+          "action_bridge": {
+            "name": "openpi_to_cosmos3_droid_v1",
+            "source": {
+              "dimension": 8,
+              "horizon": 10,
+              "representation": "normalized_joint_velocity+absolute_closed_gripper",
+              "frame": "droid_panda_controller",
+              "semantics": "normalized_joint_velocity_with_absolute_gripper",
+              "rate_hz": 15.0,
+              "normalization": "openpi_droid_decoded",
+              "components": [
+                "joint_velocity_1",
+                "joint_velocity_2",
+                "joint_velocity_3",
+                "joint_velocity_4",
+                "joint_velocity_5",
+                "joint_velocity_6",
+                "joint_velocity_7",
+                "gripper_closed"
+              ]
+            },
+            "target": {
+              "dimension": 10,
+              "horizon": 16,
+              "representation": "framewise_delta_xyz+opencv_rot6d+flipped_gripper",
+              "frame": "droid_cosmos_opencv",
+              "semantics": "delta",
+              "rate_hz": 15.0,
+              "normalization": "none_raw_metric",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "rot6d_0",
+                "rot6d_1",
+                "rot6d_2",
+                "rot6d_3",
+                "rot6d_4",
+                "rot6d_5",
+                "gripper_open"
+              ]
+            },
+            "config": {
+              "kinematics": "configs/kinematics/droid_panda_link8_v1.json",
+              "joint_delta_per_control_tick": 0.2,
+              "tail_policy": "zero_velocity_hold_gripper"
+            }
+          },
+          "state_provider": {
+            "type": "integrated_action_target",
+            "state_schema": "droid_openpi_joint_gripper_eef_v1",
+            "config": {
+              "action": "native",
+              "requires_embodiment_integrator": true
+            }
+          },
+          "view_bridge": {
+            "name": "droid_cosmos_composite_v1",
+            "config": {
+              "views": {
+                "exterior_1": "droid.exterior_1",
+                "exterior_2": "droid.exterior_2",
+                "wrist": "droid.wrist",
+                "composite": "droid.cosmos_composite"
+              }
+            },
+            "output_views": [
+              "droid.cosmos_composite",
+              "droid.exterior_1",
+              "droid.exterior_2",
+              "droid.wrist"
+            ]
+          },
+          "schema_version": 1,
+          "seed": 0,
+          "metadata": {
+            "status": "experimental_protocol_registered_not_full_wm_validated",
+            "dataset": "DROID",
+            "world_model_domain": "droid_lerobot",
+            "initial_state_source": "dataset_ground_truth",
+            "warning": "Ideal DROID controller target proxy, not measured or video-predicted state. Clip joint commands, binarize 1=closed gripper, scale 0.2 rad/control tick and saturate joint limits. Execute all native steps then zero-velocity hold for the remaining Cosmos steps. Gripper is flipped once to Cosmos 1=open. FK admission checks measured EEF against link8 across the episode. No contact/lag model.",
+            "checkpoint_variant": "pi0_fast_droid",
+            "task_success_verified": false,
+            "evaluation_mode": "policy_loop",
+            "pilworld_paper_reproduction": false
+          }
+        },
+        "max_chunks": 8,
+        "jobs": [
+          {
+            "id": "loop_smoke",
+            "episode": 350,
+            "seed": 0,
+            "completed_chunks": 2,
+            "vla_calls": 2,
+            "world_model_calls": 2
+          },
+          {
+            "id": "loop_full_window",
+            "episode": 350,
+            "seed": 0,
+            "completed_chunks": 8,
+            "vla_calls": 8,
+            "world_model_calls": 8
+          }
+        ],
+        "artifact_hashes": [
+          {
+            "directory": "results/experiments/pi0_fast_droid_cosmos_v1/attempt_20261013T085046_951687Z_b601951c764c/loop_smoke/episode_000350/seed_000",
+            "metadata_sha256": "3b0a70d19d0a06ccb38d051f0baabb952bfd0b1854dafca838ca03a420da1b70",
+            "actions_sha256": "109171b6f67f0756c61bbbfe087477eef853a2d708f40e1f11977ad2fceb51d6"
+          },
+          {
+            "directory": "results/experiments/pi0_fast_droid_cosmos_v1/attempt_20261013T085046_951687Z_b601951c764c/loop_full_window/episode_000350/seed_000",
+            "metadata_sha256": "b155c0f9c3925c636deef094bcac22426795164648c7240e292d524c3a91e496",
+            "actions_sha256": "5fbe87e707f23d1250401ece485693f9661c6ad59b1875a8487379c61b336835"
+          }
+        ],
+        "loaded_models": {
+          "vla": {
+            "module": "adapters.vla.openpi",
+            "adapter": "Pi0FastDroidAdapter",
+            "kwargs": {
+              "checkpoint_path": "checkpoints/vla/openpi/pi0-fast-droid"
+            }
+          },
+          "world_model": {
+            "module": "adapters.world_models.cosmos3_nano_droid_fd",
+            "adapter": "Cosmos3NanoDroidFDAdapter",
+            "kwargs": {
+              "model_path": "checkpoints/world_models/cosmos3_nano_droid_fd/community_jere_mybao_v1_20k_ema",
+              "runtime_dir": "results/experiments/pi0_fast_droid_cosmos_v1/attempt_20261013T085046_951687Z_b601951c764c/workers/cosmos_runtime",
+              "num_inference_steps": 30,
+              "guidance": 1,
+              "shift": 10,
+              "resolution": "480",
+              "diffusion_cache": false,
+              "use_torch_compile": false
+            }
+          }
+        },
+        "package_versions": [
+          {
+            "adapter": "Pi0FastDroidAdapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "diffusers": "0.33.1",
+              "jax": "0.5.3",
+              "torch": "2.7.1",
+              "transformers": "4.53.2"
+            }
+          },
+          {
+            "adapter": "Cosmos3NanoDroidFDAdapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "transformers": "4.57.1",
+              "torch": "2.7.1",
+              "diffusers": "0.39.0"
+            }
+          }
+        ],
+        "source_version": "Historical execution; report hash identifies evidence, not current code validation",
+        "checkpoint_identity": "Recorded paths; full checkpoint digests not asserted by this historical receipt"
+      }
+    },
+    "pi0_fast_droid__ctrl_world_droid_v1": {
+      "real_weight_loop": {
+        "status": "historical_pass",
+        "attempt": "attempt_20261013T084522_587008Z_a7fb62aa431c",
+        "report": "results/delivery/pi0_fast_droid_ctrl_retry1_20261013.json",
+        "report_sha256": "b4c3e57f630bc02b5cda96c3b9208a6cbc0e5d90c8358e538cd411c36f02bea8",
+        "artifact_rechecked_at": "2026-10-30T13:24:29.160801+00:00",
+        "pair_contract": {
+          "pair_id": "pi0_fast_droid__ctrl_world_droid_v1",
+          "vla": {
+            "adapter": "Pi0FastDroidAdapter",
+            "view_mapping": {
+              "observation/exterior_image_1_left": "droid.exterior_1",
+              "observation/wrist_image_left": "droid.wrist"
+            },
+            "view_mode": "mapping",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 8,
+              "horizon": 10,
+              "representation": "normalized_joint_velocity+absolute_closed_gripper",
+              "frame": "droid_panda_controller",
+              "semantics": "normalized_joint_velocity_with_absolute_gripper",
+              "rate_hz": 15.0,
+              "normalization": "openpi_droid_decoded",
+              "components": [
+                "joint_velocity_1",
+                "joint_velocity_2",
+                "joint_velocity_3",
+                "joint_velocity_4",
+                "joint_velocity_5",
+                "joint_velocity_6",
+                "joint_velocity_7",
+                "gripper_closed"
+              ]
+            },
+            "state_schema": "droid_openpi_joint_gripper_eef_v1",
+            "output_views": [],
+            "image_size": null,
+            "video": null,
+            "history_offsets": null
+          },
+          "world_model": {
+            "adapter": "CtrlWorldAdapter",
+            "view_mapping": {
+              "exterior_1": "droid.exterior_1",
+              "exterior_2": "droid.exterior_2",
+              "wrist": "droid.wrist"
+            },
+            "view_mode": "stack",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 7,
+              "horizon": 5,
+              "representation": "xyz_rpy_gripper",
+              "frame": "droid_robot_base",
+              "semantics": "absolute_eef_target",
+              "rate_hz": 5.0,
+              "normalization": "raw_metric_adapter_normalizes",
+              "components": []
+            },
+            "state_schema": null,
+            "output_views": [
+              "droid.exterior_1",
+              "droid.exterior_2",
+              "droid.wrist"
+            ],
+            "image_size": null,
+            "video": {
+              "fps": 7,
+              "frames_per_chunk": 5
+            },
+            "history_offsets": null
+          },
+          "action_bridge": {
+            "name": "droid_policy_to_ctrl_world_v1",
+            "source": {
+              "dimension": 8,
+              "horizon": 10,
+              "representation": "normalized_joint_velocity+absolute_closed_gripper",
+              "frame": "droid_panda_controller",
+              "semantics": "normalized_joint_velocity_with_absolute_gripper",
+              "rate_hz": 15.0,
+              "normalization": "openpi_droid_decoded",
+              "components": [
+                "joint_velocity_1",
+                "joint_velocity_2",
+                "joint_velocity_3",
+                "joint_velocity_4",
+                "joint_velocity_5",
+                "joint_velocity_6",
+                "joint_velocity_7",
+                "gripper_closed"
+              ]
+            },
+            "target": {
+              "dimension": 7,
+              "horizon": 5,
+              "representation": "xyz_rpy_gripper",
+              "frame": "droid_robot_base",
+              "semantics": "absolute_eef_target",
+              "rate_hz": 5.0,
+              "normalization": "raw_metric_adapter_normalizes",
+              "components": []
+            },
+            "config": {
+              "kinematics": "configs/kinematics/droid_panda_link8_v1.json",
+              "joint_delta_per_control_tick": 0.2,
+              "tail_policy": "zero_velocity_hold_gripper"
+            }
+          },
+          "state_provider": {
+            "type": "integrated_action_target",
+            "state_schema": "droid_openpi_joint_gripper_eef_v1",
+            "config": {
+              "action": "native",
+              "requires_embodiment_integrator": true
+            }
+          },
+          "view_bridge": {
+            "name": "droid_ctrl_views_v1",
+            "config": {},
+            "output_views": [
+              "droid.exterior_1",
+              "droid.exterior_2",
+              "droid.wrist"
+            ]
+          },
+          "schema_version": 1,
+          "seed": 0,
+          "metadata": {
+            "status": "experimental",
+            "dataset": "DROID",
+            "warning": "Execute 15 controller ticks, supply absolute EEF targets at ticks 3,6,9,12,15. Ctrl video playback is 7 FPS; control waypoints are 5Hz, source data/policy commands 15Hz. Initial measured EEF seeds official sparse history; prompt supplied on reset. Recurrent state is proxy.",
+            "checkpoint_variant": "pi0_fast_droid",
+            "task_success_verified": false,
+            "evaluation_mode": "policy_loop",
+            "pilworld_paper_reproduction": false
+          }
+        },
+        "max_chunks": 8,
+        "jobs": [
+          {
+            "id": "loop_smoke",
+            "episode": 350,
+            "seed": 0,
+            "completed_chunks": 2,
+            "vla_calls": 2,
+            "world_model_calls": 2
+          },
+          {
+            "id": "loop_full_window",
+            "episode": 350,
+            "seed": 0,
+            "completed_chunks": 8,
+            "vla_calls": 8,
+            "world_model_calls": 8
+          }
+        ],
+        "artifact_hashes": [
+          {
+            "directory": "results/experiments/pi0_fast_droid_ctrl_v1/attempt_20261013T084522_587008Z_a7fb62aa431c/loop_smoke/episode_000350/seed_000",
+            "metadata_sha256": "995cda2680b15fbb7ac9bcb10cc1355347ee754340e116e15cc5ceefe6d8c401",
+            "actions_sha256": "9b166e0b8af0ec47876b683bced22f1948a72f2073d1772849ad605f763f3849"
+          },
+          {
+            "directory": "results/experiments/pi0_fast_droid_ctrl_v1/attempt_20261013T084522_587008Z_a7fb62aa431c/loop_full_window/episode_000350/seed_000",
+            "metadata_sha256": "ae805d977b6281ddcccc15f958b46affa0f85f99327671788912544793a36aef",
+            "actions_sha256": "a95e50fbf14301141736d9e71f18f5403323936d315072233ab659750900ee19"
+          }
+        ],
+        "loaded_models": {
+          "vla": {
+            "module": "adapters.vla.openpi",
+            "adapter": "Pi0FastDroidAdapter",
+            "kwargs": {
+              "checkpoint_path": "checkpoints/vla/openpi/pi0-fast-droid"
+            }
+          },
+          "world_model": {
+            "module": "adapters.world_models.ctrl_world",
+            "adapter": "CtrlWorldAdapter",
+            "kwargs": {
+              "svd_model_path": "checkpoints/world_models/ctrl_world/svd",
+              "clip_model_path": "checkpoints/world_models/ctrl_world/clip",
+              "checkpoint_path": "checkpoints/world_models/ctrl_world/ctrl_world/checkpoint-10000.pt",
+              "repo_path": "third_party/ctrl-world",
+              "num_inference_steps": 50,
+              "guidance_scale": 1,
+              "prompt": "__instruction_supplied_on_reset__"
+            }
+          }
+        },
+        "package_versions": [
+          {
+            "adapter": "Pi0FastDroidAdapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "diffusers": "0.33.1",
+              "jax": "0.5.3",
+              "torch": "2.7.1",
+              "transformers": "4.53.2"
+            }
+          },
+          {
+            "adapter": "CtrlWorldAdapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "transformers": "4.48.1",
+              "torch": "2.7.1",
+              "diffusers": "0.34.0"
+            }
+          }
+        ],
+        "source_version": "Historical execution; report hash identifies evidence, not current code validation",
+        "checkpoint_identity": "Recorded paths; full checkpoint digests not asserted by this historical receipt"
+      }
+    },
+    "groot_n15__ctrl_world_droid_v1": {
+      "real_weight_loop": {
+        "status": "historical_pass",
+        "attempt": "attempt_20261012T123626_806890Z_27be2c38fcfa",
+        "report": "results/delivery/groot_n15_ctrl_other_pairs_20261012.json",
+        "report_sha256": "eabac22dd5e1d1c02a5b93626c13321e63ec392e769484e891e999f2d5e88f1a",
+        "artifact_rechecked_at": "2026-10-30T13:24:29.585980+00:00",
+        "pair_contract": {
+          "pair_id": "groot_n15__ctrl_world_droid_v1",
+          "vla": {
+            "adapter": "GrootN15Adapter",
+            "view_mapping": {
+              "video.exterior_image_1": "droid.exterior_1",
+              "video.exterior_image_2": "droid.exterior_2",
+              "video.wrist_image": "droid.wrist"
+            },
+            "view_mode": "mapping",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 7,
+              "horizon": 16,
+              "representation": "cartesian_velocity_xyz_rpy+absolute_gripper",
+              "frame": "droid_controller",
+              "semantics": "velocity_command_with_absolute_gripper",
+              "rate_hz": 15.0,
+              "normalization": "groot_n15_oxe_droid_decoded",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "droll",
+                "dpitch",
+                "dyaw",
+                "gripper_position"
+              ]
+            },
+            "state_schema": "droid_eef_rpy_gripper_v1",
+            "output_views": [],
+            "image_size": [
+              256,
+              256
+            ],
+            "video": null,
+            "history_offsets": null
+          },
+          "world_model": {
+            "adapter": "CtrlWorldAdapter",
+            "view_mapping": {
+              "exterior_1": "droid.exterior_1",
+              "exterior_2": "droid.exterior_2",
+              "wrist": "droid.wrist"
+            },
+            "view_mode": "stack",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 7,
+              "horizon": 5,
+              "representation": "xyz_rpy_gripper",
+              "frame": "droid_robot_base",
+              "semantics": "absolute_eef_target",
+              "rate_hz": 5.0,
+              "normalization": "raw_metric_adapter_normalizes",
+              "components": []
+            },
+            "state_schema": null,
+            "output_views": [
+              "droid.exterior_1",
+              "droid.exterior_2",
+              "droid.wrist"
+            ],
+            "image_size": null,
+            "video": {
+              "fps": 7,
+              "frames_per_chunk": 5
+            },
+            "history_offsets": null
+          },
+          "action_bridge": {
+            "name": "droid_policy_to_ctrl_world_v1",
+            "source": {
+              "dimension": 7,
+              "horizon": 16,
+              "representation": "cartesian_velocity_xyz_rpy+absolute_gripper",
+              "frame": "droid_controller",
+              "semantics": "velocity_command_with_absolute_gripper",
+              "rate_hz": 15.0,
+              "normalization": "groot_n15_oxe_droid_decoded",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "droll",
+                "dpitch",
+                "dyaw",
+                "gripper_position"
+              ]
+            },
+            "target": {
+              "dimension": 7,
+              "horizon": 5,
+              "representation": "xyz_rpy_gripper",
+              "frame": "droid_robot_base",
+              "semantics": "absolute_eef_target",
+              "rate_hz": 5.0,
+              "normalization": "raw_metric_adapter_normalizes",
+              "components": []
+            },
+            "config": {
+              "action_normalization": "none",
+              "requires_current_eef_pose": true,
+              "dynamics_calibration": "configs/calibration/droid_velocity_dynamics_v1.json"
+            }
+          },
+          "state_provider": {
+            "type": "integrated_action_target",
+            "state_schema": "droid_eef_rpy_gripper_v1",
+            "config": {
+              "action": "native",
+              "requires_embodiment_integrator": true,
+              "output_components": [
+                "state.eef_position",
+                "state.eef_rotation",
+                "state.gripper_position"
+              ]
+            }
+          },
+          "view_bridge": {
+            "name": "droid_ctrl_views_v1",
+            "config": {},
+            "output_views": [
+              "droid.exterior_1",
+              "droid.exterior_2",
+              "droid.wrist"
+            ]
+          },
+          "schema_version": 1,
+          "seed": 0,
+          "metadata": {
+            "status": "experimental",
+            "dataset": "DROID",
+            "warning": "Execute 15 controller ticks, supply absolute EEF targets at ticks 3,6,9,12,15. Ctrl video playback is 7 FPS; control waypoints are 5Hz, source data/policy commands 15Hz. Initial measured EEF seeds official sparse history; prompt supplied on reset. Recurrent state is proxy."
+          }
+        },
+        "max_chunks": 20,
+        "jobs": [
+          {
+            "id": "loop_smoke",
+            "episode": 0,
+            "seed": 0,
+            "completed_chunks": 2,
+            "vla_calls": 2,
+            "world_model_calls": 2
+          },
+          {
+            "id": "loop_long",
+            "episode": 0,
+            "seed": 0,
+            "completed_chunks": 20,
+            "vla_calls": 20,
+            "world_model_calls": 20
+          }
+        ],
+        "artifact_hashes": [
+          {
+            "directory": "results/experiments/groot_n15_ctrl_world_droid_v1/attempt_20261012T123626_806890Z_27be2c38fcfa/loop_smoke/episode_000000/seed_000",
+            "metadata_sha256": "0a68d877465985c8909788ebe0c6bd2fbe751ea85c109c2bf47a7ba2c90cb6d2",
+            "actions_sha256": "83193ea90153a745496ee1fa5550dcdca95a6d7a188a03e73596406f0b6dd7d3"
+          },
+          {
+            "directory": "results/experiments/groot_n15_ctrl_world_droid_v1/attempt_20261012T123626_806890Z_27be2c38fcfa/loop_long/episode_000000/seed_000",
+            "metadata_sha256": "90eb394ca99674ebac4f539c50bd142950896a67242cc4acc35b1d432ed4f07d",
+            "actions_sha256": "bbd6a2745e9b1cb21fbab29ffc8c3663fc7871619328445bae1e71aa4c3acc77"
+          }
+        ],
+        "loaded_models": {
+          "vla": {
+            "module": "adapters.vla.groot",
+            "adapter": "GrootN15Adapter",
+            "kwargs": {
+              "model_path": "checkpoints/vla/groot/n1.5-3b"
+            }
+          },
+          "world_model": {
+            "module": "adapters.world_models.ctrl_world",
+            "adapter": "CtrlWorldAdapter",
+            "kwargs": {
+              "svd_model_path": "checkpoints/world_models/ctrl_world/svd",
+              "clip_model_path": "checkpoints/world_models/ctrl_world/clip",
+              "checkpoint_path": "checkpoints/world_models/ctrl_world/ctrl_world/checkpoint-10000.pt",
+              "repo_path": "third_party/ctrl-world",
+              "num_inference_steps": 50,
+              "guidance_scale": 1,
+              "prompt": "__instruction_supplied_on_reset__"
+            }
+          }
+        },
+        "package_versions": [
+          {
+            "adapter": "GrootN15Adapter",
+            "python": "3.10.18 (main, Sep  2 2025, 14:19:37) [Clang 20.1.4 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "tensorflow": "2.15.0",
+              "torch": "2.5.1",
+              "diffusers": "0.30.2",
+              "transformers": "4.51.3"
+            }
+          },
+          {
+            "adapter": "CtrlWorldAdapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "transformers": "4.48.1",
+              "torch": "2.7.1",
+              "diffusers": "0.34.0"
+            }
+          }
+        ],
+        "source_version": "Historical execution; report hash identifies evidence, not current code validation",
+        "checkpoint_identity": "Recorded paths; full checkpoint digests not asserted by this historical receipt"
+      }
+    },
+    "rt1_x__worldgym_bridge_v1": {
+      "real_weight_loop": {
+        "status": "historical_pass",
+        "attempt": "attempt_20261012T055013_317234Z_d0f4837e9ee2",
+        "report": "results/delivery/long_rt1_x_20261012_report.json",
+        "report_sha256": "a4fbb88a1f6b3215c5e19b3e4ead8b401f6d29eb866f9dbc095a6fb880034e48",
+        "artifact_rechecked_at": "2026-10-30T13:24:29.757532+00:00",
+        "pair_contract": {
+          "pair_id": "rt1_x__worldgym_bridge_v1",
+          "vla": {
+            "adapter": "RT1Adapter",
+            "view_mapping": {
+              "single_view": "bridge.primary"
+            },
+            "view_mode": "single",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 10,
+              "horizon": 1,
+              "representation": "worldgym_bridge_xyz_rpy_gripper_reserved3",
+              "frame": "bridge_openx",
+              "semantics": "delta",
+              "rate_hz": 20.0,
+              "normalization": "legacy_adapter_worldgym_bridge_rescale",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "droll",
+                "dpitch",
+                "dyaw",
+                "gripper",
+                "reserved0",
+                "reserved1",
+                "reserved2"
+              ]
+            },
+            "state_schema": null,
+            "output_views": [],
+            "image_size": [
+              256,
+              256
+            ],
+            "video": null
+          },
+          "world_model": {
+            "adapter": "WorldGymAdapter",
+            "view_mapping": {
+              "single_view": "bridge.primary"
+            },
+            "view_mode": "single",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 10,
+              "horizon": 1,
+              "representation": "worldgym_bridge_xyz_rpy_gripper_reserved3",
+              "frame": "bridge_openx",
+              "semantics": "delta",
+              "rate_hz": 20.0,
+              "normalization": "legacy_adapter_worldgym_bridge_rescale",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "droll",
+                "dpitch",
+                "dyaw",
+                "gripper",
+                "reserved0",
+                "reserved1",
+                "reserved2"
+              ]
+            },
+            "state_schema": null,
+            "output_views": [
+              "bridge.primary"
+            ],
+            "image_size": null,
+            "video": {
+              "fps": 20,
+              "frames_per_chunk": 1
+            }
+          },
+          "action_bridge": {
+            "name": "identity",
+            "source": {
+              "dimension": 10,
+              "horizon": 1,
+              "representation": "worldgym_bridge_xyz_rpy_gripper_reserved3",
+              "frame": "bridge_openx",
+              "semantics": "delta",
+              "rate_hz": 20.0,
+              "normalization": "legacy_adapter_worldgym_bridge_rescale",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "droll",
+                "dpitch",
+                "dyaw",
+                "gripper",
+                "reserved0",
+                "reserved1",
+                "reserved2"
+              ]
+            },
+            "target": {
+              "dimension": 10,
+              "horizon": 1,
+              "representation": "worldgym_bridge_xyz_rpy_gripper_reserved3",
+              "frame": "bridge_openx",
+              "semantics": "delta",
+              "rate_hz": 20.0,
+              "normalization": "legacy_adapter_worldgym_bridge_rescale",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "droll",
+                "dpitch",
+                "dyaw",
+                "gripper",
+                "reserved0",
+                "reserved1",
+                "reserved2"
+              ]
+            },
+            "config": {}
+          },
+          "state_provider": {
+            "type": "none",
+            "state_schema": "not_required",
+            "config": {}
+          },
+          "view_bridge": {
+            "name": "identity",
+            "config": {},
+            "output_views": []
+          },
+          "schema_version": 1,
+          "seed": 0,
+          "metadata": {
+            "dataset": "WorldGym upstream Bridge test sample",
+            "warning": "Native actions here mean current adapter outputs (already converted 10-D), not raw network 7-D. 20 FPS describes official video indexing/playback, not verified physical controller rate."
+          }
+        },
+        "max_chunks": 400,
+        "jobs": [
+          {
+            "id": "loop_long",
+            "episode": 2,
+            "seed": 0,
+            "completed_chunks": 400,
+            "vla_calls": 400,
+            "world_model_calls": 400
+          }
+        ],
+        "artifact_hashes": [
+          {
+            "directory": "results/experiments/long_rt1_x_20261012/attempt_20261012T055013_317234Z_d0f4837e9ee2/loop_long/episode_000002/seed_000",
+            "metadata_sha256": "4855b2d4c116864fdcd60113f7757b60e8b84ae56e6dcb5a822e2a637db32713",
+            "actions_sha256": "7bf49c0088a03fb79b641c19311334d6728b8d5874adbb4ca7975e81a2f3a0fd"
+          }
+        ],
+        "loaded_models": {
+          "vla": {
+            "module": "adapters.vla.rt1",
+            "adapter": "RT1Adapter",
+            "kwargs": {
+              "checkpoint_path": "checkpoints/vla/rt1-x/rt_1_x_tf_trained_for_002272480_step",
+              "text_encoder_path": "checkpoints/vla/rt1-x/universal_sentence_encoder_large_v5"
+            }
+          },
+          "world_model": {
+            "module": "adapters.world_models.worldgym",
+            "adapter": "WorldGymAdapter",
+            "kwargs": {
+              "checkpoint_path": "checkpoints/world_models/worldgym/checkpoint/mixed_openx_9robots_20frames_0p1actiondropout_580ksteps.pt",
+              "default_cfg": 3,
+              "use_pixel_rope": false,
+              "num_inference_steps": 10
+            }
+          }
+        },
+        "package_versions": [
+          {
+            "adapter": "RT1Adapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "tensorflow": "2.21.0",
+              "diffusers": "0.35.1",
+              "torch": "2.6.0"
+            }
+          },
+          {
+            "adapter": "WorldGymAdapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "diffusers": "0.35.1",
+              "transformers": "4.49.0",
+              "torch": "2.6.0"
+            }
+          }
+        ],
+        "source_version": "Historical execution; report hash identifies evidence, not current code validation",
+        "checkpoint_identity": "Recorded paths; full checkpoint digests not asserted by this historical receipt"
+      }
+    },
+    "pi05__ctrl_world_droid_v1": {
+      "real_weight_loop": {
+        "status": "historical_pass",
+        "attempt": "attempt_20261012T123217_834721Z_25aeed8abc13",
+        "report": "results/delivery/pi05_ctrl_other_pairs_20261012.json",
+        "report_sha256": "5434eccdcfddbb6c5c16b6eb395a9abc8eecaa820f7225e801c5f19e0310c788",
+        "artifact_rechecked_at": "2026-10-30T13:24:30.198565+00:00",
+        "pair_contract": {
+          "pair_id": "pi05__ctrl_world_droid_v1",
+          "vla": {
+            "adapter": "Pi05Adapter",
+            "view_mapping": {
+              "observation/exterior_image_1_left": "droid.exterior_1",
+              "observation/wrist_image_left": "droid.wrist"
+            },
+            "view_mode": "mapping",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 8,
+              "horizon": 15,
+              "representation": "normalized_joint_velocity+absolute_closed_gripper",
+              "frame": "droid_panda_controller",
+              "semantics": "normalized_joint_velocity_with_absolute_gripper",
+              "rate_hz": 15.0,
+              "normalization": "openpi_droid_decoded",
+              "components": [
+                "joint_velocity_1",
+                "joint_velocity_2",
+                "joint_velocity_3",
+                "joint_velocity_4",
+                "joint_velocity_5",
+                "joint_velocity_6",
+                "joint_velocity_7",
+                "gripper_closed"
+              ]
+            },
+            "state_schema": "droid_openpi_joint_gripper_eef_v1",
+            "output_views": [],
+            "image_size": null,
+            "video": null,
+            "history_offsets": null
+          },
+          "world_model": {
+            "adapter": "CtrlWorldAdapter",
+            "view_mapping": {
+              "exterior_1": "droid.exterior_1",
+              "exterior_2": "droid.exterior_2",
+              "wrist": "droid.wrist"
+            },
+            "view_mode": "stack",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 7,
+              "horizon": 5,
+              "representation": "xyz_rpy_gripper",
+              "frame": "droid_robot_base",
+              "semantics": "absolute_eef_target",
+              "rate_hz": 5.0,
+              "normalization": "raw_metric_adapter_normalizes",
+              "components": []
+            },
+            "state_schema": null,
+            "output_views": [
+              "droid.exterior_1",
+              "droid.exterior_2",
+              "droid.wrist"
+            ],
+            "image_size": null,
+            "video": {
+              "fps": 7,
+              "frames_per_chunk": 5
+            },
+            "history_offsets": null
+          },
+          "action_bridge": {
+            "name": "droid_policy_to_ctrl_world_v1",
+            "source": {
+              "dimension": 8,
+              "horizon": 15,
+              "representation": "normalized_joint_velocity+absolute_closed_gripper",
+              "frame": "droid_panda_controller",
+              "semantics": "normalized_joint_velocity_with_absolute_gripper",
+              "rate_hz": 15.0,
+              "normalization": "openpi_droid_decoded",
+              "components": [
+                "joint_velocity_1",
+                "joint_velocity_2",
+                "joint_velocity_3",
+                "joint_velocity_4",
+                "joint_velocity_5",
+                "joint_velocity_6",
+                "joint_velocity_7",
+                "gripper_closed"
+              ]
+            },
+            "target": {
+              "dimension": 7,
+              "horizon": 5,
+              "representation": "xyz_rpy_gripper",
+              "frame": "droid_robot_base",
+              "semantics": "absolute_eef_target",
+              "rate_hz": 5.0,
+              "normalization": "raw_metric_adapter_normalizes",
+              "components": []
+            },
+            "config": {
+              "kinematics": "configs/kinematics/droid_panda_link8_v1.json",
+              "joint_delta_per_control_tick": 0.2,
+              "tail_policy": "zero_velocity_hold_gripper"
+            }
+          },
+          "state_provider": {
+            "type": "integrated_action_target",
+            "state_schema": "droid_openpi_joint_gripper_eef_v1",
+            "config": {
+              "action": "native",
+              "requires_embodiment_integrator": true
+            }
+          },
+          "view_bridge": {
+            "name": "droid_ctrl_views_v1",
+            "config": {},
+            "output_views": [
+              "droid.exterior_1",
+              "droid.exterior_2",
+              "droid.wrist"
+            ]
+          },
+          "schema_version": 1,
+          "seed": 0,
+          "metadata": {
+            "status": "experimental",
+            "dataset": "DROID",
+            "warning": "Execute 15 controller ticks, supply absolute EEF targets at ticks 3,6,9,12,15. Ctrl video playback is 7 FPS; control waypoints are 5Hz, source data/policy commands 15Hz. Initial measured EEF seeds official sparse history; prompt supplied on reset. Recurrent state is proxy."
+          }
+        },
+        "max_chunks": 20,
+        "jobs": [
+          {
+            "id": "loop_smoke",
+            "episode": 0,
+            "seed": 0,
+            "completed_chunks": 2,
+            "vla_calls": 2,
+            "world_model_calls": 2
+          },
+          {
+            "id": "loop_long",
+            "episode": 0,
+            "seed": 0,
+            "completed_chunks": 20,
+            "vla_calls": 20,
+            "world_model_calls": 20
+          }
+        ],
+        "artifact_hashes": [
+          {
+            "directory": "results/experiments/pi05_ctrl_world_droid_v1/attempt_20261012T123217_834721Z_25aeed8abc13/loop_smoke/episode_000000/seed_000",
+            "metadata_sha256": "2e6b8180fbd7ec0db79dd98fa9ca1ddbedf33068c6586b87e17710619ab497db",
+            "actions_sha256": "a2f3b3edebbe41f6126badfc598cda22a3e1cb1f48aa7b8d71de61ee9c879ebf"
+          },
+          {
+            "directory": "results/experiments/pi05_ctrl_world_droid_v1/attempt_20261012T123217_834721Z_25aeed8abc13/loop_long/episode_000000/seed_000",
+            "metadata_sha256": "fc57b713861da0da37f36c5f1399a5477e29f818a3ff22d7ce576b2ef48e8b59",
+            "actions_sha256": "e17d3f97bdcffdd7620100dad068c75e4d589db16115665989914f8d466916d4"
+          }
+        ],
+        "loaded_models": {
+          "vla": {
+            "module": "adapters.vla.openpi",
+            "adapter": "Pi05Adapter",
+            "kwargs": {
+              "checkpoint_path": "checkpoints/vla/openpi/pi05-droid"
+            }
+          },
+          "world_model": {
+            "module": "adapters.world_models.ctrl_world",
+            "adapter": "CtrlWorldAdapter",
+            "kwargs": {
+              "svd_model_path": "checkpoints/world_models/ctrl_world/svd",
+              "clip_model_path": "checkpoints/world_models/ctrl_world/clip",
+              "checkpoint_path": "checkpoints/world_models/ctrl_world/ctrl_world/checkpoint-10000.pt",
+              "repo_path": "third_party/ctrl-world",
+              "num_inference_steps": 50,
+              "guidance_scale": 1,
+              "prompt": "__instruction_supplied_on_reset__"
+            }
+          }
+        },
+        "package_versions": [
+          {
+            "adapter": "Pi05Adapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "diffusers": "0.33.1",
+              "jax": "0.5.3",
+              "torch": "2.7.1",
+              "transformers": "4.53.2"
+            }
+          },
+          {
+            "adapter": "CtrlWorldAdapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "transformers": "4.48.1",
+              "torch": "2.7.1",
+              "diffusers": "0.34.0"
+            }
+          }
+        ],
+        "source_version": "Historical execution; report hash identifies evidence, not current code validation",
+        "checkpoint_identity": "Recorded paths; full checkpoint digests not asserted by this historical receipt"
+      }
+    },
+    "groot_n17__ctrl_world_droid_v1": {
+      "real_weight_loop": {
+        "status": "historical_pass",
+        "attempt": "attempt_20261012T123233_668099Z_78ee60813f6b",
+        "report": "results/delivery/groot_n17_ctrl_other_pairs_20261012.json",
+        "report_sha256": "9336404bf83355bf69ed16790fcebed7f0539dc0183528ffb20037ed76c53716",
+        "artifact_rechecked_at": "2026-10-30T13:24:30.635977+00:00",
+        "pair_contract": {
+          "pair_id": "groot_n17__ctrl_world_droid_v1",
+          "vla": {
+            "adapter": "GrootN17Adapter",
+            "view_mapping": {
+              "exterior_image_1_left": "droid.exterior_1",
+              "wrist_image_left": "droid.wrist"
+            },
+            "view_mode": "mapping",
+            "squeeze_single_frame": false,
+            "action": {
+              "dimension": 17,
+              "horizon": 40,
+              "representation": "decoded_absolute_eef9d+gripper+joint_position",
+              "frame": "droid_panda_base",
+              "semantics": "absolute_target",
+              "rate_hz": 15.0,
+              "normalization": "official_groot_n17_decoded",
+              "components": []
+            },
+            "state_schema": "groot_n17_droid_joint_eef9d_v1",
+            "output_views": [],
+            "image_size": null,
+            "video": null,
+            "history_offsets": [
+              -5,
+              0
+            ]
+          },
+          "world_model": {
+            "adapter": "CtrlWorldAdapter",
+            "view_mapping": {
+              "exterior_1": "droid.exterior_1",
+              "exterior_2": "droid.exterior_2",
+              "wrist": "droid.wrist"
+            },
+            "view_mode": "stack",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 7,
+              "horizon": 5,
+              "representation": "xyz_rpy_gripper",
+              "frame": "droid_robot_base",
+              "semantics": "absolute_eef_target",
+              "rate_hz": 5.0,
+              "normalization": "raw_metric_adapter_normalizes",
+              "components": []
+            },
+            "state_schema": null,
+            "output_views": [
+              "droid.exterior_1",
+              "droid.exterior_2",
+              "droid.wrist"
+            ],
+            "image_size": null,
+            "video": {
+              "fps": 7,
+              "frames_per_chunk": 5
+            },
+            "history_offsets": [
+              0
+            ]
+          },
+          "action_bridge": {
+            "name": "droid_policy_to_ctrl_world_v1",
+            "source": {
+              "dimension": 17,
+              "horizon": 40,
+              "representation": "decoded_absolute_eef9d+gripper+joint_position",
+              "frame": "droid_panda_base",
+              "semantics": "absolute_target",
+              "rate_hz": 15.0,
+              "normalization": "official_groot_n17_decoded",
+              "components": []
+            },
+            "target": {
+              "dimension": 7,
+              "horizon": 5,
+              "representation": "xyz_rpy_gripper",
+              "frame": "droid_robot_base",
+              "semantics": "absolute_eef_target",
+              "rate_hz": 5.0,
+              "normalization": "raw_metric_adapter_normalizes",
+              "components": []
+            },
+            "config": {
+              "kinematics": "configs/kinematics/droid_panda_link8_v1.json",
+              "execute_prefix": 15
+            }
+          },
+          "state_provider": {
+            "type": "integrated_action_target",
+            "state_schema": "groot_n17_droid_joint_eef9d_v1",
+            "config": {
+              "action": "native",
+              "requires_embodiment_integrator": true
+            }
+          },
+          "view_bridge": {
+            "name": "droid_ctrl_views_v1",
+            "config": {},
+            "output_views": [
+              "droid.exterior_1",
+              "droid.exterior_2",
+              "droid.wrist"
+            ]
+          },
+          "schema_version": 1,
+          "seed": 0,
+          "metadata": {
+            "status": "experimental",
+            "warning": "Decoded absolute targets: execute first 15 joint targets, discard 25 on replanning. Initial source history [-15,0] at 15Hz is mapped to two [-5,0] 5Hz view slots; generated Ctrl frames are 5Hz controller steps but encoded at official 7FPS playback. Proxy state only."
+          }
+        },
+        "max_chunks": 20,
+        "jobs": [
+          {
+            "id": "loop_smoke",
+            "episode": 0,
+            "seed": 0,
+            "completed_chunks": 2,
+            "vla_calls": 2,
+            "world_model_calls": 2
+          },
+          {
+            "id": "loop_long",
+            "episode": 0,
+            "seed": 0,
+            "completed_chunks": 20,
+            "vla_calls": 20,
+            "world_model_calls": 20
+          }
+        ],
+        "artifact_hashes": [
+          {
+            "directory": "results/experiments/groot_n17_ctrl_world_droid_v1/attempt_20261012T123233_668099Z_78ee60813f6b/loop_smoke/episode_000000/seed_000",
+            "metadata_sha256": "e8643a31733da9acee771c2127650375c5c210e667cc432066e3e71e42156c10",
+            "actions_sha256": "05bab53ae71b863e4d76feb8e3082b3e317c541615e84fba4bf1a1aa1719414d"
+          },
+          {
+            "directory": "results/experiments/groot_n17_ctrl_world_droid_v1/attempt_20261012T123233_668099Z_78ee60813f6b/loop_long/episode_000000/seed_000",
+            "metadata_sha256": "15706ecb49075070b5178ebe420a532fb2857138dac10deb17ddfd563eb2a6a6",
+            "actions_sha256": "e07a1ec6c31d3f48a94e4b4c03f04d3ae77af21ecc2126dad24d838e56d00bf2"
+          }
+        ],
+        "loaded_models": {
+          "vla": {
+            "module": "adapters.vla.groot",
+            "adapter": "GrootN17Adapter",
+            "kwargs": {
+              "model_path": "checkpoints/vla/groot/n1.7-3b"
+            }
+          },
+          "world_model": {
+            "module": "adapters.world_models.ctrl_world",
+            "adapter": "CtrlWorldAdapter",
+            "kwargs": {
+              "svd_model_path": "checkpoints/world_models/ctrl_world/svd",
+              "clip_model_path": "checkpoints/world_models/ctrl_world/clip",
+              "checkpoint_path": "checkpoints/world_models/ctrl_world/ctrl_world/checkpoint-10000.pt",
+              "repo_path": "third_party/ctrl-world",
+              "num_inference_steps": 50,
+              "guidance_scale": 1,
+              "prompt": "__instruction_supplied_on_reset__"
+            }
+          }
+        },
+        "package_versions": [
+          {
+            "adapter": "GrootN17Adapter",
+            "python": "3.10.18 (main, Sep  2 2025, 14:19:37) [Clang 20.1.4 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "diffusers": "0.35.1",
+              "transformers": "4.57.3",
+              "torch": "2.7.1+cu128"
+            }
+          },
+          {
+            "adapter": "CtrlWorldAdapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "transformers": "4.48.1",
+              "torch": "2.7.1",
+              "diffusers": "0.34.0"
+            }
+          }
+        ],
+        "source_version": "Historical execution; report hash identifies evidence, not current code validation",
+        "checkpoint_identity": "Recorded paths; full checkpoint digests not asserted by this historical receipt"
+      }
+    },
+    "spatialvla__worldgym_bridge_v1": {
+      "real_weight_loop": {
+        "status": "historical_pass",
+        "attempt": "attempt_20261012T054209_607622Z_1dc44c2d740b",
+        "report": "results/delivery/long_spatialvla_20261012_report.json",
+        "report_sha256": "04ee91e8ecf2e79ca05fccd5fe3ead582f6df0700917c1c970e6480d67a38a7e",
+        "artifact_rechecked_at": "2026-10-30T13:24:30.763502+00:00",
+        "pair_contract": {
+          "pair_id": "spatialvla__worldgym_bridge_v1",
+          "vla": {
+            "adapter": "SpatialVLAAdapter",
+            "view_mapping": {
+              "single_view": "bridge.primary"
+            },
+            "view_mode": "single",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 10,
+              "horizon": 4,
+              "representation": "worldgym_bridge_xyz_rpy_gripper_reserved3",
+              "frame": "bridge_openx",
+              "semantics": "delta",
+              "rate_hz": 20.0,
+              "normalization": "legacy_adapter_worldgym_bridge_rescale",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "droll",
+                "dpitch",
+                "dyaw",
+                "gripper",
+                "reserved0",
+                "reserved1",
+                "reserved2"
+              ]
+            },
+            "state_schema": null,
+            "output_views": [],
+            "image_size": [
+              256,
+              256
+            ],
+            "video": null
+          },
+          "world_model": {
+            "adapter": "WorldGymAdapter",
+            "view_mapping": {
+              "single_view": "bridge.primary"
+            },
+            "view_mode": "single",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 10,
+              "horizon": 4,
+              "representation": "worldgym_bridge_xyz_rpy_gripper_reserved3",
+              "frame": "bridge_openx",
+              "semantics": "delta",
+              "rate_hz": 20.0,
+              "normalization": "legacy_adapter_worldgym_bridge_rescale",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "droll",
+                "dpitch",
+                "dyaw",
+                "gripper",
+                "reserved0",
+                "reserved1",
+                "reserved2"
+              ]
+            },
+            "state_schema": null,
+            "output_views": [
+              "bridge.primary"
+            ],
+            "image_size": null,
+            "video": {
+              "fps": 20,
+              "frames_per_chunk": 4
+            }
+          },
+          "action_bridge": {
+            "name": "identity",
+            "source": {
+              "dimension": 10,
+              "horizon": 4,
+              "representation": "worldgym_bridge_xyz_rpy_gripper_reserved3",
+              "frame": "bridge_openx",
+              "semantics": "delta",
+              "rate_hz": 20.0,
+              "normalization": "legacy_adapter_worldgym_bridge_rescale",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "droll",
+                "dpitch",
+                "dyaw",
+                "gripper",
+                "reserved0",
+                "reserved1",
+                "reserved2"
+              ]
+            },
+            "target": {
+              "dimension": 10,
+              "horizon": 4,
+              "representation": "worldgym_bridge_xyz_rpy_gripper_reserved3",
+              "frame": "bridge_openx",
+              "semantics": "delta",
+              "rate_hz": 20.0,
+              "normalization": "legacy_adapter_worldgym_bridge_rescale",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "droll",
+                "dpitch",
+                "dyaw",
+                "gripper",
+                "reserved0",
+                "reserved1",
+                "reserved2"
+              ]
+            },
+            "config": {}
+          },
+          "state_provider": {
+            "type": "none",
+            "state_schema": "not_required",
+            "config": {}
+          },
+          "view_bridge": {
+            "name": "identity",
+            "config": {},
+            "output_views": []
+          },
+          "schema_version": 1,
+          "seed": 0,
+          "metadata": {
+            "dataset": "WorldGym upstream Bridge test sample",
+            "warning": "Native actions here mean current adapter outputs (already converted 10-D), not raw network 7-D. 20 FPS describes official video indexing/playback, not verified physical controller rate."
+          }
+        },
+        "max_chunks": 100,
+        "jobs": [
+          {
+            "id": "loop_long",
+            "episode": 2,
+            "seed": 0,
+            "completed_chunks": 100,
+            "vla_calls": 100,
+            "world_model_calls": 100
+          }
+        ],
+        "artifact_hashes": [
+          {
+            "directory": "results/experiments/long_spatialvla_20261012/attempt_20261012T054209_607622Z_1dc44c2d740b/loop_long/episode_000002/seed_000",
+            "metadata_sha256": "1f4d980d784b62bc16fbe130f4ac63c73abaa0596925843bdc80cdb6c3e015ee",
+            "actions_sha256": "7c54db29c115409eee15d3f2f52223bd834776a4e4bc3c00fb31a1470f012ec4"
+          }
+        ],
+        "loaded_models": {
+          "vla": {
+            "module": "adapters.vla.spatialvla",
+            "adapter": "SpatialVLAAdapter",
+            "kwargs": {
+              "model_name": "checkpoints/vla/spatialvla-4b-224-pt"
+            }
+          },
+          "world_model": {
+            "module": "adapters.world_models.worldgym",
+            "adapter": "WorldGymAdapter",
+            "kwargs": {
+              "checkpoint_path": "checkpoints/world_models/worldgym/checkpoint/mixed_openx_9robots_20frames_0p1actiondropout_580ksteps.pt",
+              "default_cfg": 3,
+              "use_pixel_rope": false,
+              "num_inference_steps": 10
+            }
+          }
+        },
+        "package_versions": [
+          {
+            "adapter": "SpatialVLAAdapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "transformers": "4.48.1",
+              "diffusers": "0.35.1",
+              "torch": "2.6.0"
+            }
+          },
+          {
+            "adapter": "WorldGymAdapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "diffusers": "0.35.1",
+              "transformers": "4.49.0",
+              "torch": "2.6.0"
+            }
+          }
+        ],
+        "source_version": "Historical execution; report hash identifies evidence, not current code validation",
+        "checkpoint_identity": "Recorded paths; full checkpoint digests not asserted by this historical receipt"
+      }
+    },
+    "pi05__cosmos3_nano_droid_fd_v1": {
+      "real_weight_loop": {
+        "status": "historical_pass",
+        "attempt": "attempt_20261012T114248_157776Z_239070b69a09",
+        "report": "results/delivery/pi05_cosmos_3gpu_validation_20261012.json",
+        "report_sha256": "c00ccf47f71d389f9e17c700dd2729fd765775f4a68d5bb60f0b968ed57a6ae3",
+        "artifact_rechecked_at": "2026-10-30T13:24:31.328030+00:00",
+        "pair_contract": {
+          "pair_id": "pi05__cosmos3_nano_droid_fd_v1",
+          "vla": {
+            "adapter": "Pi05Adapter",
+            "view_mapping": {
+              "observation/exterior_image_1_left": "droid.exterior_1",
+              "observation/wrist_image_left": "droid.wrist"
+            },
+            "view_mode": "mapping",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 8,
+              "horizon": 15,
+              "representation": "normalized_joint_velocity+absolute_closed_gripper",
+              "frame": "droid_panda_controller",
+              "semantics": "normalized_joint_velocity_with_absolute_gripper",
+              "rate_hz": 15.0,
+              "normalization": "openpi_droid_decoded",
+              "components": [
+                "joint_velocity_1",
+                "joint_velocity_2",
+                "joint_velocity_3",
+                "joint_velocity_4",
+                "joint_velocity_5",
+                "joint_velocity_6",
+                "joint_velocity_7",
+                "gripper_closed"
+              ]
+            },
+            "state_schema": "droid_openpi_joint_gripper_eef_v1",
+            "output_views": [],
+            "image_size": null,
+            "video": null
+          },
+          "world_model": {
+            "adapter": "Cosmos3NanoDroidFDAdapter",
+            "view_mapping": {
+              "single_view": "droid.cosmos_composite"
+            },
+            "view_mode": "single",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 10,
+              "horizon": 16,
+              "representation": "framewise_delta_xyz+opencv_rot6d+flipped_gripper",
+              "frame": "droid_cosmos_opencv",
+              "semantics": "delta",
+              "rate_hz": 15.0,
+              "normalization": "none_raw_metric",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "rot6d_0",
+                "rot6d_1",
+                "rot6d_2",
+                "rot6d_3",
+                "rot6d_4",
+                "rot6d_5",
+                "gripper_open"
+              ]
+            },
+            "state_schema": null,
+            "output_views": [
+              "droid.cosmos_composite"
+            ],
+            "image_size": null,
+            "video": {
+              "fps": 15,
+              "frames_per_chunk": 16
+            }
+          },
+          "action_bridge": {
+            "name": "openpi_to_cosmos3_droid_v1",
+            "source": {
+              "dimension": 8,
+              "horizon": 15,
+              "representation": "normalized_joint_velocity+absolute_closed_gripper",
+              "frame": "droid_panda_controller",
+              "semantics": "normalized_joint_velocity_with_absolute_gripper",
+              "rate_hz": 15.0,
+              "normalization": "openpi_droid_decoded",
+              "components": [
+                "joint_velocity_1",
+                "joint_velocity_2",
+                "joint_velocity_3",
+                "joint_velocity_4",
+                "joint_velocity_5",
+                "joint_velocity_6",
+                "joint_velocity_7",
+                "gripper_closed"
+              ]
+            },
+            "target": {
+              "dimension": 10,
+              "horizon": 16,
+              "representation": "framewise_delta_xyz+opencv_rot6d+flipped_gripper",
+              "frame": "droid_cosmos_opencv",
+              "semantics": "delta",
+              "rate_hz": 15.0,
+              "normalization": "none_raw_metric",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "rot6d_0",
+                "rot6d_1",
+                "rot6d_2",
+                "rot6d_3",
+                "rot6d_4",
+                "rot6d_5",
+                "gripper_open"
+              ]
+            },
+            "config": {
+              "kinematics": "configs/kinematics/droid_panda_link8_v1.json",
+              "joint_delta_per_control_tick": 0.2,
+              "tail_policy": "zero_velocity_hold_gripper"
+            }
+          },
+          "state_provider": {
+            "type": "integrated_action_target",
+            "state_schema": "droid_openpi_joint_gripper_eef_v1",
+            "config": {
+              "action": "native",
+              "requires_embodiment_integrator": true
+            }
+          },
+          "view_bridge": {
+            "name": "droid_cosmos_composite_v1",
+            "config": {
+              "views": {
+                "exterior_1": "droid.exterior_1",
+                "exterior_2": "droid.exterior_2",
+                "wrist": "droid.wrist",
+                "composite": "droid.cosmos_composite"
+              }
+            },
+            "output_views": [
+              "droid.cosmos_composite",
+              "droid.exterior_1",
+              "droid.exterior_2",
+              "droid.wrist"
+            ]
+          },
+          "schema_version": 1,
+          "seed": 0,
+          "metadata": {
+            "status": "experimental_protocol_registered_not_full_wm_validated",
+            "dataset": "DROID",
+            "world_model_domain": "droid_lerobot",
+            "initial_state_source": "dataset_ground_truth",
+            "warning": "Ideal DROID controller target proxy, not measured or video-predicted state. Clip joint commands, binarize 1=closed gripper, scale 0.2 rad/control tick and saturate joint limits. Execute all native steps then zero-velocity hold for the remaining Cosmos steps. Gripper is flipped once to Cosmos 1=open. FK admission checks measured EEF against link8 across the episode. No contact/lag model."
+          }
+        },
+        "max_chunks": 20,
+        "jobs": [
+          {
+            "id": "loop_smoke",
+            "episode": 0,
+            "seed": 0,
+            "completed_chunks": 2,
+            "vla_calls": 2,
+            "world_model_calls": 2
+          },
+          {
+            "id": "loop_long",
+            "episode": 0,
+            "seed": 0,
+            "completed_chunks": 20,
+            "vla_calls": 20,
+            "world_model_calls": 20
+          }
+        ],
+        "artifact_hashes": [
+          {
+            "directory": "results/experiments/pi05_cosmos_droid_3gpu_v1/attempt_20261012T114248_157776Z_239070b69a09/loop_smoke/episode_000000/seed_000",
+            "metadata_sha256": "f9cd0963128f943806ed07dc6c93c4f26975b869f0f41487ba3259058972bac8",
+            "actions_sha256": "f144a5118e2aa20c8cf80e022f401141a2f3c632be1dfbb7f4c1212d6166a94b"
+          },
+          {
+            "directory": "results/experiments/pi05_cosmos_droid_3gpu_v1/attempt_20261012T114248_157776Z_239070b69a09/loop_long/episode_000000/seed_000",
+            "metadata_sha256": "b231368bd623f4c1691e0492b11ef148d9aee20267ed66d0567143434e30a28c",
+            "actions_sha256": "e40edb10068d4d21424674f199e9b31bdd16712d8a50d74ef866ade5d46aaf77"
+          }
+        ],
+        "loaded_models": {
+          "vla": {
+            "module": "adapters.vla.openpi",
+            "adapter": "Pi05Adapter",
+            "kwargs": {
+              "checkpoint_path": "checkpoints/vla/openpi/pi05-droid"
+            }
+          },
+          "world_model": {
+            "module": "adapters.world_models.cosmos3_nano_droid_fd",
+            "adapter": "Cosmos3NanoDroidFDAdapter",
+            "kwargs": {
+              "model_path": "checkpoints/world_models/cosmos3_nano_droid_fd/community_jere_mybao_v1_20k_ema",
+              "runtime_dir": "results/experiments/pi05_cosmos_droid_3gpu_v1/attempt_20261012T114248_157776Z_239070b69a09/workers/cosmos_runtime",
+              "num_inference_steps": 30,
+              "guidance": 1,
+              "shift": 10,
+              "resolution": "480",
+              "diffusion_cache": false,
+              "use_torch_compile": false
+            }
+          }
+        },
+        "package_versions": [
+          {
+            "adapter": "Pi05Adapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "diffusers": "0.33.1",
+              "jax": "0.5.3",
+              "torch": "2.7.1",
+              "transformers": "4.53.2"
+            }
+          },
+          {
+            "adapter": "Cosmos3NanoDroidFDAdapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "transformers": "4.57.1",
+              "torch": "2.7.1",
+              "diffusers": "0.39.0"
+            }
+          }
+        ],
+        "source_version": "Historical execution; report hash identifies evidence, not current code validation",
+        "checkpoint_identity": "Recorded paths; full checkpoint digests not asserted by this historical receipt"
+      }
+    },
+    "octo__worldgym_bridge_v1": {
+      "real_weight_loop": {
+        "status": "historical_pass",
+        "attempt": "attempt_20261012T060227_434176Z_5ca3d68e0c46",
+        "report": "results/delivery/long_octo_20261012_report.json",
+        "report_sha256": "b6f441b4bd7e1c8bc585cd06d86cc0c7515c92caf44c3350577d285335be47fb",
+        "artifact_rechecked_at": "2026-10-30T13:24:31.448708+00:00",
+        "pair_contract": {
+          "pair_id": "octo__worldgym_bridge_v1",
+          "vla": {
+            "adapter": "OctoAdapter",
+            "view_mapping": {
+              "single_view": "bridge.primary"
+            },
+            "view_mode": "single",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 10,
+              "horizon": 4,
+              "representation": "worldgym_bridge_xyz_rpy_gripper_reserved3",
+              "frame": "bridge_openx",
+              "semantics": "delta",
+              "rate_hz": 20.0,
+              "normalization": "legacy_adapter_worldgym_bridge_rescale",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "droll",
+                "dpitch",
+                "dyaw",
+                "gripper",
+                "reserved0",
+                "reserved1",
+                "reserved2"
+              ]
+            },
+            "state_schema": null,
+            "output_views": [],
+            "image_size": [
+              256,
+              256
+            ],
+            "video": null
+          },
+          "world_model": {
+            "adapter": "WorldGymAdapter",
+            "view_mapping": {
+              "single_view": "bridge.primary"
+            },
+            "view_mode": "single",
+            "squeeze_single_frame": true,
+            "action": {
+              "dimension": 10,
+              "horizon": 4,
+              "representation": "worldgym_bridge_xyz_rpy_gripper_reserved3",
+              "frame": "bridge_openx",
+              "semantics": "delta",
+              "rate_hz": 20.0,
+              "normalization": "legacy_adapter_worldgym_bridge_rescale",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "droll",
+                "dpitch",
+                "dyaw",
+                "gripper",
+                "reserved0",
+                "reserved1",
+                "reserved2"
+              ]
+            },
+            "state_schema": null,
+            "output_views": [
+              "bridge.primary"
+            ],
+            "image_size": null,
+            "video": {
+              "fps": 20,
+              "frames_per_chunk": 4
+            }
+          },
+          "action_bridge": {
+            "name": "identity",
+            "source": {
+              "dimension": 10,
+              "horizon": 4,
+              "representation": "worldgym_bridge_xyz_rpy_gripper_reserved3",
+              "frame": "bridge_openx",
+              "semantics": "delta",
+              "rate_hz": 20.0,
+              "normalization": "legacy_adapter_worldgym_bridge_rescale",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "droll",
+                "dpitch",
+                "dyaw",
+                "gripper",
+                "reserved0",
+                "reserved1",
+                "reserved2"
+              ]
+            },
+            "target": {
+              "dimension": 10,
+              "horizon": 4,
+              "representation": "worldgym_bridge_xyz_rpy_gripper_reserved3",
+              "frame": "bridge_openx",
+              "semantics": "delta",
+              "rate_hz": 20.0,
+              "normalization": "legacy_adapter_worldgym_bridge_rescale",
+              "components": [
+                "dx",
+                "dy",
+                "dz",
+                "droll",
+                "dpitch",
+                "dyaw",
+                "gripper",
+                "reserved0",
+                "reserved1",
+                "reserved2"
+              ]
+            },
+            "config": {}
+          },
+          "state_provider": {
+            "type": "none",
+            "state_schema": "not_required",
+            "config": {}
+          },
+          "view_bridge": {
+            "name": "identity",
+            "config": {},
+            "output_views": []
+          },
+          "schema_version": 1,
+          "seed": 0,
+          "metadata": {
+            "dataset": "WorldGym upstream Bridge test sample",
+            "warning": "Native actions here mean current adapter outputs (already converted 10-D), not raw network 7-D. 20 FPS describes official video indexing/playback, not verified physical controller rate."
+          }
+        },
+        "max_chunks": 100,
+        "jobs": [
+          {
+            "id": "loop_long",
+            "episode": 2,
+            "seed": 0,
+            "completed_chunks": 100,
+            "vla_calls": 100,
+            "world_model_calls": 100
+          }
+        ],
+        "artifact_hashes": [
+          {
+            "directory": "results/experiments/long_octo_20261012/attempt_20261012T060227_434176Z_5ca3d68e0c46/loop_long/episode_000002/seed_000",
+            "metadata_sha256": "33ae467192ec21c8c3ca591047a48a2955c6110b35567b64365a243cba2c72b3",
+            "actions_sha256": "3bd926e1b8b1298f4e09020007f22a7d894173c10b465286e6f0066398b6d7f4"
+          }
+        ],
+        "loaded_models": {
+          "vla": {
+            "module": "adapters.vla.octo",
+            "adapter": "OctoAdapter",
+            "kwargs": {
+              "model_name": "checkpoints/vla/octo-base-1.5"
+            }
+          },
+          "world_model": {
+            "module": "adapters.world_models.worldgym",
+            "adapter": "WorldGymAdapter",
+            "kwargs": {
+              "checkpoint_path": "checkpoints/world_models/worldgym/checkpoint/mixed_openx_9robots_20frames_0p1actiondropout_580ksteps.pt",
+              "default_cfg": 3,
+              "use_pixel_rope": false,
+              "num_inference_steps": 10
+            }
+          }
+        },
+        "package_versions": [
+          {
+            "adapter": "OctoAdapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "diffusers": "0.35.1",
+              "transformers": "4.49.0",
+              "jax": "0.4.29",
+              "tensorflow": "2.19.1",
+              "torch": "2.6.0"
+            }
+          },
+          {
+            "adapter": "WorldGymAdapter",
+            "python": "3.11.16 (main, Sep  1 2026, 14:18:37) [Clang 22.1.3 ]",
+            "packages": {
+              "vlaworldeval": "0.1.0",
+              "diffusers": "0.35.1",
+              "transformers": "4.49.0",
+              "torch": "2.6.0"
+            }
+          }
+        ],
+        "source_version": "Historical execution; report hash identifies evidence, not current code validation",
+        "checkpoint_identity": "Recorded paths; full checkpoint digests not asserted by this historical receipt"
+      }
+    }
+  }
+}
