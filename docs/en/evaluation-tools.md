@@ -88,7 +88,8 @@ python -m http.server 8080 --directory results/report
 ```
 
 Omit the second source unless you have a saved `evaluate` report. Native replay
-`summary.json` is also accepted. Open `index.html` locally or serve the directory; for a
+`summary.json` and frozen native-study `study.json` are also accepted. The latter binds
+progress to the frozen queue and keeps failed/unrun cases in the denominator. Open `index.html` locally or serve the directory; for a
 remote machine forward port 8080 with SSH. Copy the whole report directory to share it.
 There are no CDN dependencies. Videos, synchronized playback/seek, per-frame error plots,
 reference availability, costs, protocol details and errors are included alongside `report.json`.
@@ -98,3 +99,51 @@ Outputs must use new directories. These commands do not overwrite earlier eviden
 claim model reliability from plausible-looking videos. See [metric limits](reliability.md).
 
 [2026-10-31: OpenVLA / WorldGym parity receipts](../../configs/native_parity_evidence_v1.json).
+
+## Native DROID world-model acceptance
+
+The real-weight checks also have dedicated **Ctrl-World** and **Cosmos DROID community
+20k-EMA** profiles. These compare the pinned public inference methods with the adapter,
+sharing resident weights to isolate conditioning, recurrent state and output conversion.
+They do **not** independently validate the loader or certify pristine upstream CLI behavior.
+
+```bash
+# Ctrl: use an available physical GPU; defaults are two AR chunks, 50 diffusion steps.
+CUDA_VISIBLE_DEVICES=0 environment/world_models/ctrl_world/bin/python \
+  scripts/acceptance/world_model_parity.py --model ctrl_world \
+  --output results/ctrl-parity
+
+# Prepare the fixed native long-replay cases. These commands do not run models.
+environment/world_models/ctrl_world/bin/python scripts/acceptance/prepare_world_model_cases.py \
+  --model ctrl_world --output results/ctrl-inputs
+environment/world_models/cosmos3_nano_droid_fd/bin/python scripts/acceptance/prepare_world_model_cases.py \
+  --model cosmos_droid --output results/cosmos-inputs
+
+CUDA_VISIBLE_DEVICES=0,1 environment/world_models/cosmos3_nano_droid_fd/bin/python \
+  -m torch.distributed.run --standalone --nproc_per_node=2 \
+  scripts/acceptance/world_model_parity.py --model cosmos_droid \
+  --input results/cosmos-inputs/cosmos_ep0/input.npz --output results/cosmos-parity
+
+# Existing shared framework runner; change the prefix for Ctrl.
+vlaworldeval native-study prepare --plan results/cosmos-inputs/plan.json \
+  --directory results/cosmos-acceptance
+vlaworldeval native-study run --directory results/cosmos-acceptance --reuse-worker
+```
+
+Use `--reuse-worker` only for a runtime declaring that capability (Cosmos supports it;
+Ctrl currently loads once per episode). `--gpu N` can explicitly remap a single-GPU
+Ctrl study. The Cosmos preparation freezes a two-GPU, 38 GiB-per-GPU budget; `--gpus A B`
+remaps its two ranks without changing the model configuration. Keep proxies disabled and
+use already verified local assets; the checks need no new downloads.
+
+| Profile | Native data and timing | Interpretation |
+| --- | --- | --- |
+| Ctrl-World | Both public episodes 199 and 18599; 5 inclusive waypoints at 5 FPS, advancing 4 frames; official final-state padding, padded predictions excluded | Full published example episodes, not the paper's full test set |
+| Cosmos community 20k-EMA | Fixed development episodes 0, 351, 795 from the pinned Cosmos3-DROID snapshot; 16 future actions/frames at 15 FPS; all complete chunks | Engineering acceptance, not independent held-out evaluation or official NVIDIA DROID weights |
+
+Ctrl's parity path encodes only the initial RGB using the upstream method and aligns RNG;
+it does not mimic the upstream script's unnecessary sampling of future reference latents.
+Cosmos invokes the public JSON inference entry with the same local compatibility config and
+shared pipeline. Full effective numerical sample arguments are compared; operational paths
+are excluded while conditioning pixels and actions are compared separately. Neither profile
+feeds the real future into model inference. Missing physical branch truth remains unknown.

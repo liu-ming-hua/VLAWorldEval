@@ -75,7 +75,7 @@ vlaworldeval report --source results/branches/summary.json \
 python -m http.server 8080 --directory results/report
 ```
 
-第二个 source 仅在保存过 `evaluate` 报告时使用，否则省略；也接受原生回放的 `summary.json`。
+第二个 source 仅在保存过 `evaluate` 报告时使用，否则省略；也接受原生回放的 `summary.json` 和冻结的原生队列 `study.json`；后者会校验进度与计划的绑定，并保留失败和未运行项。
 可以直接打开 `index.html`，或启动 HTTP 服务。远程服务器需 SSH 转发 8080 端口。
 分享时复制整个报告文件夹，不需要外部 CDN。
 
@@ -84,3 +84,44 @@ python -m http.server 8080 --directory results/report
 所有输出使用新目录，不覆盖已有证据。视频看起来合理不代表模型可靠，详见[指标边界](reliability.md)。
 
 [2026-10-31: OpenVLA / WorldGym parity receipts](../../configs/native_parity_evidence_v1.json).
+
+## DROID 世界模型原生验收
+
+新增 **Ctrl-World** 和 **Cosmos DROID 社区 20k-EMA** 真实权重检查，比较固定版本的公开推理方法与 Adapter。
+两条路径共享驻留权重，以检查条件构造、跨轮历史和输出转换；**不独立验证加载器，也不声称完整复现未经修改的上游 CLI**。
+
+```bash
+# Ctrl：选择空闲物理卡，默认两轮自回归、50 步去噪。
+CUDA_VISIBLE_DEVICES=0 environment/world_models/ctrl_world/bin/python \
+  scripts/acceptance/world_model_parity.py --model ctrl_world \
+  --output results/ctrl-parity
+
+# 准备固定的原生长回放数据，不启动模型。
+environment/world_models/ctrl_world/bin/python scripts/acceptance/prepare_world_model_cases.py \
+  --model ctrl_world --output results/ctrl-inputs
+environment/world_models/cosmos3_nano_droid_fd/bin/python scripts/acceptance/prepare_world_model_cases.py \
+  --model cosmos_droid --output results/cosmos-inputs
+
+CUDA_VISIBLE_DEVICES=0,1 environment/world_models/cosmos3_nano_droid_fd/bin/python \
+  -m torch.distributed.run --standalone --nproc_per_node=2 \
+  scripts/acceptance/world_model_parity.py --model cosmos_droid \
+  --input results/cosmos-inputs/cosmos_ep0/input.npz --output results/cosmos-parity
+
+# 复用框架已有执行器；Ctrl 更换路径前缀即可。
+vlaworldeval native-study prepare --plan results/cosmos-inputs/plan.json \
+  --directory results/cosmos-acceptance
+vlaworldeval native-study run --directory results/cosmos-acceptance --reuse-worker
+```
+
+仅对声明支持的运行时使用 `--reuse-worker`：Cosmos 支持跨轨迹复用，Ctrl 当前每条轨迹加载一次。
+单卡 Ctrl study 可通过 `--gpu N` 显式换卡；Cosmos 准备配置固定为两卡、每卡 38 GiB 预算，
+可用 `--gpus A B` 映射两张物理卡。关闭代理，使用已经核验的本地资源，无需重新下载。
+
+| 模型 | 原生数据和时序 | 结论范围 |
+| --- | --- | --- |
+| Ctrl-World | 官方公开的 199、18599 两条完整轨迹；5 FPS、含当前时刻的 5 个 waypoint，每轮推进 4 帧；按官方规则重复尾状态，补齐预测不计分 | 完整公开示例轨迹，不是论文全部测试集 |
+| Cosmos 社区 20k-EMA | 固定 Cosmos3-DROID 开发轨迹 0、351、795；15 FPS、16 个未来动作对应 16 帧；执行全部完整 chunk | 工程验收，不是独立留出评测，也不是 NVIDIA 官方 DROID 权重 |
+
+Ctrl 一致性路径通过上游方法只编码初始 RGB，并对齐随机数；不模拟上游脚本对未来参考图像进行的额外潜变量采样。
+Cosmos 调用公开 JSON 推理入口，共享本地兼容配置和 pipeline，比较完整的有效数值参数；排除运行目录等路径，
+观测像素与动作单独比较。真实未来不送入模型。缺少物理动作分支真值时仍标为未知。

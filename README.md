@@ -177,6 +177,8 @@ Generated from versioned evidence. `historical_pass` means a historical real run
 
 [Evidence guide](docs/en/support.md) · `python -m cli support`
 
+Native WM acceptance now covers Ctrl-World v2 and Cosmos DROID community 20k-EMA; see the scoped parity and long-replay checks in the evidence guide.
+
 ## Native-domain reference results
 
 Paired prediction metrics from existing runs; **not a cross-domain leaderboard**.

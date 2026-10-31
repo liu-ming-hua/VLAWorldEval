@@ -174,6 +174,8 @@ DreamDojo、IWS、PlayWorld、DreamTrue、IRASim 与 Giga-World-1。
 
 [证据说明](docs/zh/support.md) · `python -m cli support`
 
+原生世界模型验收已覆盖 Ctrl-World v2 和 Cosmos DROID 社区 20k-EMA，限定范围的一致性与长回放检查见证据说明。
+
 ## 原生域参考结果
 
 已有运行的配对预测指标，**不是跨域排行榜**。LPIPS 越低、SSIM 越高表示图像更接近，不代表物理正确。

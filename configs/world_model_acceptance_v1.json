@@ -1,0 +1,240 @@
+{
+  "schema_version": 1,
+  "verified_at": "2026-10-31",
+  "records": [
+    {
+      "model": "Ctrl-World native v2",
+      "status": "historical_pass",
+      "adapter_sources": {
+        "adapters/world_models/ctrl_world.py": "91a7e1e13c397cb8ab617075fd6cc2db658c9fb67e7d92d1e2144aefee673cd8"
+      },
+      "native_entry_parity": {
+        "status": "passed",
+        "scope": "Pinned native get_traj_info/forward_wm versus adapter, shared loaded weights; initial-only VAE encoding and identical RNG; excludes module CLI and full-trajectory VAE sampling.",
+        "report_sha256": "e031c48f77351e50faca1cedade2345c59520dfdeff90c6314085e05cc390e9b",
+        "trace_sha256": {
+          "native": "1f1b0d19b38917df5da8bcbf9bc6d65de846bbea16ef6bbb14ef587c28235b47",
+          "adapter": "b7a4562213a37887135f2f04a196826ccc6373aff517234931b76faaf559c553"
+        },
+        "output_metrics": {
+          "outputs.frames": {
+            "shape": [
+              2,
+              5,
+              3,
+              192,
+              320,
+              3
+            ],
+            "dtype": "uint8",
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          }
+        }
+      },
+      "long_replay": {
+        "status": "completed",
+        "scope": "Both complete episodes named in published droid_subset val list; every native5FPS state, no incomplete-tail drop; NOT full paper test",
+        "planned": 2,
+        "completed": 2,
+        "world_model_calls": 26,
+        "seed": 0,
+        "cases": [
+          {
+            "id": "ctrl_released_long_ep199_seed0",
+            "world_model_calls": 8,
+            "frames_per_view": 33,
+            "fps": 5,
+            "summary_sha256": "f020deff2aafe5b61b8c9df2b92baba628f9abe03693c626a56f32377c4840af",
+            "input_sha256": "76eb682b80400ee84dd226bfb02c8f02c72de76f6760f36f49d51897d0462314",
+            "reference_sha256": "df36bd8e983d31fc7a699afafe7c8a5c35d8f02f490c5c41d261e0fc90039019",
+            "clean_worker_exit": true
+          },
+          {
+            "id": "ctrl_released_long_ep18599_seed0",
+            "world_model_calls": 18,
+            "frames_per_view": 72,
+            "fps": 5,
+            "summary_sha256": "90bea128a16ca122c32a0455fa2966a23295836a603a7c3e6a6b560f13c4e5c5",
+            "input_sha256": "84f6e6f32400a0dc192784345a3cdff1d2bf79d24024b2e688bbfed87922f76d",
+            "reference_sha256": "396bf0ce8b1dd3b80f4b9f2bec17ac25d0893a414612fe51087003048e0e3f9c",
+            "clean_worker_exit": true
+          }
+        ]
+      },
+      "assets": {
+        "checkpoints/world_models/ctrl_world/clip/.vlaworldeval-download.json": "08ae7ac3a846c50989486c604fc843e1af5eaa602575bd5a6464058094f9cb54",
+        "checkpoints/world_models/ctrl_world/clip/config.json": "b575ef3c36f2a057fa19e221650105052d61cc9c1a972ec15019c6261ec98770",
+        "checkpoints/world_models/ctrl_world/clip/preprocessor_config.json": "910e70b3956ac9879ebc90b22fb3bc8a75b6a0677814500101a4c072bd7857bd",
+        "checkpoints/world_models/ctrl_world/clip/pytorch_model.bin": "a63082132ba4f97a80bea76823f544493bffa8082296d62d71581a4feff1576f",
+        "checkpoints/world_models/ctrl_world/clip/special_tokens_map.json": "f8c0d6c39aee3f8431078ef6646567b0aba7f2246e9c54b8b99d55c22b707cbf",
+        "checkpoints/world_models/ctrl_world/clip/tokenizer.json": "b556ac8c99757ffb677208af34bc8c6721572114111a6e0aaf5fa69ff0b8d842",
+        "checkpoints/world_models/ctrl_world/clip/tokenizer_config.json": "34b7336e4bee12e0a9730eaf5189f582ef3c3eea5027f65730e5717256755aad",
+        "checkpoints/world_models/ctrl_world/clip/vocab.json": "5047b556ce86ccaf6aa22b3ffccfc52d391ea4accdab9c2f2407da5b742d4363",
+        "checkpoints/world_models/ctrl_world/ctrl_world/.vlaworldeval-download.json": "ea3fe30d65fe7808b27e586bd506ce1169490a79046a2e297932d9a6fc5a9aa4",
+        "checkpoints/world_models/ctrl_world/ctrl_world/checkpoint-10000.pt": "ed17de48180d4e6f89fd33c53e9fb7a0196189c1a67d44c2c486a279a80ea8a8",
+        "checkpoints/world_models/ctrl_world/ctrl_world/config.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "checkpoints/world_models/ctrl_world/svd/.vlaworldeval-download.json": "73d310a52b78c40a48a807348c7b241278b7028ee4f4d28f72dee078d5d58a86",
+        "checkpoints/world_models/ctrl_world/svd/feature_extractor/preprocessor_config.json": "4db495644e3e5bd8fcac52f70e7fc0b413c911086021acf73ac30e5911166e95",
+        "checkpoints/world_models/ctrl_world/svd/image_encoder/config.json": "9f3e1b6d9c091720471c14efd208d4a2666642833cdc28e44ecc78b35e0dce13",
+        "checkpoints/world_models/ctrl_world/svd/image_encoder/model.fp16.safetensors": "ae616c24393dd1854372b0639e5541666f7521cbe219669255e865cb7f89466a",
+        "checkpoints/world_models/ctrl_world/svd/image_encoder/model.safetensors": "ed1e5af7b4042ca30ec29999a4a5cfcac90b7fb610fd05ace834f2dcbb763eab",
+        "checkpoints/world_models/ctrl_world/svd/model_index.json": "a6130bbf546242f454c184649a012809c34ab0f398cf8e80f887627b7f7dfc02",
+        "checkpoints/world_models/ctrl_world/svd/scheduler/scheduler_config.json": "59aa43afc33395efd40fe94c7369c0477b81698f4b65b63e3ae06f26269876d5",
+        "checkpoints/world_models/ctrl_world/svd/svd.safetensors": "3e0994626df395a3831de024f11b2d9d241143bb6f16e2efbacced248aa18ce0",
+        "checkpoints/world_models/ctrl_world/svd/svd_image_decoder.safetensors": "f454a3bdb92e0bc2aae634146208605f209c5a3d37f5bb87fbec8e5cca44dc18",
+        "checkpoints/world_models/ctrl_world/svd/unet/config.json": "b69bc73c489ebe9b7ecbcbd786b8d04a1be872599669084b0588112ba50bb46c",
+        "checkpoints/world_models/ctrl_world/svd/unet/diffusion_pytorch_model.fp16.safetensors": "cb552818963e736506c6693ffc279d59df423d63aced38902ea4373ab1fd2932",
+        "checkpoints/world_models/ctrl_world/svd/unet/diffusion_pytorch_model.safetensors": "98c5e6b99df6bef015b2681c0f8ab9d4c807b733be46c067d6c9966101698f58",
+        "checkpoints/world_models/ctrl_world/svd/vae/config.json": "aab2b8766d6db1bf742fa0e3bf217fae64e67a20e7e0fe78de84f79007100ffb",
+        "checkpoints/world_models/ctrl_world/svd/vae/diffusion_pytorch_model.fp16.safetensors": "af602cd0eb4ad6086ec94fbf1438dfb1be5ec9ac03fd0215640854e90d6463a3",
+        "checkpoints/world_models/ctrl_world/svd/vae/diffusion_pytorch_model.safetensors": "9975042d7bee021bd53a72b1af14c8627d624f6547ec9abe661b68b962b88c49"
+      },
+      "physical_reliability_verified": false,
+      "vla_pair_validation_upgraded": false
+    },
+    {
+      "model": "Cosmos DROID community 20k-EMA",
+      "status": "historical_pass",
+      "adapter_sources": {
+        "adapters/world_models/cosmos3_nano_droid_fd.py": "116079430deff6421099d038c1614955bfaf2f9bb313da0012ed732ee361dcc9",
+        "adapters/world_models/cosmos3_droid_native.py": "beed763ae9350ae2946bb20056215f81581eaba5653c9f341150c7d8dfa72b3f",
+        "adapters/backends/cosmos.py": "d7523dd6456758f42a237bebd08e4bcfd9d9fd92cae9b7b95e175054e73fb0ad"
+      },
+      "native_entry_parity": {
+        "status": "passed",
+        "scope": "Official JSON entry versus adapter, shared weights and local runtime config; operational path fields excluded, full effective numerical settings compared.",
+        "report_sha256": "db1cdd15865fa2a443fffa07667e1b7e04f45cfcdcccfba37377ea92c64fdd5e",
+        "trace_sha256": {
+          "native": "e06306202e555754096da2281eac802d297ea72b008766e49739ef99d594b300",
+          "adapter": "b5a61b5b6c15c377a222bcf3ba825507a550419f006423cffbaf0827f535108b"
+        },
+        "output_metrics": {
+          "outputs.frames": {
+            "shape": [
+              2,
+              16,
+              528,
+              640,
+              3
+            ],
+            "dtype": "uint8",
+            "max_abs": 0.0,
+            "mean_abs": 0.0
+          }
+        }
+      },
+      "long_replay": {
+        "status": "completed",
+        "scope": "Engineering acceptance only: fixed development episodes 0,351,795; all complete16-action chunks; not a held-out quality estimate",
+        "planned": 3,
+        "completed": 3,
+        "world_model_calls": 62,
+        "seed": 0,
+        "cases": [
+          {
+            "id": "cosmos_ep0",
+            "world_model_calls": 29,
+            "frames_per_view": 465,
+            "fps": 15,
+            "summary_sha256": "afa22cb0c653abbf4b29aae0c45d463d0f38bd1111013250765826890f120cd2",
+            "input_sha256": "7301514c9dcb0f2a48f6dfe1dc4094aa97f3cd6446abf8b93c4e8abb7b8ba07c",
+            "reference_sha256": "92aba5c03e33227d0fa7c4a3193bd660e1a711b1b76cbe0d31b64bd982af02cc",
+            "clean_worker_exit": true
+          },
+          {
+            "id": "cosmos_ep351",
+            "world_model_calls": 15,
+            "frames_per_view": 241,
+            "fps": 15,
+            "summary_sha256": "395334c7773a4bc712733785f224653a287e7600f0e8eb4cfd3a8df1137240f2",
+            "input_sha256": "167f3199565d8a1b9a6d92f386255c8b86f8f3300faf81e82095480f7937bb7a",
+            "reference_sha256": "7949e48d89b640f4a7d611b1b6d3ce526961a561ac33f6076407214e2c658f1c",
+            "clean_worker_exit": true
+          },
+          {
+            "id": "cosmos_ep795",
+            "world_model_calls": 18,
+            "frames_per_view": 289,
+            "fps": 15,
+            "summary_sha256": "05722640bd9293a9ac19cb4c369dd8d0202d886c244c14c70f391be290f7a19d",
+            "input_sha256": "4079ec99e0bffc1ebdc5dcdbc928ca0feba85ede1f21bba118cb38e3a2acfa89",
+            "reference_sha256": "5fb5d6d4abfb330c2435884e904bb03051c5cd2c25e788367d3c14f848a9c3f0",
+            "clean_worker_exit": true
+          }
+        ]
+      },
+      "assets": {
+        "checkpoints/world_models/cosmos3_nano_droid_fd/community_jere_mybao_v1_20k_ema/checkpoint.json": "75702048710c4376823f2952b59fc8f795502e6f03835d874fd8d1b2b0716c73",
+        "checkpoints/world_models/cosmos3_nano_droid_fd/community_jere_mybao_v1_20k_ema/config.json": "ab018c26c6ebefc2da679fd7a03450143fdedb81b6d55584ec575d416bea8044",
+        "checkpoints/world_models/cosmos3_nano_droid_fd/community_jere_mybao_v1_20k_ema/export_manifest.json": "c85226092f1b5aa4ad32b70faa4332f50be1ebc894488795b4372d48599934fb",
+        "checkpoints/world_models/cosmos3_nano_droid_fd/community_jere_mybao_v1_20k_ema/model-00001-of-00007.safetensors": "68f8feae29d3a9860eff98df63540f091d54145980b9040a07e2dbe04944c433",
+        "checkpoints/world_models/cosmos3_nano_droid_fd/community_jere_mybao_v1_20k_ema/model-00002-of-00007.safetensors": "acb5dd0625d80a857f55952dfbc9e6486c8d584ccfd7a48aa40e6da464546117",
+        "checkpoints/world_models/cosmos3_nano_droid_fd/community_jere_mybao_v1_20k_ema/model-00003-of-00007.safetensors": "fbb47f1893a44bb7082812b1091a59c4fa3de0f5c07879758ddaa016b59743d7",
+        "checkpoints/world_models/cosmos3_nano_droid_fd/community_jere_mybao_v1_20k_ema/model-00004-of-00007.safetensors": "711fec6636d2517f20a99901889a72a99a088fbed614916764eb7baa1fcc9e93",
+        "checkpoints/world_models/cosmos3_nano_droid_fd/community_jere_mybao_v1_20k_ema/model-00005-of-00007.safetensors": "ea2e3a66f555591c73d2ca27171df33a0c65a374a1a75cbce96929b1455c62cf",
+        "checkpoints/world_models/cosmos3_nano_droid_fd/community_jere_mybao_v1_20k_ema/model-00006-of-00007.safetensors": "a7f6b91f32b63f9032060bdc368b5755b03e6cb7d479819aad589e4b8e17c60c",
+        "checkpoints/world_models/cosmos3_nano_droid_fd/community_jere_mybao_v1_20k_ema/model-00007-of-00007.safetensors": "331a13212b3fcb7572725575220b36e82add5854942384a17e1bc3dd1779a4fe",
+        "checkpoints/world_models/cosmos3_nano_droid_fd/community_jere_mybao_v1_20k_ema/model.safetensors.index.json": "e22462fb55373ac5b990e530b7a8cef6a21946edae38422d23c9f24d9ae23d84",
+        "checkpoints/world_models/cosmos3_nano_droid_fd/text_tokenizer/added_tokens.json": "c0284b582e14987fbd3d5a2cb2bd139084371ed9acbae488829a1c900833c680",
+        "checkpoints/world_models/cosmos3_nano_droid_fd/text_tokenizer/special_tokens_map.json": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd",
+        "checkpoints/world_models/cosmos3_nano_droid_fd/text_tokenizer/tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+        "checkpoints/world_models/cosmos3_nano_droid_fd/text_tokenizer/tokenizer_config.json": "355f2b4e5bad7b01f11ef6cb68ebc176f61b95c3276092ea225b1bea0e01e95c",
+        "checkpoints/world_models/cosmos3_nano_droid_fd/text_tokenizer/vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+        "checkpoints/world_models/cosmos3_nano_droid_fd/vae/Wan2.2_VAE.pth": "20eb789667fa5e60e7516bf509512f6cb61f01b0aa0695eadaea930c13892b36"
+      },
+      "physical_reliability_verified": false,
+      "vla_pair_validation_upgraded": false,
+      "action_conversion": [
+        {
+          "episode": 0,
+          "input_sha256": "7301514c9dcb0f2a48f6dfe1dc4094aa97f3cd6446abf8b93c4e8abb7b8ba07c",
+          "status": "passed",
+          "chunks": 29,
+          "actions": 464,
+          "atol": 1e-06,
+          "rtol": 1e-06,
+          "max_abs": 1.1920928955078125e-07,
+          "exact_equal": false,
+          "source_sha256": {
+            "cosmos_framework/data/generator/action/datasets/droid_lerobot_dataset.py": "226121a99d33e31d61a48ab4d42355f6313d1995398c01da783b210974c02f92",
+            "cosmos_framework/data/generator/action/utils/pose_utils.py": "73daa21bc5d66d94ee9217b6065b50ab81ee644d07067bb360326e4edf490380"
+          },
+          "scope": "Public ee_pose/midtrain branch, backward-framewise OpenCV rot6d, flipped commanded gripper; float rounding tolerance, not bitwise certification"
+        },
+        {
+          "episode": 351,
+          "input_sha256": "167f3199565d8a1b9a6d92f386255c8b86f8f3300faf81e82095480f7937bb7a",
+          "status": "passed",
+          "chunks": 15,
+          "actions": 240,
+          "atol": 1e-06,
+          "rtol": 1e-06,
+          "max_abs": 1.1920928955078125e-07,
+          "exact_equal": false,
+          "source_sha256": {
+            "cosmos_framework/data/generator/action/datasets/droid_lerobot_dataset.py": "226121a99d33e31d61a48ab4d42355f6313d1995398c01da783b210974c02f92",
+            "cosmos_framework/data/generator/action/utils/pose_utils.py": "73daa21bc5d66d94ee9217b6065b50ab81ee644d07067bb360326e4edf490380"
+          },
+          "scope": "Public ee_pose/midtrain branch, backward-framewise OpenCV rot6d, flipped commanded gripper; float rounding tolerance, not bitwise certification"
+        },
+        {
+          "episode": 795,
+          "input_sha256": "4079ec99e0bffc1ebdc5dcdbc928ca0feba85ede1f21bba118cb38e3a2acfa89",
+          "status": "passed",
+          "chunks": 18,
+          "actions": 288,
+          "atol": 1e-06,
+          "rtol": 1e-06,
+          "max_abs": 1.1920928955078125e-07,
+          "exact_equal": false,
+          "source_sha256": {
+            "cosmos_framework/data/generator/action/datasets/droid_lerobot_dataset.py": "226121a99d33e31d61a48ab4d42355f6313d1995398c01da783b210974c02f92",
+            "cosmos_framework/data/generator/action/utils/pose_utils.py": "73daa21bc5d66d94ee9217b6065b50ab81ee644d07067bb360326e4edf490380"
+          },
+          "scope": "Public ee_pose/midtrain branch, backward-framewise OpenCV rot6d, flipped commanded gripper; float rounding tolerance, not bitwise certification"
+        }
+      ]
+    }
+  ]
+}

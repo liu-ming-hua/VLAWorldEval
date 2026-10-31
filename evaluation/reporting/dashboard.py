@@ -14,6 +14,20 @@ def _json(path):
 
 def _cases(root, source):
     report = _json(source)
+    if 'source_plan_sha256' in report and isinstance(report.get('jobs'), list):
+        progress_path = source.parent / 'progress.json'
+        progress = _json(progress_path) if progress_path.exists() else {}
+        if progress and progress.get('study_sha256') != digest(source):
+            raise ValueError('Native study progress is bound to a different frozen study')
+        jobs = progress.get('jobs', {})
+        cases = []
+        for job in report['jobs']:
+            record = jobs.get(job['id'], {})
+            directory = source.parent / 'runs' / job['id']
+            directory = project_path(root, str(directory))
+            cases.append({**record, 'id': job['id'], 'status': record.get('status', 'not_run'),
+                          'directory': directory if directory.is_dir() else None})
+        return cases, []
     if report.get('kind') == 'action_branch_evaluation':
         return [{**j, 'directory': project_path(root, j['summary']).parent if j.get('summary') else None}
                 for j in report['jobs']], report.get('branch_contrasts', [])

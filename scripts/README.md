@@ -23,3 +23,6 @@ For inference use the shared CLI, not a new experiment script.
 `acceptance/native_parity.py` captures real native/adapter traces with fixed tolerances.
 `acceptance/branch_example.py` prepares a recorded-vs-zero WorldGym example without generation.
 See the [evaluation tools guide](../docs/en/evaluation-tools.md) for scope and execution commands.
+
+`acceptance/world_model_parity.py` compares pinned Ctrl/Cosmos inference paths with adapters using shared real weights.
+`acceptance/prepare_world_model_cases.py` prepares fixed native long-replay plans; execute them with `native-study`, not another inference runner.

@@ -129,6 +129,7 @@ def convert_episode(dataset, episode, start, chunks, repo):
         "unscored_tail_transitions": data.provenance["length"]-start-16*chunks-1}
     packet = {"actions": np.stack(data.replay_actions), "reset_args": {"value": composed[0]},
               "initial_views": {VIEW: region[0]}, "source": source}
+    source['action_conversion_parity'] = compare_source_actions(packet, repo)
     return packet, region
 
 
@@ -179,3 +180,60 @@ def prepare_native_case(root, dataset, config_path, output, *, episode=0, start=
     return {"ok": True, "prepared": str(output), "chunks": len(packet["actions"]),
             "source_length": packet["source"]["length"],
             "action_shape": list(packet["actions"].shape), "model_inference_performed": False}
+
+
+def compare_source_actions(packet, repo, *, atol=1e-6, rtol=1e-6):
+    """Compare every frozen chunk with the public DROID __getitem__ action branch.
+
+    Uses real measured poses and commanded gripper from the source parquet.
+    Float32 native matrix inversion and the adapter's float64 rigid transform
+    may round differently; tolerances are declared before comparison.
+    """
+    import importlib.util
+    import pyarrow.parquet as pq
+    import torch
+    from typing import cast
+    repo = Path(repo)
+    dataset_source = repo/'cosmos_framework/data/generator/action/datasets/droid_lerobot_dataset.py'
+    utility_source = repo/'cosmos_framework/data/generator/action/utils/pose_utils.py'
+    spec = importlib.util.spec_from_file_location('_native_cosmos_pose_utils', utility_source)
+    utility = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(utility)
+    tree = ast.parse(dataset_source.read_text())
+    cls = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == 'DROIDLeRobotDataset')
+    method = next(n for n in cls.body if isinstance(n, ast.FunctionDef) and n.name == '__getitem__')
+    rotation = next(n for n in tree.body if isinstance(n, ast.AnnAssign)
+                    and isinstance(n.target, ast.Name) and n.target.id == '_DROID_TO_OPENCV')
+    namespace = dict(np=np, torch=torch, cast=cast, Any=Any, PoseConvention=utility.PoseConvention,
+                     build_abs_pose_from_components=utility.build_abs_pose_from_components,
+                     pose_abs_to_rel=utility.pose_abs_to_rel)
+    exec(compile(ast.Module(body=[rotation, method], type_ignores=[]), str(dataset_source), 'exec'), namespace)
+    source = packet['source']
+    data = pq.read_table(source['data_path'], filters=[('episode_index', '=', source['episode_index'])],
+                         columns=['frame_index', 'observation.state.cartesian_position', 'action.gripper_position'])
+    frames = np.asarray(data['frame_index'].to_numpy())
+    if not np.array_equal(frames, np.arange(len(frames))):
+        raise ValueError('Native action audit needs the full ordered source episode')
+    poses = np.asarray(data['observation.state.cartesian_position'].to_pylist(), np.float32)
+    gripper = np.asarray(data['action.gripper_position'].to_pylist(), np.float32).reshape(-1)
+    expected = []
+    for index in range(len(packet['actions'])):
+        start = source['start_frame'] + index*16
+        sample = {'state': torch.from_numpy(poses[start:start+17]),
+                  'action': torch.from_numpy(gripper[start:start+16]), 'task': ''}
+        ctx = SimpleNamespace(_fetch_sample=lambda idx: ('forward_dynamics', None, None, sample),
+            _has_multi_language_annotations=False, _skip_video_loading=True,
+            _action_space='midtrain', _pose_convention='backward_framewise', _chunk_length=16,
+            _state_features='state', _action_features='action', _to_opencv=namespace['_DROID_TO_OPENCV'],
+            _is_flat_action=False, _is_gripper_action_flipped=True,
+            _max_num_history_actions=0, _use_state=False, _viewpoint='concat_view', _video_mode=None,
+            _build_result=lambda **kw: kw['action'])
+        expected.append(namespace['__getitem__'](ctx, 0).numpy())
+    expected = np.stack(expected)
+    actual = np.asarray(packet['actions'])
+    np.testing.assert_allclose(actual, expected, atol=atol, rtol=rtol)
+    return {'status': 'passed', 'chunks': len(actual), 'actions': int(np.prod(actual.shape[:2])),
+            'atol': atol, 'rtol': rtol, 'max_abs': float(np.max(np.abs(actual-expected))),
+            'exact_equal': bool(np.array_equal(actual, expected)),
+            'source_sha256': {str(p.relative_to(repo)): _digest(p) for p in (dataset_source, utility_source)},
+            'scope': 'Public ee_pose/midtrain branch, backward-framewise OpenCV rot6d, flipped commanded gripper; float rounding tolerance, not bitwise certification'}

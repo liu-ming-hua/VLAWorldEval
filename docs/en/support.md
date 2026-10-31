@@ -58,3 +58,24 @@ source revision; the fresh recipe additionally records the installed wheel SHA25
 To attach a fresh-install receipt, run the importer with `--fresh-report results/delivery/my_first_rollout/report.json`. The CLI compares installed-wheel framework source hashes with the current source; `matches_tested_wheel` applies to code identity only, not current assets, dependencies or hardware.
 
 `official_input_alignment=declared_only_not_certified` distinguishes the declared camera/action protocol from an independently verified official-input audit. It does not imply numerical parity. `last_tested_attempt` identifies the latest imported fresh run when available.
+
+## Native world-model acceptance
+
+These are separate from VLA-pair certification. See the [reproduction commands](evaluation-tools.md)
+and [checksum-bound receipts](../../configs/world_model_acceptance_v1.json).
+
+| Model / protocol | Registered | Real native replay | Scoped native-entry parity | Long-replay coverage |
+| --- | --- | --- | --- | --- |
+| Ctrl-World native v2 | Yes | Passed | Two chunks, exact model conditions and decoded frames | 2 public episodes, 26 calls, 33 / 72 frames per view |
+| Cosmos DROID community 20k-EMA | Yes | Passed | Two chunks, exact effective sample settings and decoded frames | 3 development episodes, 62 calls, 465 / 241 / 289 frames |
+
+The checks share loaded weights; loader parity is outside their scope. Cosmos action conversion
+was also compared with the public DROID dataset method on all 992 actions (maximum difference
+1.2e-7, within predeclared 1e-6 absolute/relative tolerance). This is numerical agreement,
+not bitwise action equality. Real future frames are reserved for scoring.
+
+`support` includes a separate `runtime_acceptance` list with `current_adapter_sources_match`.
+It checks only the listed adapter source files against the receipt, not current installed assets
+or the entire framework. These results do not upgrade any VLA pair, establish physical action
+tracking, or constitute a held-out model-quality ranking. Other registered world models retain
+their existing evidence status; no new native-entry parity is implied for them.

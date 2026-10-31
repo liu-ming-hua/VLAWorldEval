@@ -104,3 +104,18 @@ def test_fresh_source_identity_is_invalidated_by_code_changes(tmp_path):
     assert source_matches(tmp_path, record) is False
     (tmp_path / 'module.py').unlink()
     assert source_matches(tmp_path, record) is False
+
+
+def test_runtime_acceptance_receipt_does_not_upgrade_pair_or_changed_sources(tmp_path):
+    from evaluation.reporting.support import digest
+    root = fixture_root(tmp_path)
+    adapter = root / 'adapter.py'
+    adapter.write_text('version1')
+    path = root / 'configs/world_model_acceptance_v1.json'
+    path.write_text(json.dumps({'records': [{'model': 'fixture', 'status': 'historical_pass',
+                                           'adapter_sources': {'adapter.py': digest(adapter)}}]}))
+    result = support_report(root)
+    assert result['runtime_acceptance'][0]['current_adapter_sources_match']
+    assert result['pairs'][0]['official_numerical_parity'] == 'not_verified'
+    adapter.write_text('version2')
+    assert not support_report(root)['runtime_acceptance'][0]['current_adapter_sources_match']

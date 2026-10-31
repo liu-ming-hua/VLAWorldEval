@@ -67,3 +67,22 @@ def test_reference_crop_matches_actual_upstream_latent_unpadding():
         actual = namespace[method.name](context, [latent], [image_size])[0]
         assert torch.equal(actual, latent[..., :33, :40])
         assert tuple(dimension * factor for dimension in actual.shape[-2:]) == (528, 640)
+
+
+def test_actual_droid_action_conversion_matches_upstream_and_rejects_axis_error():
+    pytest.importorskip('torch')
+    pytest.importorskip('pyarrow')
+    from evaluation.datasets.droid import load_droid_episode
+    from evaluation.datasets.cosmos_reference import compare_source_actions
+    root = Path(__file__).resolve().parents[2]
+    repo = root/'third_party/cosmos-framework'
+    dataset = root/'datasets/cosmos3_droid/success'
+    if not repo.is_dir() or not dataset.is_dir():
+        pytest.skip('Pinned upstream source and DROID example are optional assets')
+    data = load_droid_episode(dataset, 0, 0, 1, require_instruction=False)
+    packet = {'actions': np.stack(data.replay_actions), 'source': data.provenance}
+    result = compare_source_actions(packet, repo)
+    assert result['status'] == 'passed' and result['actions'] == 16
+    packet['actions'][0, 0, 0] += .01
+    with pytest.raises(AssertionError):
+        compare_source_actions(packet, repo)

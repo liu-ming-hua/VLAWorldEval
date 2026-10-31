@@ -51,3 +51,22 @@ environment/core/bin/python scripts/acceptance/support_evidence.py --check
 使用 `--fresh-report results/delivery/my_first_rollout/report.json` 附加全新安装凭证。CLI 会比较已测试 wheel 的框架源码哈希与当前源码；`matches_tested_wheel` 仅表示代码相同，不认证当前资源、依赖或硬件。
 
 `official_input_alignment=declared_only_not_certified` 表示相机／动作协议已有声明，但尚未独立认证与官方输入完全对齐，也不表示数值一致。`last_tested_attempt` 优先显示最近导入的全新环境运行标识。
+
+## 原生世界模型验收
+
+以下证据与 VLA 组合认证分开，参见[复现命令](evaluation-tools.md)和
+[带校验和的验收凭证](../../configs/world_model_acceptance_v1.json)。
+
+| 模型／协议 | 已注册 | 真实原生回放 | 限定范围的原生入口一致性 | 长回放覆盖 |
+| --- | --- | --- | --- | --- |
+| Ctrl-World native v2 | 是 | 通过 | 两轮，模型条件与解码帧完全一致 | 2 条官方公开轨迹，26 次调用，各视角 33／72 帧 |
+| Cosmos DROID 社区 20k-EMA | 是 | 通过 | 两轮，有效采样参数与解码帧完全一致 | 3 条开发轨迹，62 次调用，465／241／289 帧 |
+
+一致性检查共享已加载的权重，不包含加载器独立认证。Cosmos 另外对全部 992 个动作与公开 DROID 数据集方法
+进行转换比较，最大差异约 1.2e-7，在预先规定的绝对／相对 1e-6 容差内；这是数值一致，不是动作逐位相同。
+真实未来图像只参与评分。
+
+`support` 单独返回 `runtime_acceptance` 和 `current_adapter_sources_match`。
+后者只比较凭证列出的 Adapter 源文件，不认证当前安装的资源或全部框架代码。
+这些检查不升级任何 VLA 组合的认证状态，不证明物理动作跟随可靠，也不构成独立留出集效果排名。
+其他已注册世界模型保留原有证据状态，不因此获得新的原生入口一致性认证。

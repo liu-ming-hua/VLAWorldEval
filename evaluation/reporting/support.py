@@ -73,7 +73,17 @@ def support_report(root):
                 and item.get('real_weight_loop', {}).get('pair_contract', {}).get('world_model', {}).get('adapter') == pair.world_model.adapter],
             'physical_reliability': 'not_verified',
         })
-    return {'schema_version': 1, 'pairs': rows, 'execution_performed': False,
+    acceptance_path = root / 'configs/world_model_acceptance_v1.json'
+    acceptance = json.loads(acceptance_path.read_text())['records'] if acceptance_path.exists() else []
+    runtime_rows = []
+    for record in acceptance:
+        sources = record.get('adapter_sources', {})
+        matches = bool(sources) and all(
+            (root / name).is_file() and digest(root / name) == expected
+            for name, expected in sources.items())
+        runtime_rows.append({**record, 'current_adapter_sources_match': matches,
+                             'scope_of_source_check': 'Listed adapter files only; not installed weights or machine readiness'})
+    return {'schema_version': 1, 'pairs': rows, 'runtime_acceptance': runtime_rows, 'execution_performed': False,
             'scope': 'Published historical evidence, not current machine readiness. '
                      'Use evaluate --check-only for local preflight; execute for a new run.'}
 

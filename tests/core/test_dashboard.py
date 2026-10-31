@@ -58,3 +58,19 @@ def test_planned_episode_index_matches_executed_episode(tmp_path):
     cases, _ = _cases(tmp_path, source)
     assert [c['status'] for c in cases] == ['completed', 'not_run']
     assert cases[0]['directory'] == tmp_path / 'run'
+
+
+def test_native_study_report_preserves_frozen_queue_and_binds_progress(tmp_path):
+    from evaluation.reporting.dashboard import _cases
+    from evaluation.reporting.support import digest
+    source = tmp_path / 'study.json'
+    source.write_text(json.dumps({'source_plan_sha256': 'plan', 'jobs': [{'id': 'a'}, {'id': 'b'}]}))
+    progress = tmp_path / 'progress.json'
+    progress.write_text(json.dumps({'study_sha256': digest(source), 'jobs': {'a': {'status': 'failed', 'error': 'fixture'}}}))
+    cases, _ = _cases(tmp_path, source)
+    assert [c['status'] for c in cases] == ['failed', 'not_run']
+    report = build_dashboard(tmp_path, [source], tmp_path / 'report')
+    assert report['counts']['planned'] == 2 and report['counts']['failed'] == 1
+    progress.write_text(json.dumps({'study_sha256': 'changed'}))
+    with pytest.raises(ValueError, match='different frozen study'):
+        _cases(tmp_path, source)
