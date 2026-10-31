@@ -6,6 +6,7 @@
   <a href="README_CN.md">简体中文</a> ·
   <a href="https://liu-ming-hua.github.io/VLAWorldEval/">Documentation website</a> ·
   <a href="#model-combinations">Model combinations</a> ·
+  <a href="#action-world-model-landscape">World-model landscape</a> ·
   <a href="#native-domain-reference-results">Reference results</a> ·
   <a href="CONTRIBUTING.md">Contributing</a>
 </p>
@@ -178,6 +179,50 @@ Generated from versioned evidence. `historical_pass` means a historical real run
 [Evidence guide](docs/en/support.md) · `python -m cli support`
 
 Native WM acceptance now covers Ctrl-World v2 and Cosmos DROID community 20k-EMA; see the scoped parity and long-replay checks in the evidence guide.
+
+## Action world model landscape
+
+A curated list of robot action-conditioned world models, including relevant latent-dynamics models.
+**Checked: 2026-10-31.** Ordered by first public paper/project year (newest first);
+the venue column records the separately verified publication year. Workshop papers are labeled explicitly.
+Code and checkpoint availability describe the linked upstream release, not unrestricted licensing
+or reproduction of every result in the paper. **† Venue not confirmed from the checked primary sources**;
+this is not a claim that the work has never been accepted. “Not located” is likewise a bounded search result.
+
+**Framework status:** loop = declared VLA feedback route; native = model-specific replay/generation;
+experimental = adapter exists with limited validation. These are not accuracy certifications.
+Adapter links identify the implemented scope; see [support evidence](docs/en/support.md) for actual runs.
+
+| First year | Work / paper | Conference / publication | Code availability | Weight availability | VLAWorldEval integration |
+| --- | --- | --- | --- | --- | --- |
+| 2026 | [A2World](https://logosintelligencelab.github.io/A2World/) | [ECCV 2026](https://logosintelligencelab.github.io/A2World/#citation) | [WM train + inference](https://github.com/LogosIntelligenceLab/A2World) | [Pretrained + LIBERO](https://huggingface.co/Fleurrr/A2World-World-Model) | [Experimental adapter](adapters/world_models/a2world.py) |
+| 2026 | [Cosmos 3 / Nano](https://arxiv.org/abs/2606.02800) | Technical report † | [Inference + post-training](https://github.com/NVIDIA/cosmos/tree/main/cookbooks/cosmos3/generator/action) | [Base released; FD caveat below](https://huggingface.co/nvidia/Cosmos3-Nano) | [Loop: community DROID EEF FD; native joint replay](adapters/world_models/cosmos3_nano_droid_fd.py) |
+| 2026 | [DreamDojo](https://arxiv.org/abs/2602.06949) | [ICML 2026](https://github.com/NVIDIA/DreamDojo) | [Pre/post-training + inference](https://github.com/NVIDIA/DreamDojo) | [2B / 14B released](https://huggingface.co/nvidia/DreamDojo) | [Native replay: 2B GR1](adapters/world_models/dreamdojo.py) |
+| 2026 | [DreamTrue](https://arxiv.org/abs/2610.12468) | [Under review †](https://github.com/brave-eai/DreamTrue#citation) | [Calibration / generation / reward](https://github.com/brave-eai/DreamTrue) | [Checkpoint + partial data release](https://github.com/brave-eai/DreamTrue#release-contents) | [Native geometry-conditioned generation](adapters/world_models/dreamtrue.py) |
+| 2026 | [GE-Sim 2.0](https://arxiv.org/abs/2605.27491) | Technical report † | [Simulator / replay / policy loop](https://github.com/AgibotTech/GE-Sim-V2) | [G01 / G02 / YAM released](https://huggingface.co/agibot-world/Genie-Envisioner-Sim-v2.0) | [Native replay: G01 + OmniPicker only](adapters/world_models/ge_sim_v2.py) |
+| 2026 | [GigaWorld-1](https://arxiv.org/abs/2607.02642) | Technical report † | [Partial train / inference / data tools](https://github.com/open-gigaai/giga-world-1) | [Stage-1 Nano / Pro; partial release](https://huggingface.co/open-gigaai/Giga-World-1) | [Control-video adapter only; no raw-action loop](adapters/world_models/giga_world_1.py) |
+| 2026 | [IWS](https://arxiv.org/abs/2603.08546) | [RSS 2026](https://www.yixuanwang.me/interactive_world_sim/) | [Training + inference](https://github.com/WangYixuan12/interactive_world_sim) | [Task-specific checkpoints](https://github.com/WangYixuan12/interactive_world_sim#download-checkpoints) | [Native replay: PushT cam1](adapters/world_models/iws.py) |
+| 2026 | [LAC-WM](https://arxiv.org/abs/2610.10846) | [ICML 2026](https://proceedings.mlr.press/v306/huang26bv.html) | [Pretraining + adaptation](https://github.com/qingh097/Latent_action_world_model) | Trained WM checkpoint not located | Not integrated |
+| 2026 | [PiL-World](https://arxiv.org/abs/2606.05773) | Preprint † | [No release located](https://pil-world.github.io/) | No release located | Not integrated; pilworld mode ≠ model |
+| 2026 | [PlayWorld](https://arxiv.org/abs/2603.09030) | [CoRL 2026](https://robot-playworld.github.io/) | [Training + inference](https://github.com/irom-princeton/open-world) | [SVD released; AR requires access](https://github.com/irom-princeton/open-world/blob/main/docs/MODELS.md) | [Native SVD path; not AR](adapters/world_models/playworld.py) |
+| 2026 | [τ₀-WM Simulator](https://arxiv.org/abs/2606.01027) | Preprint † | [Post-training + inference](https://github.com/sii-research/tau-0-wm) | [VAM + simulator released](https://huggingface.co/sii-research/tau-0-wm/tree/main/simulator) | [Experimental server/client adapter](adapters/world_models/tau0_wm_simulator.py) |
+| 2025 | [Ctrl-World](https://arxiv.org/abs/2510.10125) | [ICLR 2026](https://github.com/Robert-gyj/Ctrl-World) | [Training + inference](https://github.com/Robert-gyj/Ctrl-World) | [DROID checkpoint released](https://huggingface.co/yjguo/Ctrl-World) | [Native replay verified; VLA pairs experimental](adapters/world_models/ctrl_world.py) |
+| 2025 | [EnerVerse-AC / EVAC](https://arxiv.org/abs/2505.09723) | [NeurIPS 2025 EWM workshop](https://openreview.net/pdf/0b3834932ea7d86d8acfed0c98fbc5164366fcdc.pdf) | [Single-view inference; challenge training](https://github.com/AgibotTech/EnerVerse-AC) | [Single-view AgiBotWorld; no failure data](https://github.com/AgibotTech/EnerVerse-AC#inference) | Not integrated in this repository |
+| 2025 | [V-JEPA 2-AC](https://arxiv.org/abs/2506.09985) | Preprint † | [Training + inference](https://github.com/facebookresearch/vjepa2) | [Action-conditioned ViT-g released](https://github.com/facebookresearch/vjepa2#v-jepa-2-ac) | Not integrated; predicts latent features |
+| 2025 | [WorldGym](https://arxiv.org/abs/2506.00613) | [ICLR 2026](https://proceedings.iclr.cc/paper_files/paper/2026/hash/7f5e909ac0324db03506b380c695ffaf-Abstract-Conference.html) | [Inference + policy evaluation](https://github.com/world-model-eval/world-model-eval) | [OXE checkpoint released](https://github.com/world-model-eval/world-model-eval#world-model-checkpoint) | [Loop + native replay: Bridge route](adapters/world_models/worldgym.py) |
+| 2024 | [DINO-WM](https://arxiv.org/abs/2411.04983) | Preprint † | [Training + planning](https://github.com/gaoyuezhou/dino_wm) | Trained WM checkpoint not located | Not integrated; predicts visual features |
+| 2024 | [IRASim](https://arxiv.org/abs/2406.14540) | [ICCV 2025](https://openaccess.thecvf.com/content/ICCV2025/papers/Zhu_IRASim_A_Fine-Grained_World_Model_for_Robot_Manipulation_ICCV_2025_paper.pdf) | [Training + inference](https://github.com/bytedance/IRASim) | [RT-1 / Bridge / Language-Table](https://github.com/bytedance/IRASim#dataset) | [Native replay: Language-Table Frame-Ada](adapters/world_models/irasim.py) |
+| 2023 | [UniSim](https://arxiv.org/abs/2310.06114) | [ICLR 2024](https://proceedings.iclr.cc/paper_files/paper/2024/hash/c4d66eae503694424123b93ac0fbaf17-Abstract-Conference.html) | No official release located | No official release located | Not integrated |
+
+**Release-specific notes**
+
+- Cosmos: our tested EEF FD uses the [community 20k-EMA checkpoint](https://huggingface.co/jere-mybao/cosmos3-nano-droid-forward-dynamics), not NVIDIA's base or policy weights. Its unauthenticated page could not be verified in this check; existing local acceptance is not a promise of current public download access.
+- PlayWorld: the [public SVD assets](https://huggingface.co/tennyyyin/open-world-checkpoints) and access-restricted AR students are different releases. Our adapter covers SVD only.
+- GigaWorld-1: upstream now documents training code and Stage-1 weights; our existing FunCtrl adapter still accepts a control video, not raw VLA actions. Hosting a CVPR challenge is not a CVPR main-conference publication.
+- EVAC's public single-view checkpoint excludes the failure trajectories used in the paper. PiL-World's paper/model is separate from this framework's `pilworld` action-target feedback mode.
+
+This list is a discovery and integration map, **not a leaderboard or an exhaustive literature survey**.
+Model versions and protocols remain in the [model catalog](configs/model_catalog.json).
 
 ## Native-domain reference results
 

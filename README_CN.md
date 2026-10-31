@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="README.md">English</a> · <a href="https://liu-ming-hua.github.io/VLAWorldEval/zh/README.html">在线使用手册</a> ·
-  <a href="#模型组合">模型组合</a> · <a href="#原生域参考结果">参考结果</a> ·
+  <a href="#模型组合">模型组合</a> · <a href="#动作世界模型工作一览">世界模型工作一览</a> · <a href="#原生域参考结果">参考结果</a> ·
   <a href="CONTRIBUTING.md">参与贡献</a>
 </p>
 
@@ -175,6 +175,49 @@ DreamDojo、IWS、PlayWorld、DreamTrue、IRASim 与 Giga-World-1。
 [证据说明](docs/zh/support.md) · `python -m cli support`
 
 原生世界模型验收已覆盖 Ctrl-World v2 和 Cosmos DROID 社区 20k-EMA，限定范围的一致性与长回放检查见证据说明。
+
+## 动作世界模型工作一览
+
+汇总机器人动作条件世界模型，并补充相关潜空间动力学工作。
+**核对日期：2026-10-31。** 按论文 / 项目首次公开年份倒序排列；会议栏单独标明发表年份，
+Workshop 明确区分，不当作主会论文。代码与权重栏描述上游实际公开范围，
+不表示许可证无限制，也不表示论文所有结果均可复现。
+**† 表示在本次核对的一手来源中未确认正式发表 venue**，不等于断言从未录用；“未找到”也仅限本次检索。
+
+**框架状态：** 闭环 = 已有 VLA 反馈路径；原生 = 模型专用回放 / 生成；
+实验性 = 已实现适配器但验证有限。它们均不代表效果认证。
+适配器链接对应实际实现范围，运行证据见[支持情况](docs/zh/support.md)。
+
+| 首发年份 | 工作 / 论文 | 会议 / 发表情况 | 代码公开范围 | 权重公开范围 | 本框架接入情况 |
+| --- | --- | --- | --- | --- | --- |
+| 2026 | [A2World](https://logosintelligencelab.github.io/A2World/) | [ECCV 2026](https://logosintelligencelab.github.io/A2World/#citation) | [WM 训练 + 推理](https://github.com/LogosIntelligenceLab/A2World) | [预训练 + LIBERO](https://huggingface.co/Fleurrr/A2World-World-Model) | [实验性适配器](adapters/world_models/a2world.py) |
+| 2026 | [Cosmos 3 / Nano](https://arxiv.org/abs/2606.02800) | 技术报告 † | [推理 + 后训练](https://github.com/NVIDIA/cosmos/tree/main/cookbooks/cosmos3/generator/action) | [基础权重已发布；FD 见下文](https://huggingface.co/nvidia/Cosmos3-Nano) | [闭环：社区 DROID EEF FD；原生关节回放](adapters/world_models/cosmos3_nano_droid_fd.py) |
+| 2026 | [DreamDojo](https://arxiv.org/abs/2602.06949) | [ICML 2026](https://github.com/NVIDIA/DreamDojo) | [预训练 / 后训练 + 推理](https://github.com/NVIDIA/DreamDojo) | [2B / 14B 已发布](https://huggingface.co/nvidia/DreamDojo) | [原生回放：2B GR1](adapters/world_models/dreamdojo.py) |
+| 2026 | [DreamTrue](https://arxiv.org/abs/2610.12468) | [审稿中 †](https://github.com/brave-eai/DreamTrue#citation) | [标定 / 生成 / 奖励代码](https://github.com/brave-eai/DreamTrue) | [权重 + 部分数据已发布](https://github.com/brave-eai/DreamTrue#release-contents) | [原生几何条件生成](adapters/world_models/dreamtrue.py) |
+| 2026 | [GE-Sim 2.0](https://arxiv.org/abs/2605.27491) | 技术报告 † | [模拟器 / 回放 / 策略闭环](https://github.com/AgibotTech/GE-Sim-V2) | [G01 / G02 / YAM 已发布](https://huggingface.co/agibot-world/Genie-Envisioner-Sim-v2.0) | [原生回放：仅 G01 + OmniPicker](adapters/world_models/ge_sim_v2.py) |
+| 2026 | [GigaWorld-1](https://arxiv.org/abs/2607.02642) | 技术报告 † | [部分训练 / 推理 / 数据工具](https://github.com/open-gigaai/giga-world-1) | [Stage-1 Nano / Pro；部分发布](https://huggingface.co/open-gigaai/Giga-World-1) | [仅控制视频适配；无原始动作闭环](adapters/world_models/giga_world_1.py) |
+| 2026 | [IWS](https://arxiv.org/abs/2603.08546) | [RSS 2026](https://www.yixuanwang.me/interactive_world_sim/) | [训练 + 推理](https://github.com/WangYixuan12/interactive_world_sim) | [任务专用权重](https://github.com/WangYixuan12/interactive_world_sim#download-checkpoints) | [原生回放：PushT cam1](adapters/world_models/iws.py) |
+| 2026 | [LAC-WM](https://arxiv.org/abs/2610.10846) | [ICML 2026](https://proceedings.mlr.press/v306/huang26bv.html) | [预训练 + 具身适配](https://github.com/qingh097/Latent_action_world_model) | 未找到训练后 WM 权重 | 未接入 |
+| 2026 | [PiL-World](https://arxiv.org/abs/2606.05773) | 预印本 † | [未找到公开实现](https://pil-world.github.io/) | 未找到公开权重 | 未接入；pilworld 模式 ≠ 该模型 |
+| 2026 | [PlayWorld](https://arxiv.org/abs/2603.09030) | [CoRL 2026](https://robot-playworld.github.io/) | [训练 + 推理](https://github.com/irom-princeton/open-world) | [SVD 已发布；AR 需访问权限](https://github.com/irom-princeton/open-world/blob/main/docs/MODELS.md) | [原生 SVD 路径；非 AR](adapters/world_models/playworld.py) |
+| 2026 | [τ₀-WM Simulator](https://arxiv.org/abs/2606.01027) | 预印本 † | [后训练 + 推理](https://github.com/sii-research/tau-0-wm) | [VAM + simulator 已发布](https://huggingface.co/sii-research/tau-0-wm/tree/main/simulator) | [实验性服务端 / 客户端适配器](adapters/world_models/tau0_wm_simulator.py) |
+| 2025 | [Ctrl-World](https://arxiv.org/abs/2510.10125) | [ICLR 2026](https://github.com/Robert-gyj/Ctrl-World) | [训练 + 推理](https://github.com/Robert-gyj/Ctrl-World) | [DROID 权重已发布](https://huggingface.co/yjguo/Ctrl-World) | [原生回放已验证；VLA 组合为实验性](adapters/world_models/ctrl_world.py) |
+| 2025 | [EnerVerse-AC / EVAC](https://arxiv.org/abs/2505.09723) | [NeurIPS 2025 EWM Workshop](https://openreview.net/pdf/0b3834932ea7d86d8acfed0c98fbc5164366fcdc.pdf) | [单视角推理；挑战赛训练代码](https://github.com/AgibotTech/EnerVerse-AC) | [单视角 AgiBotWorld；不含失败数据](https://github.com/AgibotTech/EnerVerse-AC#inference) | 本仓库未接入 |
+| 2025 | [V-JEPA 2-AC](https://arxiv.org/abs/2506.09985) | 预印本 † | [训练 + 推理](https://github.com/facebookresearch/vjepa2) | [动作条件 ViT-g 已发布](https://github.com/facebookresearch/vjepa2#v-jepa-2-ac) | 未接入；预测潜特征 |
+| 2025 | [WorldGym](https://arxiv.org/abs/2506.00613) | [ICLR 2026](https://proceedings.iclr.cc/paper_files/paper/2026/hash/7f5e909ac0324db03506b380c695ffaf-Abstract-Conference.html) | [推理 + 策略评测](https://github.com/world-model-eval/world-model-eval) | [OXE 权重已发布](https://github.com/world-model-eval/world-model-eval#world-model-checkpoint) | [闭环 + 原生回放：Bridge 路径](adapters/world_models/worldgym.py) |
+| 2024 | [DINO-WM](https://arxiv.org/abs/2411.04983) | 预印本 † | [训练 + 规划](https://github.com/gaoyuezhou/dino_wm) | 未找到训练后 WM 权重 | 未接入；预测视觉特征 |
+| 2024 | [IRASim](https://arxiv.org/abs/2406.14540) | [ICCV 2025](https://openaccess.thecvf.com/content/ICCV2025/papers/Zhu_IRASim_A_Fine-Grained_World_Model_for_Robot_Manipulation_ICCV_2025_paper.pdf) | [训练 + 推理](https://github.com/bytedance/IRASim) | [RT-1 / Bridge / Language-Table](https://github.com/bytedance/IRASim#dataset) | [原生回放：Language-Table Frame-Ada](adapters/world_models/irasim.py) |
+| 2023 | [UniSim](https://arxiv.org/abs/2310.06114) | [ICLR 2024](https://proceedings.iclr.cc/paper_files/paper/2024/hash/c4d66eae503694424123b93ac0fbaf17-Abstract-Conference.html) | 未找到官方公开实现 | 未找到官方公开权重 | 未接入 |
+
+**需要区分的发布版本**
+
+- Cosmos：我们测试的 EEF FD 使用[社区 20k-EMA 权重](https://huggingface.co/jere-mybao/cosmos3-nano-droid-forward-dynamics)，不是 NVIDIA 基础模型或策略权重。本次未能验证其匿名访问页面；已有本地验收不代表当前仍可公开下载。
+- PlayWorld：[公开 SVD 资产](https://huggingface.co/tennyyyin/open-world-checkpoints)与需要访问权限的 AR student 是不同版本；当前适配器只覆盖 SVD。
+- GigaWorld-1：上游目前已列出训练代码和 Stage-1 权重，但我们现有 FunCtrl 适配器仍接收控制视频，不接收原始 VLA action。举办 CVPR 挑战赛不等于论文发表于 CVPR 主会。
+- EVAC 公开单视角权重不含论文中的失败轨迹数据；PiL-World 论文 / 模型也不等于框架中的 `pilworld` 动作目标反馈模式。
+
+这是一份工作发现与接入索引，**不是排行榜，也不声称穷尽所有相关论文**。
+具体版本与输入协议仍以[模型目录](configs/model_catalog.json)为准。
 
 ## 原生域参考结果
 
