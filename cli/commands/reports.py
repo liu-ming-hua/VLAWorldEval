@@ -72,3 +72,18 @@ def motion_eval(args, root):
         result = json.loads((output/"motion.json").read_text())
     print_json(result)
     return 0
+
+
+def dashboard(args, root):
+    from evaluation.reporting.dashboard import build_dashboard
+    print_json(build_dashboard(root, args.source, args.output))
+    return 0
+
+
+def parity_check(args, root):
+    from evaluation.validation.parity import compare_traces
+    from evaluation.planning.registry import project_path
+    paths = [project_path(root, str(p)) for p in (args.native, args.adapter, args.policy, args.output)]
+    report = compare_traces(*paths)
+    print_json(report)
+    return 0 if report['status'] == 'passed' else 1

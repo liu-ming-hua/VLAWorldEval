@@ -87,3 +87,16 @@ def prepare_replay(args, root):
     )
     print_json(report)
     return 0
+
+
+def branches(args, root):
+    from evaluation.execution.branches import run_branches
+    from evaluation.execution.reliability import RunInterrupted, run_signal_handlers
+    try:
+        with run_signal_handlers(), redirect_stdout(sys.stderr):
+            result = run_branches(root, args.manifest, args.output, execute=args.execute)
+    except RunInterrupted as exc:
+        print(f'{exc}; inspect the branch summary if created.', file=sys.stderr)
+        return 128 + exc.signum
+    print_json(result)
+    return 0 if result['status'] in {'completed', 'validated_not_executed'} else 1

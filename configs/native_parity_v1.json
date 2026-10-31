@@ -1,0 +1,28 @@
+{
+  "openvla_bridge": {
+    "profile": "openvla_bridge",
+    "protocol": "openvla_bridge_v1",
+    "atol": 1e-05,
+    "rtol": 1e-05,
+    "adapter_source": "adapters/vla/openvla.py",
+    "native_source_sha256": {
+      "third_party/world-model-eval/src/world_model_eval/run_openvla.py": "9a21615ce51343d41621ac5ef89101d927f6becd3ae68623834ab83f4591f8e5",
+      "third_party/world-model-eval/src/world_model_eval/utils.py": "e7a8b19278c8c7a798cc13557fb9b646a0f42ea3b87234a1a236ab856d31f630"
+    },
+    "scope": "Pinned WorldGym OpenVLA integration loop; real VLA inference, observation hooks replace WM and cloud scoring; not parity with the original OpenVLA dependency environment"
+  },
+  "worldgym_bridge": {
+    "profile": "worldgym_bridge",
+    "protocol": "worldgym_bridge_v1",
+    "atol": 1.0,
+    "rtol": 0.0,
+    "adapter_source": "adapters/world_models/worldgym.py",
+    "native_source_sha256": {
+      "third_party/worldgym_runtime/worldgym_runtime/world_model.py": "6bcf4c633c4fcdefaaec88aeec649986a0870d866738fe07f16638bbff6bdb15",
+      "third_party/worldgym_runtime/worldgym_runtime/vae.py": "9f870ce84c24db35a9bf51bd9f1cefe3689a544ab4fadc5c261f7a66287f0ebf",
+      "third_party/worldgym_runtime/worldgym_runtime/model.py": "a33d68ff4f8aca11059381536c381d6c52c94edbff6d603b43a4ee497be2169a",
+      "third_party/worldgym_runtime/worldgym_runtime/diffusion.py": "60a7f9e34ff8d301ec06ff306705f531c5b9604e2a091301fbb1970e9f0ba643"
+    },
+    "scope": "Pinned WorldGym runtime with disclosed CPU-load/local-VAE compatibility edits; three autoregressive single-frame chunks; not pristine upstream binary parity"
+  }
+}

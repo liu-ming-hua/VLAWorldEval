@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "captured_at": "2026-10-31",
+  "records": [
+    {
+      "profile": "openvla_bridge",
+      "status": "passed",
+      "policy": {
+        "profile": "openvla_bridge",
+        "protocol": "openvla_bridge_v1",
+        "atol": 1e-05,
+        "rtol": 1e-05,
+        "adapter_source": "adapters/vla/openvla.py",
+        "native_source_sha256": {
+          "third_party/world-model-eval/src/world_model_eval/run_openvla.py": "9a21615ce51343d41621ac5ef89101d927f6becd3ae68623834ab83f4591f8e5",
+          "third_party/world-model-eval/src/world_model_eval/utils.py": "e7a8b19278c8c7a798cc13557fb9b646a0f42ea3b87234a1a236ab856d31f630"
+        },
+        "scope": "Pinned WorldGym OpenVLA integration loop; real VLA inference, observation hooks replace WM and cloud scoring; not parity with the original OpenVLA dependency environment"
+      },
+      "policy_sha256": "d78857d15673d40abe58776f50c2d42c9aab8d5d9f7e2d6fc38a9fec5e70f239",
+      "trace_sha256": {
+        "native": "1cd2b943891e031d7cc43909cda84892b6a89e6315980c4a4988db60d44e2eb0",
+        "adapter": "76a28855990a80d305cf0f68aa02121dbcb14bb02da241f343891eec4b8db04f"
+      },
+      "output_metrics": {
+        "outputs.native_actions": {
+          "shape": [
+            3,
+            7
+          ],
+          "dtype": "float32",
+          "max_abs": 0.0,
+          "mean_abs": 0.0
+        },
+        "outputs.wm_actions": {
+          "shape": [
+            3,
+            10
+          ],
+          "dtype": "float32",
+          "max_abs": 1.1920928955078125e-07,
+          "mean_abs": 2.743521084388097e-08
+        }
+      },
+      "provenance": {
+        "native": {
+          "native_source_sha256": {
+            "third_party/world-model-eval/src/world_model_eval/run_openvla.py": "9a21615ce51343d41621ac5ef89101d927f6becd3ae68623834ab83f4591f8e5",
+            "third_party/world-model-eval/src/world_model_eval/utils.py": "e7a8b19278c8c7a798cc13557fb9b646a0f42ea3b87234a1a236ab856d31f630"
+          },
+          "adapter_sha256": "2a403672711a0aa7afa43aa932fba2ecdda08edac312c3c72d5a5671ec7f37d9",
+          "runtime": {
+            "torch": "2.6.0",
+            "transformers": "4.49.0",
+            "diffusers": "0.35.1"
+          },
+          "elapsed_seconds": 9.494460954330862,
+          "peak_allocated_bytes": 15285913600,
+          "scope": "Pinned WorldGym OpenVLA integration loop; real VLA inference, observation hooks replace WM and cloud scoring; not parity with the original OpenVLA dependency environment"
+        },
+        "adapter": {
+          "native_source_sha256": {
+            "third_party/world-model-eval/src/world_model_eval/run_openvla.py": "9a21615ce51343d41621ac5ef89101d927f6becd3ae68623834ab83f4591f8e5",
+            "third_party/world-model-eval/src/world_model_eval/utils.py": "e7a8b19278c8c7a798cc13557fb9b646a0f42ea3b87234a1a236ab856d31f630"
+          },
+          "adapter_sha256": "2a403672711a0aa7afa43aa932fba2ecdda08edac312c3c72d5a5671ec7f37d9",
+          "runtime": {
+            "torch": "2.6.0",
+            "transformers": "4.49.0",
+            "diffusers": "0.35.1"
+          },
+          "elapsed_seconds": 8.016519164666533,
+          "peak_allocated_bytes": 15284340224,
+          "scope": "Pinned WorldGym OpenVLA integration loop; real VLA inference, observation hooks replace WM and cloud scoring; not parity with the original OpenVLA dependency environment"
+        }
+      },
+      "scope": "Captured inputs and outputs in this runtime/profile only; not physical reliability or all model versions",
+      "physical_reliability_verified": false,
+      "report_sha256": "775a881c2c4b1477de0398fd6756a051210c2100cf752b2a74a22090608dddb0"
+    },
+    {
+      "profile": "worldgym_bridge",
+      "status": "passed",
+      "policy": {
+        "profile": "worldgym_bridge",
+        "protocol": "worldgym_bridge_v1",
+        "atol": 1.0,
+        "rtol": 0.0,
+        "adapter_source": "adapters/world_models/worldgym.py",
+        "native_source_sha256": {
+          "third_party/worldgym_runtime/worldgym_runtime/world_model.py": "6bcf4c633c4fcdefaaec88aeec649986a0870d866738fe07f16638bbff6bdb15",
+          "third_party/worldgym_runtime/worldgym_runtime/vae.py": "9f870ce84c24db35a9bf51bd9f1cefe3689a544ab4fadc5c261f7a66287f0ebf",
+          "third_party/worldgym_runtime/worldgym_runtime/model.py": "a33d68ff4f8aca11059381536c381d6c52c94edbff6d603b43a4ee497be2169a",
+          "third_party/worldgym_runtime/worldgym_runtime/diffusion.py": "60a7f9e34ff8d301ec06ff306705f531c5b9604e2a091301fbb1970e9f0ba643"
+        },
+        "scope": "Pinned WorldGym runtime with disclosed CPU-load/local-VAE compatibility edits; three autoregressive single-frame chunks; not pristine upstream binary parity"
+      },
+      "policy_sha256": "aeacec056f5a887064fdf11093ca76d340622f84730d56252cad42948d876318",
+      "trace_sha256": {
+        "native": "2d8809eed742dee3fb9be5250bfdc475b9e04776d36c26db730602bf1072b23c",
+        "adapter": "1c1412fb2f2d4ebee43122ae12017104c4db94b773cf657c8be5400311cd0eb5"
+      },
+      "output_metrics": {
+        "outputs.frames": {
+          "shape": [
+            3,
+            256,
+            256,
+            3
+          ],
+          "dtype": "uint8",
+          "max_abs": 0.0,
+          "mean_abs": 0.0
+        }
+      },
+      "provenance": {
+        "native": {
+          "native_source_sha256": {
+            "third_party/worldgym_runtime/worldgym_runtime/world_model.py": "6bcf4c633c4fcdefaaec88aeec649986a0870d866738fe07f16638bbff6bdb15",
+            "third_party/worldgym_runtime/worldgym_runtime/vae.py": "9f870ce84c24db35a9bf51bd9f1cefe3689a544ab4fadc5c261f7a66287f0ebf",
+            "third_party/worldgym_runtime/worldgym_runtime/model.py": "a33d68ff4f8aca11059381536c381d6c52c94edbff6d603b43a4ee497be2169a",
+            "third_party/worldgym_runtime/worldgym_runtime/diffusion.py": "60a7f9e34ff8d301ec06ff306705f531c5b9604e2a091301fbb1970e9f0ba643"
+          },
+          "adapter_sha256": "f878e8bc4bf4d4b19f65e9d8fa3aac2ae3601e3eea5c330290abc5736e007686",
+          "runtime": {
+            "torch": "2.6.0",
+            "transformers": "4.49.0",
+            "diffusers": "0.35.1"
+          },
+          "elapsed_seconds": 19.980576530098915,
+          "peak_allocated_bytes": 4230453248,
+          "scope": "Pinned WorldGym runtime with disclosed CPU-load/local-VAE compatibility edits; three autoregressive single-frame chunks; not pristine upstream binary parity"
+        },
+        "adapter": {
+          "native_source_sha256": {
+            "third_party/worldgym_runtime/worldgym_runtime/world_model.py": "6bcf4c633c4fcdefaaec88aeec649986a0870d866738fe07f16638bbff6bdb15",
+            "third_party/worldgym_runtime/worldgym_runtime/vae.py": "9f870ce84c24db35a9bf51bd9f1cefe3689a544ab4fadc5c261f7a66287f0ebf",
+            "third_party/worldgym_runtime/worldgym_runtime/model.py": "a33d68ff4f8aca11059381536c381d6c52c94edbff6d603b43a4ee497be2169a",
+            "third_party/worldgym_runtime/worldgym_runtime/diffusion.py": "60a7f9e34ff8d301ec06ff306705f531c5b9604e2a091301fbb1970e9f0ba643"
+          },
+          "adapter_sha256": "f878e8bc4bf4d4b19f65e9d8fa3aac2ae3601e3eea5c330290abc5736e007686",
+          "runtime": {
+            "torch": "2.6.0",
+            "transformers": "4.49.0",
+            "diffusers": "0.35.1"
+          },
+          "elapsed_seconds": 18.70006866659969,
+          "peak_allocated_bytes": 4230453248,
+          "scope": "Pinned WorldGym runtime with disclosed CPU-load/local-VAE compatibility edits; three autoregressive single-frame chunks; not pristine upstream binary parity"
+        }
+      },
+      "scope": "Captured inputs and outputs in this runtime/profile only; not physical reliability or all model versions",
+      "physical_reliability_verified": false,
+      "report_sha256": "e00b15edddedab5ecdf6e059ce2ca7aed1bb387bd9ba1cbd076d964956c87eb9"
+    }
+  ],
+  "scope": "Historical receipts for these exact profiles and sources only; rerun after changes."
+}

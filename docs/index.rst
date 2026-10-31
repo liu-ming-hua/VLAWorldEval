@@ -44,6 +44,7 @@ Read :doc:`en/workflows` to execute them, and :doc:`en/reliability` before inter
    en/compatibility
    en/models
    en/workflows
+   en/evaluation-tools
    en/artifacts
    en/architecture
    en/extending
@@ -64,6 +65,7 @@ Read :doc:`en/workflows` to execute them, and :doc:`en/reliability` before inter
    zh/compatibility
    zh/models
    zh/workflows
+   zh/evaluation-tools
    zh/artifacts
    zh/architecture
    zh/extending

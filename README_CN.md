@@ -208,6 +208,8 @@ Ctrl-World 的短窗口复用两条轨迹；WorldGym 是同一轨迹的三个种
 保持适配器轻量、协议显式、执行过程共享。新增模型前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。
 原创框架代码采用 [MIT](LICENSE)，上游实现、权重、数据和派生演示素材遵循各自适用条款，详见[许可范围](LICENSE_SCOPE.md)。
 
+[原生一致性检查、同起点动作分支和可分享的离线报告](docs/zh/evaluation-tools.md)。
+
 ## 致谢
 
 感谢以下开源模型、数据集及工具的作者与维护者，使本框架的接入和评价工作成为可能：

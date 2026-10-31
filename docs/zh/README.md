@@ -38,3 +38,5 @@
 
 - [全新安装与真实模型验收](first-rollout.md)
 - [逐组合验证证据](support.md)
+
+- [一致性检查、动作分支与离线报告](evaluation-tools.md)

@@ -19,3 +19,7 @@ They are not independent per-experiment rollout implementations.
 For inference use the shared CLI, not a new experiment script.
 
 [Installation](../docs/en/installation.md) · [Workflows](../docs/en/workflows.md) · [Release](../docs/en/release.md) · [中文手册](../docs/zh/README.md)
+
+`acceptance/native_parity.py` captures real native/adapter traces with fixed tolerances.
+`acceptance/branch_example.py` prepares a recorded-vs-zero WorldGym example without generation.
+See the [evaluation tools guide](../docs/en/evaluation-tools.md) for scope and execution commands.

@@ -39,3 +39,5 @@ Reference data: [model catalog](../../configs/model_catalog.json),
 
 - [Fresh installation with real models](first-rollout.md)
 - [Per-pair validation evidence](support.md)
+
+- [Consistency checks, action branches and offline reports](evaluation-tools.md)

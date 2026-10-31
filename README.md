@@ -213,6 +213,8 @@ Small adapters, explicit protocols, shared execution. Read [CONTRIBUTING.md](CON
 before adding a model. Original framework code is [MIT](LICENSE); upstream implementations,
 weights, datasets and derived demo media retain their applicable terms. See [license scope](LICENSE_SCOPE.md).
 
+[Native consistency checks, same-context action branches and portable offline reports](docs/en/evaluation-tools.md).
+
 ## Acknowledgements
 
 We thank the authors and maintainers of the open models, datasets and tools that make this framework possible:
