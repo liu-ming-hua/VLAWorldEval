@@ -14,11 +14,18 @@ bash scripts/setup/core.sh
 environment/core/bin/python -m cli demo --output results/first_demo --chunks 30
 environment/core/bin/python -m cli inspect --artifact results/first_demo
 environment/core/bin/python -m cli capabilities
+environment/core/bin/python -m cli report \
+  --source results/first_demo/summary.json --output results/first_report
 ```
 
 Expected: a synthetic continuous video, saved action arrays and an inspectable artifact.
 This checks the framework—not pretrained models or robot task success.
 Every output directory must be new.
+
+
+Open `results/first_report/index.html` in a browser. The standalone report includes both
+views, a shared playback timeline and an explicit synthetic-demo label. Copy the entire
+`first_report` folder to your computer when running on a server.
 
 ## 2 · Prepare one real pair
 

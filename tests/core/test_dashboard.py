@@ -8,6 +8,30 @@ from tests.support.builders import replay_fixture
 pytestmark = pytest.mark.process
 
 
+def test_demo_report_is_portable_and_rechecks_artifacts(tmp_path):
+    import shutil
+    from vlaworldeval.demo import run_demo
+
+    original = tmp_path / 'original'
+    run_demo(original, chunks=3)
+    moved = tmp_path / 'moved'
+    original.rename(moved)
+    result = build_dashboard(tmp_path, [moved / 'summary.json'], tmp_path / 'report')
+    assert result['counts']['completed'] == 1
+    data = json.loads((tmp_path / 'report/report.json').read_text())
+    case = data['cases'][0]
+    assert case['synthetic'] and not case['task_success_evaluated']
+    assert case['world_model_calls'] == case['vla_calls'] == 3
+    assert len(case['videos']) == 2
+    assert 'Synthetic engineering demo' in (tmp_path / 'report/index.html').read_text()
+    (moved / 'actions.npz').unlink()
+    broken = build_dashboard(tmp_path, [moved / 'summary.json'], tmp_path / 'broken')
+    assert broken['counts']['completed'] == 0
+    assert broken['counts']['failed'] == 1
+    shutil.rmtree(moved)
+    assert all((tmp_path / 'report' / v['file']).is_file() for v in case['videos'])
+
+
 def test_report_copies_synchronized_views_and_keeps_missing_slots(tmp_path, monkeypatch):
     module, config, packet, _ = replay_fixture(tmp_path, monkeypatch)
     native_dir = tmp_path / 'native'

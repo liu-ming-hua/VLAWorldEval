@@ -14,6 +14,10 @@ def _json(path):
 
 def _cases(root, source):
     report = _json(source)
+    if report.get('synthetic') is True and isinstance(report.get('job'), dict):
+        return [{**report['job'], 'id': source.parent.name,
+                 'status': report['status'], 'synthetic': True,
+                 'directory': source.parent}], []
     if 'source_plan_sha256' in report and isinstance(report.get('jobs'), list):
         progress_path = source.parent / 'progress.json'
         progress = _json(progress_path) if progress_path.exists() else {}
@@ -44,7 +48,7 @@ def _cases(root, source):
         return cases, []
     if 'world_model_calls' in report and 'files' in report:
         return [{'id': source.parent.name, 'status': report['status'], 'directory': source.parent}], []
-    raise ValueError('Expected an evaluate report, native summary or action-branch summary')
+    raise ValueError('Expected an evaluate report, native summary, demo summary or action-branch summary')
 
 
 def build_dashboard(root, sources, output):
@@ -68,14 +72,17 @@ def build_dashboard(root, sources, output):
                    'seed': case.get('seed'), 'family': case.get('family'), 'videos': [],
                    'metrics': {}, 'reference_available': False, 'cost': {}, 'error': case.get('error'),
                    'source': str(source.relative_to(root))}
+            if case.get('synthetic'):
+                row.update(synthetic=True, task_success_evaluated=False, model_weights_used=False)
             report['cases'].append(row)
             directory = case['directory']
             if directory is None:
                 row['error'] = row['error'] or 'No execution artifact for this planned slot'
                 continue
             try:
-                if (directory / 'summary.json').exists():
-                    native = _json(directory / 'summary.json')
+                summary_path = directory / 'summary.json'
+                native = _json(summary_path) if summary_path.exists() else {}
+                if 'files' in native and 'world_model_calls' in native:
                     row['status'] = native['status']
                     videos = {name: name for name in native['files'] if name.endswith('.mp4')}
                     for name, expected in native['files'].items():
@@ -149,7 +156,10 @@ def render_html(report):
                 points = ' '.join(f'{i * 600 / max(1,len(series)-1):.2f},{110-v/ceiling*100:.2f}' for i,v in enumerate(series))
                 metrics.append(f'<p>{e(view)} · Future-frame MSE (0–1), max {ceiling:.5g}</p><svg viewBox="0 0 600 120" role="img" aria-label="Future-frame error"><polyline fill="none" stroke="#5ec4e8" stroke-width="2" points="{points}"/></svg>')
         detail = {k: v for k, v in case.items() if k not in {'videos', 'metrics'}}
+        notice = ('<p>Synthetic engineering demo · no pretrained model or task-success evaluation.</p>'
+                  if case.get('synthetic') else '')
         sections.append(f'<section><h2>{e(case["id"])} <small>{e(case["status"])}</small></h2>'
+                        f'{notice}'
                         f'<button class="play">Play views together</button> <button class="pause">Pause</button> '
                         '<label>Timeline <input class="seek" type="range" min="0" max="0" step="0.01" value="0"></label>'
                         f'<div class="views">{videos or "No video available"}</div>{"".join(metrics)}'

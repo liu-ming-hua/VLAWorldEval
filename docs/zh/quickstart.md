@@ -14,10 +14,16 @@ bash scripts/setup/core.sh
 environment/core/bin/python -m cli demo --output results/first_demo --chunks 30
 environment/core/bin/python -m cli inspect --artifact results/first_demo
 environment/core/bin/python -m cli capabilities
+environment/core/bin/python -m cli report \
+  --source results/first_demo/summary.json --output results/first_report
 ```
 
 预期得到连续合成视频、动作数组和可检查产物。该过程验证框架，不代表预训练模型效果或任务成功。
 每次请选择尚不存在的输出目录。
+
+
+用浏览器打开 `results/first_report/index.html`，即可同步播放两路视频，
+报告会明确标注合成示例。在服务器运行时，将整个 `first_report` 文件夹复制到电脑查看。
 
 ## 2 · 准备一个真实组合
 
