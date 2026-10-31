@@ -2,6 +2,16 @@
 
 [手册首页](README.md) / 发布 · [English](../en/release.md)
 
+## 固定版本发布
+
+首个冻结版本为 **v0.1.0**，功能、验证范围与限制见[更新记录](../../CHANGELOG.md)。
+需要复现时使用 `git checkout v0.1.0` 固定源码版本。
+
+维护者审核发布提交后推送带说明的 `vMAJOR.MINOR.PATCH` 标签。
+`versioned-release` 工作流核对包与文档版本，执行工程检查和全新安装验收，
+再发布 wheel、源码包与 SHA256 校验文件。上传失败会保留草稿，
+不会覆盖已经公开的 Release。模型权重与数据仍须单独获取，也不会发布到 PyPI。
+
 ## 校验源码
 
 ```bash

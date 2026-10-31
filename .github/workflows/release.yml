@@ -1,0 +1,104 @@
+name: versioned-release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify tag and package versions
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          python - <<'PY'
+          import ast, os, re, tomllib
+          from pathlib import Path
+          version = tomllib.loads(Path('pyproject.toml').read_text())['project']['version']
+          assert re.fullmatch(r'\d+\.\d+\.\d+', version), 'Stable semantic version required'
+          assert os.environ['RELEASE_TAG'] == 'v' + version, 'Tag/package version mismatch'
+          for filename, variable in [('vlaworldeval/__init__.py', '__version__'), ('docs/conf.py', 'release')]:
+              tree = ast.parse(Path(filename).read_text())
+              value = next(ast.literal_eval(n.value) for n in tree.body if isinstance(n, ast.Assign)
+                           and any(isinstance(t, ast.Name) and t.id == variable for t in n.targets))
+              assert value == version, f'Version mismatch in {filename}'
+          notes = Path('CHANGELOG.md').read_text()
+          assert f'## {version} ' in notes, 'Missing version release notes'
+          section = notes.split(f'## {version} ', 1)[1].split('\n## ', 1)[0]
+          Path('release-notes.md').write_text(f'# VLAWorldEval {version}\n\n' + section.split('\n', 1)[1])
+          PY
+      - name: Install lightweight release environment
+        run: |
+          unset HTTP_PROXY HTTPS_PROXY ALL_PROXY http_proxy https_proxy all_proxy
+          python -m pip install --index-url https://pypi.tuna.tsinghua.edu.cn/simple uv==0.12.14
+          sudo apt-get update && sudo apt-get install -y ffmpeg
+          CORE_DEV=1 bash scripts/setup/core.sh
+      - name: Validate source and installed distributions
+        run: |
+          bash scripts/check_project.sh
+          environment/core/bin/python scripts/acceptance/public_delivery.py --offline --output results/release
+          environment/core/bin/python scripts/acceptance/export_source.py \
+            --sdist results/release/distributions/*.tar.gz --output dist/reviewed-source
+      - name: Prepare checksummed release assets
+        run: |
+          mkdir release-assets
+          cp results/release/distributions/* release-assets/
+          cp dist/reviewed-source/release_manifest.json release-assets/
+          cp release-notes.md release-assets/
+          cd release-assets
+          sha256sum *.whl *.tar.gz release_manifest.json release-notes.md > SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-assets
+          path: release-assets/
+          if-no-files-found: error
+      - name: Save validation logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-validation
+          path: |
+            results/release/*.json
+            results/release/*.log
+            .cache/quality/
+          if-no-files-found: ignore
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-assets
+          path: release-assets
+      - name: Publish verified tag without replacing an existing release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          cd release-assets
+          sha256sum --check SHA256SUMS
+          # A failed upload stays a draft; reruns may complete that draft only.
+          if gh release view "$RELEASE_TAG" --json isDraft > existing.json; then
+            python -c 'import json; assert json.load(open("existing.json"))["isDraft"], "Refusing to modify an already published release"'
+          else
+            gh release create "$RELEASE_TAG" --verify-tag --draft \
+              --title "VLAWorldEval $RELEASE_TAG" --notes-file release-notes.md
+          fi
+          gh release upload "$RELEASE_TAG" *.whl *.tar.gz release_manifest.json release-notes.md SHA256SUMS --clobber
+          gh release edit "$RELEASE_TAG" --draft=false --latest

@@ -8,7 +8,7 @@ import tarfile
 
 
 ROOT_FILES = {"pyproject.toml", "MANIFEST.in", ".gitignore", "README.md", "README_CN.md",
-              "CONTRIBUTING.md", "LICENSE", "LICENSE_SCOPE.md"}
+              "CONTRIBUTING.md", "CHANGELOG.md", "LICENSE", "LICENSE_SCOPE.md"}
 CODE_DIRS = {"adapters", "cli", "evaluation", "vlaworldeval", "scripts", "tests", "configs", "docs"}
 TEXT_SUFFIXES = {".py", ".sh", ".md", ".patch", ".json", ".yaml", ".yml", ".toml", ".txt", ".in"}
 PRESENTATION_ASSETS = {

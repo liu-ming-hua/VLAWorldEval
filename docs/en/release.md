@@ -2,6 +2,18 @@
 
 [Manual](README.md) / Release · [简体中文](../zh/release.md)
 
+## Versioned releases
+
+The first frozen version is **v0.1.0**. See the [changelog](../../CHANGELOG.md) for
+features, verified scope and limitations. Use `git checkout v0.1.0` for reproducible
+source code rather than following a moving branch.
+
+Maintainers push an annotated `vMAJOR.MINOR.PATCH` tag after reviewing the release commit.
+The `versioned-release` workflow verifies package/documentation versions, runs the engineering
+and fresh-installation gates, and publishes wheel/source assets with SHA256 checksums.
+A failed upload remains a draft; an existing published release is never overwritten.
+Model weights and datasets are separate assets. This workflow does not publish to PyPI.
+
 ## Validate the source
 
 ```bash
