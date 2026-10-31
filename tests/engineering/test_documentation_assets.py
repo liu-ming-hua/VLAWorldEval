@@ -39,8 +39,14 @@ def test_readme_pair_table_covers_every_registered_pair_once():
     for name in ("README.md", "README_CN.md"):
         text = (ROOT / name).read_text()
         assert "16" in text and "docs/assets/framework.svg" in text
-        assert "state provider" not in text.lower()
-        assert "statebridge" not in text.lower() and "pilworld" not in text.lower()
+        # Literature may discuss unsupported models and explicitly distinguish
+        # them from a feedback mode; do not mistake that for a product claim.
+        product_text = re.sub(
+            r"(?ms)^## (?:Action world model landscape|动作世界模型工作一览)\n.*?(?=^## |\Z)",
+            "", text,
+        ).lower()
+        assert "state provider" not in product_text
+        assert "statebridge" not in product_text and "pilworld" not in product_text
 
 
 def test_reviewed_media_match_provenance_and_export_limits():
