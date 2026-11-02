@@ -94,3 +94,53 @@ Use the [installation guide](installation.md) for assets and [workflows](workflo
 | `gigaworld1` | `world_models.gigaworld1` | [Upstream](https://github.com/open-gigaai/giga-world-1) |
 
 [Compatibility](compatibility.md) · [Metric interpretation](reliability.md)
+
+## τ₀-WM: checkpoint and dataset boundary
+
+Audit date: 2026-11-02. The [official model repository](https://huggingface.co/sii-research/tau-0-wm/tree/main)
+was checked at revision `bb30c3a5e119a60268809a5247eae767ed691729`.
+
+| Asset | Actual contract | Current native replay status |
+| --- | --- | --- |
+| Released `simulator/` checkpoint | 26-D network condition: normalized 20-D dual-arm relative EEF commands plus six default head/waist/velocity controls | No directly matched real example identified in the checked release |
+| Local TacoPlay episode | 66 samples, 7-D actions/state, static and gripper cameras, 15 FPS | Incompatible with the released checkpoint |
+| Official TacoPlay simulator recipe | 7-D action condition, `whole_body: false`, placeholder path to a **post-trained** model | Training/inference recipe exists; matching weights were not found in the checked model tree |
+| Official pretrained client | Random observations and zero 20-D commands | Protocol example only; not a recorded-action benchmark |
+
+See the [upstream training instructions](https://github.com/sii-research/tau-0-wm#post-training-of-action-conditioned-video-simulator).
+Changing a YAML action dimension cannot change a checkpoint's learned input layer.
+A joint-action example from τ₀-VLA is also not automatically an arm-base relative-EEF
+example for this simulator. A verified conversion, embodiment convention and timing are required.
+
+The upstream websocket reply contains **terminal RGB and reward**, not robot state.
+Our optional transport patch (`scripts/setup/patches/tau0_full_video.patch`) returns
+all decoded frames without changing model inputs or sampling. Setup applies it
+idempotently. Existing installations can apply it with:
+
+```bash
+git -C third_party/tau-0-wm apply --check ../../scripts/setup/patches/tau0_full_video.patch
+git -C third_party/tau-0-wm apply ../../scripts/setup/patches/tau0_full_video.patch
+```
+
+Restart the server and instantiate `Tau0WMSimulatorAdapter(return_full_video=True)`.
+The adapter exposes future RGB as `[T,V,H,W,3]` through the shared `step_output`
+contract, removes the decoded context frame, checks terminal-frame consistency,
+and feeds the generated terminal images into the next request. With the released
+`chunk: 9` configuration this is eight future frames, **not 33 video frames for
+33 actions**. Temporal alignment must be established before a native replay route
+is admitted. Default `return_full_video=False` preserves the terminal-only API;
+requesting full video from an unpatched server raises an error, without silently
+falling back. Protocol unit tests are not checkpoint inference or quality validation.
+
+Paper evidence: [§V and Appendix A](https://arxiv.org/html/2606.01027v2) describe
+video/reward prediction and downstream post-training, but do not establish a
+one-to-one mapping from every experiment to the released simulator checkpoint.
+The related [τ₀-VLA example](https://github.com/sii-research/tau-0-vla/tree/main/configs/example_agibot_world_gong)
+contains EEF metadata as well as joint commands; its documented route uses joints.
+EEF coordinate frames, quaternion order, command semantics and camera selection
+still require verification before using it with this simulator.
+
+To unblock real evaluation, obtain either a documented real episode in the released
+20-D protocol, or the matching 7-D TacoPlay post-trained checkpoint and statistics.
+No 7→20 zero padding, synthetic-action replacement, or new fine-tuning is performed
+as part of public-checkpoint capability evaluation.

@@ -42,6 +42,7 @@ class A2WorldAdapter(WorldModelAdapter):
         *,
         checkpoint: str | Path,
         base_checkpoints: str | Path,
+        tokenizer_path: str | Path | None = None,
         variant: str = "pretrained",
         repo_path: str | Path = "third_party/a2world/world_model",
         device: str | torch.device = "cuda",
@@ -65,6 +66,11 @@ class A2WorldAdapter(WorldModelAdapter):
 
         self.checkpoint = Path(checkpoint).expanduser().resolve()
         self.base_checkpoints = Path(base_checkpoints).expanduser().resolve()
+        expected_tokenizer = self.base_checkpoints / "nvidia/Cosmos-Predict2-2B-Video2World/tokenizer/tokenizer.pth"
+        if tokenizer_path is not None and Path(tokenizer_path).expanduser().resolve() != expected_tokenizer:
+            raise ValueError("tokenizer_path must match the official tokenizer under base_checkpoints")
+        if not expected_tokenizer.is_file() or expected_tokenizer.stat().st_size == 0:
+            raise FileNotFoundError(f"Missing A2World NVIDIA tokenizer: {expected_tokenizer}")
         self.variant = variant
         self.repo_path = Path(repo_path).expanduser().resolve()
         self.device = torch.device(device)
@@ -202,9 +208,11 @@ class A2WorldAdapter(WorldModelAdapter):
             image = [image]
         if not isinstance(image, Sequence) or isinstance(image, (bytes, bytearray)):
             raise TypeError("A2World reset expects a sequence of 2 or 3 RGB views")
+        import cv2
+
         views = [self._as_rgb(value) for value in image]
         views = [
-            np.asarray(Image.fromarray(view, mode="RGB").resize((self.width, self.height), Image.Resampling.BILINEAR))
+            cv2.resize(view, (self.width, self.height), interpolation=cv2.INTER_AREA)
             for view in views
         ]
         if len(views) not in {2, 3}:

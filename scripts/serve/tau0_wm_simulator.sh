@@ -25,6 +25,7 @@ if [[ ! -f "${CHECKPOINT_DIR}/Wan2.2-TI2V-5B/Wan2.2_VAE.pth" ]]; then
   exit 1
 fi
 
+
 # Upstream resolves its paths from the source checkout, so generate machine-local
 # absolute paths at launch, never into the checked-in portable template.
 RUNTIME_DIR="${ROOT_DIR}/.cache/runtime/tau0_wm_simulator"

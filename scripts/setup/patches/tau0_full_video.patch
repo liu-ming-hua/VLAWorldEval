@@ -1,0 +1,27 @@
+--- a/web_infer_utils/simulator/TauSimulator.py
++++ b/web_infer_utils/simulator/TauSimulator.py
+@@ -155,7 +155,7 @@
+         guide_scale=1,
+         sim_path="./sim_results", save_sim_video=False,
+         sample_solver="unipc",
+-        n_mem=3, shift=5.0,
++        n_mem=3, shift=5.0, return_full_video=False,
+         *args, **kwargs
+     ):
+ 
+@@ -257,7 +257,14 @@
+                 self.video_cache = torch.cat((self.video_cache, video2save), dim=1)
+             save_video(self.video_cache, sim_path, fps=int(30*(self.chunk-1)/(self.action_chunk-1)))
+ 
+-        return pred_final_frame.data.cpu().numpy(), pred_reward.squeeze().data.cpu().float().numpy()
++        result = (pred_final_frame.data.cpu().numpy(), pred_reward.squeeze().data.cpu().float().numpy())
++        if return_full_video:
++            # Optional transport extension; no change to model inputs or sampling.
++            return (*result, {"protocol": "vlaworldeval.tau0.video.v1",
++                              "video": video.float().numpy(),
++                              "layout": "VCTHW", "range": "[-1,1]",
++                              "includes_context_frame": True})
++        return result
+ 
+ 
+     def reset(self, *args, **kwargs):

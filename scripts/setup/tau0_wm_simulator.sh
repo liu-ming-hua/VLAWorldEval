@@ -42,6 +42,18 @@ source "${ROOT_DIR}/scripts/setup/common.sh"
 ensure_source "${SOURCE_DIR}" https://github.com/sii-research/tau-0-wm.git \
   a3e4c0fe58b88974ab6d9b1522af97e5e46be04d
 
+
+# Optional full-video websocket extension; preserve the original two-item reply.
+PATCH="${ROOT_DIR}/scripts/setup/patches/tau0_full_video.patch"
+if git -C "${SOURCE_DIR}" apply --reverse --check "${PATCH}" >/dev/null 2>&1; then
+  : # Already applied.
+elif git -C "${SOURCE_DIR}" apply --check "${PATCH}"; then
+  git -C "${SOURCE_DIR}" apply "${PATCH}"
+else
+  echo "Tau0 source differs from the reviewed video patch; preserving checkout." >&2
+  exit 1
+fi
+
 if [[ ! -x "${VENV_DIR}/bin/python" ]]; then
   "${UV_BIN}" venv "${VENV_DIR}" --python 3.11
 fi

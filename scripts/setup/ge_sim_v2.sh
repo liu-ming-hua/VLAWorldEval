@@ -34,6 +34,16 @@ source "${ROOT_DIR}/scripts/setup/common.sh"
 ensure_source "${SOURCE_DIR}" https://github.com/AgibotTech/GE-Sim-V2.git \
   4a34498e326dfa88d6300b2e476e8a67795c430a
 
+PATCH="${ROOT_DIR}/scripts/setup/patches/ge_sim_v2_finite_tail.patch"
+if git -C "${SOURCE_DIR}" apply --reverse --check "${PATCH}" >/dev/null 2>&1; then
+  echo "GE-Sim finite-tail compatibility patch already applied."
+elif git -C "${SOURCE_DIR}" apply --check "${PATCH}"; then
+  git -C "${SOURCE_DIR}" apply "${PATCH}"
+else
+  echo "GE-Sim source differs from the reviewed tail patch; preserving your checkout." >&2
+  exit 1
+fi
+
 cd "${ROOT_DIR}"
 mkdir -p "${MODEL_DIR}"
 if [[ ! -x "${VENV_DIR}/bin/python" ]]; then

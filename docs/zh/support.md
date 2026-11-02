@@ -70,3 +70,30 @@ environment/core/bin/python scripts/acceptance/support_evidence.py --check
 后者只比较凭证列出的 Adapter 源文件，不认证当前安装的资源或全部框架代码。
 这些检查不升级任何 VLA 组合的认证状态，不证明物理动作跟随可靠，也不构成独立留出集效果排名。
 其他已注册世界模型保留原有证据状态，不因此获得新的原生入口一致性认证。
+
+## 查找世界模型回放入口
+
+```bash
+environment/core/bin/python -m cli world-models
+environment/core/bin/python -m cli world-models --model ctrl_world
+```
+
+这个只读入口覆盖模型目录中的全部 checkpoint 配置，汇总回放配置、输入输出、训练域、
+运行时资产绑定、历史原生验收记录和具体 VLA 组合证据。它不会加载模型或下载文件。
+缺少运行入口、缺少公开验收记录都会明确标注；这不等于模型效果失败。
+
+| 入口情况 | Checkpoint 配置 |
+| --- | --- |
+| 已有统一回放配置 | GE-Sim 2.0 action 模式、A2World pretrained、WorldGym、Ctrl-World、Cosmos DROID 20k EMA、Cosmos DROID joint best5600、DreamDojo GR1、IWS PushT、PlayWorld SVD、DreamTrue 三视角、IRASim LanguageTable |
+| 已有适配器，尚缺统一回放配置 | τ₀-WM Simulator、GigaWorld-1、基础版 Cosmos3-Nano |
+| 已有精简原生一致性／长回放验收记录 | Ctrl-World v2 和 Cosmos DROID 20k EMA；以记录中的适用范围、源码匹配状态为准 |
+
+有回放配置不代表已通过官方示例、完整轨迹或 VLA 闭环验证。
+分别查看 `native_acceptance_evidence` 和 `closed_loop_evidence`。
+旧版回放配置保留用于复现，必须显式选择协议；基础 Cosmos 不能继承 DROID 权重的验证结果。
+
+首次运行先按[安装指南](installation.md)和[模型协议](models.md)准备环境与权重，
+再依照[工作流](workflows.md)准备匹配的输入和独立参考数据包。
+将命令模板中的 `CASE`、`MY_NEW_RUN` 替换为已准备的数据目录和新结果目录，先检查准入，再执行推理。
+参考视频只参与生成后的评分，不作为模型的未来观测输入。最后使用输出提示中的 `report` 命令生成离线报告。
+对于尚未支持的数据格式，入口不会伪造数据转换命令。

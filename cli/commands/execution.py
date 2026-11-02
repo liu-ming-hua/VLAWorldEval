@@ -75,6 +75,26 @@ def replay(args, root):
 
 
 def prepare_replay(args, root):
+    import json
+
+    config = json.loads(args.config.read_text())
+    if config.get("adapter") == "GESimV2Adapter":
+        from evaluation.datasets.ge_sim import prepare_official
+
+        if args.episode != 0 or args.start != 0:
+            raise ValueError("GE-Sim bundle replay starts at the supplied initial frame; episode/start must be 0")
+        print_json(prepare_official(args.config, args.dataset, args.output,
+                                  chunks=2 if args.chunks is None else args.chunks))
+        return 0
+    if config.get("adapter") == "A2WorldAdapter":
+        from evaluation.datasets.a2world import prepare_official
+
+        if args.episode != 0 or args.start != 0 or args.chunks not in (None, 1):
+            raise ValueError("A2World bundled example has only episode 0, start 0, one chunk")
+        print_json(prepare_official(args.config, args.dataset, args.output))
+        return 0
+    if args.chunks == "all":
+        raise ValueError("all is supported here only for GE-Sim full replay")
     from evaluation.execution.native_replay import prepare_ctrl_packet
 
     report = prepare_ctrl_packet(
@@ -83,7 +103,7 @@ def prepare_replay(args, root):
         args.output,
         episode=args.episode,
         start=args.start,
-        chunks=args.chunks,
+        chunks=20 if args.chunks is None else args.chunks,
     )
     print_json(report)
     return 0

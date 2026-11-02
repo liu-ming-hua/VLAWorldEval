@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "environment": "world_models.a2world",
+  "module": "adapters.world_models.a2world",
+  "adapter": "A2WorldAdapter",
+  "kwargs": {
+    "checkpoint": {
+      "project_path": "checkpoints/world_models/a2world/a2world-pretrained.pt"
+    },
+    "base_checkpoints": {
+      "project_path": "checkpoints/world_models/a2world/base"
+    },
+    "tokenizer_path": {
+      "project_path": "checkpoints/world_models/a2world/base/nvidia/Cosmos-Predict2-2B-Video2World/tokenizer/tokenizer.pth"
+    },
+    "repo_path": {
+      "project_path": "third_party/a2world/world_model"
+    },
+    "variant": "pretrained",
+    "width": 256,
+    "height": 256,
+    "fps": 10,
+    "num_sampling_steps": 35,
+    "guidance": 0.0,
+    "seed": 0
+  },
+  "gpus": [
+    0
+  ],
+  "memory_gib": 40,
+  "seed": 0,
+  "action": {
+    "dimension": 14,
+    "horizon": 20,
+    "representation": "dual_arm_delta_pose_gripper",
+    "frame": "a2world_pretrained_native",
+    "semantics": "official_shared_action",
+    "rate_hz": 10,
+    "normalization": "official_npz_no_conversion",
+    "temporal_layout": "future"
+  },
+  "video": {
+    "fps": 10,
+    "frames_per_chunk": 20,
+    "temporal_layout": "future"
+  },
+  "output_views": [
+    "exterior_1",
+    "wrist",
+    "exterior_2"
+  ],
+  "reset_operation": "reset",
+  "instruction_conditioning": false,
+  "worker_options": {
+    "startup_timeout_seconds": 900,
+    "request_timeout_seconds": 1800,
+    "shutdown_grace_seconds": 30
+  }
+}

@@ -18,10 +18,11 @@ import importlib
 import sys
 from collections.abc import Callable
 from pathlib import Path
-from typing import Any
+from typing import Any, TYPE_CHECKING
 
 import numpy as np
-import torch
+if TYPE_CHECKING:
+    import torch
 
 from adapters.base import WorldModelAdapter
 
@@ -139,6 +140,8 @@ class GESimV2Adapter(WorldModelAdapter):
         self.last_info = None
 
     def _prepare_action(self, action: torch.Tensor | np.ndarray) -> np.ndarray:
+        import torch
+
         arr = action.detach().float().cpu().numpy() if torch.is_tensor(action) else np.asarray(action)
         arr = np.asarray(arr, dtype=np.float32)
         if arr.ndim == 1:
@@ -183,6 +186,23 @@ class GESimV2Adapter(WorldModelAdapter):
         self.last_policy_state = np.asarray(observation.state, dtype=np.float32).copy()
         self.last_info = info
         return self.last_video[-1, 0]
+
+    def step_output(self, action, *, output_views=(), state_schema=None):
+        """Native video replay may explicitly omit a policy-state contract."""
+        if state_schema is not None:
+            return super().step_output(action, output_views=output_views, state_schema=state_schema)
+        from evaluation.contracts import WorldModelOutput
+
+        names = tuple(output_views) or self.view_names
+        if names != self.view_names:
+            raise ValueError("GE-Sim view order must be head/left_wrist/right_wrist")
+        self.step(action)
+        return WorldModelOutput(
+            views={name: self.last_video[:, index] for index, name in enumerate(names)},
+            metadata={"adapter": type(self).__name__, "conditioning": self.conditioning,
+                      "policy_state_requested": False,
+                      "model_state_returned": self.last_state is not None},
+        )
 
     def rollout(self, action: torch.Tensor | np.ndarray) -> np.ndarray:
         """Generate one chunk and return all views as ``(T,V,H,W,3)`` uint8."""

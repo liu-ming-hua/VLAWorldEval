@@ -10,6 +10,7 @@ COMMANDS = {
     "demo": workspace.demo,
     "models": project.models,
     "support": project.support,
+    "world-models": project.world_models,
     "environments": project.environments,
     "validate": project.validate,
     "runtimes": project.runtimes,

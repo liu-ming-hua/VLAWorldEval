@@ -93,3 +93,102 @@ GPU budgets do not guarantee throughput. Image rate, action rate, diffusion step
 For every optimization, keep checkpoint, action conversion, resolution, seeds and scoring horizon traceable.
 
 [Outputs](artifacts.md) · [Metric interpretation](reliability.md)
+
+## A2World: released example through shared replay
+
+The pretrained DROID example contains three initial views and **one 20×14 action
+chunk**. It supplies no recorded future RGB. This route verifies generation plumbing,
+not long-horizon performance or prediction accuracy. It uses the same isolated worker,
+action saving, per-camera continuous videos and summary format as other native replays.
+
+```bash
+environment/core/bin/python -m cli prepare-replay \
+  --config configs/replay/a2world_pretrained_native_v1.json \
+  --dataset datasets/a2world/official/droid \
+  --output results/a2world_case/input.npz --chunks 1
+environment/core/bin/python -m cli replay \
+  --config configs/replay/a2world_pretrained_native_v1.json \
+  --input results/a2world_case/input.npz \
+  --output results/a2world_case/replay --admit-only
+```
+
+Remove `--admit-only` after admission succeeds. Do not pass a fabricated `--reference`.
+Use a fresh result directory and select your GPU in a copied configuration. Alternatively,
+`scripts/replay/a2world.py --output results/a2world_example --gpu 0 --prepare-only`
+prepares an effective configuration; without `--prepare-only` it invokes shared replay.
+
+Install with `scripts/setup/a2world.sh` after obtaining access to NVIDIA's required
+base tokenizer. The explicit `tokenizer_path` must match
+`base_checkpoints/nvidia/Cosmos-Predict2-2B-Video2World/tokenizer/tokenizer.pth`.
+An empty base directory is not a complete installation: admission rejects a missing
+file before launching a model worker. A mirror returning 403 does not mean this
+prerequisite can be skipped. The model has no state output.
+
+## GE-Sim 2.0: calibrated action-mode replay
+
+Start a dedicated GE-Sim server with `scripts/serve/ge_sim_v2.sh` after installation.
+Choose its GPU through `CUDA_VISIBLE_DEVICES` and its port through `GE_SIM_PORT`;
+set `kwargs.server_url` in a copied replay configuration to the same local address.
+The shared worker is a CPU client (`gpus: []`), so its memory budget does **not**
+limit the separately launched GPU server. Stop your own server after the run.
+
+```bash
+environment/core/bin/python -m cli prepare-replay \
+  --config configs/replay/ge_sim_v2_action_native_v1.json \
+  --dataset datasets/ge_sim_v2/official/demo_000 \
+  --output results/gesim_case/input.npz --chunks 2
+environment/core/bin/python -m cli replay \
+  --config configs/replay/ge_sim_v2_action_native_v1.json \
+  --input results/gesim_case/input.npz --output results/gesim_case/replay
+```
+
+This uses the first 50 of 456 official actions, uncompressed, in two consecutive
+25-frame chunks. Three calibrated 384×512 views and 16-D absolute joint commands
+retain the upstream order. The remaining actions are counted, not padded or repeated.
+The example has no ground-truth future RGB reference. `action` conditioning derives
+trajectory bands from commands via FK with a stationary torso/head assumption;
+`episode` conditioning instead uploads recorded future end-effector trajectories.
+They are different experiments. The shared configuration deliberately selects `action`.
+Server weights/configuration and logs must be retained with the run: a CPU client
+receipt alone does not certify which remote checkpoint was used.
+
+### Complete GE-Sim episode with an owned server
+
+```bash
+environment/core/bin/python scripts/replay/ge_sim_v2.py \
+  --output results/gesim_full --gpu 0 --memory-gib 28 --chunks all
+```
+
+The entry checks free GPU memory, acquires the framework's cooperative GPU lease,
+starts a dedicated loopback server on an available port, seeds that server and caps
+its PyTorch allocator. It prepares data and executes **shared native replay**,
+builds the offline report, and stops its own server on success or error. Other users'
+processes are untouched. Proxy variables are removed from the server environment;
+model loading is offline. Dependencies, calibrated example and checkpoint must already exist.
+`--server-config PATH` selects another explicitly recorded server configuration.
+
+For the released 456-action example, `all` means 18 chunks of 25 and a final chunk of
+6: three continuous 457-frame videos including initial RGB, about 28.6 s at 16 FPS.
+The native server internally repeats the final action token to fill its fixed 25-token
+network window, then returns only six frames. The framework sends and saves exactly
+456 source actions. The short chunk is terminal: the server's internal padded history
+must not be used as the start of another continuation.
+
+The full configuration uses replay schema **v3**, a list of numeric future-action
+chunks with only the last chunk allowed to be short and one output frame per action.
+`actions.npy` is flat `[456,16]`; `action_offsets.npy` locates the original chunk
+boundaries. V1 fixed-size and V2 structured replay remain unchanged. V3 currently
+supports isolated video replay, not reference scoring, visual re-anchoring or pooled workers.
+
+Outputs include server configuration/source/asset hashes, lifecycle receipt,
+`replay/summary.json`, per-view videos, and `report/index.html`.
+`boundary_diagnostics.json` reports decoded-frame changes and near-static runs; it
+cannot establish semantic view correctness, successful manipulation or physical reliability.
+In action mode the official server seeds memory from initial RGB, then samples its
+own generated-frame history. FK-derived trajectory bands assume stationary torso/head.
+
+The pinned upstream revision requires the reviewed
+`scripts/setup/patches/ge_sim_v2_finite_tail.patch`
+for short band/camera conditioning windows. Setup applies it idempotently and refuses
+source changes that conflict with the patch. This is **upstream plus a compatibility patch**, not an
+unmodified-official parity claim. Source hashes in the receipt identify the executed code.

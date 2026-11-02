@@ -3,6 +3,19 @@
 Versioned releases freeze framework code and configuration. Model weights, datasets and
 third-party runtimes are obtained separately under their own terms.
 
+## Unreleased
+
+- Add a read-only world-model route inventory (`python -m cli world-models`) that
+  distinguishes registered adapters, replay configurations and acceptance evidence.
+- Integrate A2World input preparation and GE-Sim finite-tail autoregressive replay
+  into the shared executor, with managed server lifecycle and chunk-boundary diagnostics.
+- Add optional τ₀-WM full-video transport, explicit RGB validation and generated-frame
+  feedback. This is a project compatibility patch, not an upstream API guarantee.
+- Document native-domain blockers: A2World requires a gated tokenizer; τ₀-WM's
+  released simulator does not match the local TacoPlay sample. Protocol tests do
+  not establish checkpoint quality or real-action replay validity.
+- Keep runtime assets and intermediate experiment outputs outside source distributions.
+
 ## 0.1.0 — 2026-10-31
 
 First versioned release of **VLAWorldEval**, a modular VLA × world-model evaluation framework.

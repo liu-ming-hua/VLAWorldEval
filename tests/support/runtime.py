@@ -134,3 +134,10 @@ class CleanLauncherLeakingChildVLA(ChildFixtureVLA):
 
     def predict(self, image, instruction, state=None):
         return np.zeros((2, 2), dtype=np.float32)
+
+
+class FiniteFixtureWM(FixtureWM):
+    def step(self, action):
+        super().step(action)
+        self.last_video = self.last_video[:len(action)]
+        return self.last_video[-1, 0]

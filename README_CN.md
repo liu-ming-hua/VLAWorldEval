@@ -32,6 +32,10 @@
 > 适配器能运行，不代表物理正确、真机任务成功或 VLA 排名可信。
 > 请先在 checkpoint 的原生动作与观测域验证。[如何解读结果 →](docs/zh/reliability.md)
 
+> **接入状态提示：** 已注册适配器不代表已通过原生数据回放验证。
+> τ₀-WM 的可选完整视频接口已通过单元测试，但现有样本与公开权重协议尚未匹配，真实动作回放未验证。
+> 详见[模型契约与限制](docs/zh/models.md)，也可运行 `python -m cli world-models` 查看各模型状态。
+
 ## 实际生成演示
 
 <p align="center">
@@ -173,6 +177,9 @@ DreamDojo、IWS、PlayWorld、DreamTrue、IRASim 与 Giga-World-1。
 
 
 [证据说明](docs/zh/support.md) · `python -m cli support`
+
+查询各世界模型的回放配置、输入输出协议和验证缺口：
+`python -m cli world-models`（可加 `--model ctrl_world` 筛选）。
 
 原生世界模型验收已覆盖 Ctrl-World v2 和 Cosmos DROID 社区 20k-EMA，限定范围的一致性与长回放检查见证据说明。
 

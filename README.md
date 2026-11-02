@@ -35,6 +35,11 @@ Designed for robotic-arm and gripper workflows—not an unrestricted Cartesian p
 > A runnable adapter is not evidence of physical accuracy, robot task success, or valid VLA rankings.
 > Validate the checkpoint in its own action and observation domain. [Interpretation guide →](docs/en/reliability.md)
 
+> **Integration status:** Registered adapters are not all validated native replay routes.
+> τ₀-WM's optional full-video transport is unit-tested, but real-action replay remains
+> unvalidated because the available sample does not match the released checkpoint protocol.
+> See [model contracts and limitations](docs/en/models.md) and run `python -m cli world-models`.
+
 ## See it in action
 
 <p align="center">
@@ -177,6 +182,9 @@ Generated from versioned evidence. `historical_pass` means a historical real run
 
 
 [Evidence guide](docs/en/support.md) · `python -m cli support`
+
+Find native replay configurations, input/output protocols and missing verification:
+`python -m cli world-models` (filter with `--model ctrl_world`).
 
 Native WM acceptance now covers Ctrl-World v2 and Cosmos DROID community 20k-EMA; see the scoped parity and long-replay checks in the evidence guide.
 

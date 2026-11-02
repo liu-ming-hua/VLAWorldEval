@@ -65,6 +65,8 @@ def build_parser(root):
     configure_parser.add_argument("--chunks", type=int)
     subparsers.add_parser("support", help="published per-pair validation evidence; no model loading")
     subparsers.add_parser("models", help="list catalogued VLA and world-model adapters")
+    world_models = subparsers.add_parser("world-models", help="audit native replay routes, protocols and published evidence; no inference")
+    world_models.add_argument("--model", help="exact checkpoint-profile key from models")
     cleanup_parser = subparsers.add_parser(
         "cleanup-results",
         help="preview retention policy; --apply archives old generated outputs without deleting",
@@ -146,14 +148,14 @@ def build_parser(root):
     replay_parser.add_argument("--image-anchors", type=Path,
         help="diagnostic only: recorded images at chunk boundaries, never a closed-loop score")
     prepare_parser = subparsers.add_parser(
-        "prepare-replay", help="prepare Ctrl-World native replay packet from local DROID"
+        "prepare-replay", help="prepare Ctrl-World, A2World or GE-Sim native replay inputs"
     )
     prepare_parser.add_argument("--config", type=Path, required=True)
     prepare_parser.add_argument("--dataset", type=Path, required=True)
     prepare_parser.add_argument("--output", type=Path, required=True)
     prepare_parser.add_argument("--episode", type=int, default=0)
     prepare_parser.add_argument("--start", type=int, default=0)
-    prepare_parser.add_argument("--chunks", type=int, default=20)
+    prepare_parser.add_argument("--chunks", type=lambda x: "all" if x == "all" else int(x), help="Ctrl default: 20; A2World: 1; GE-Sim: 2 or all with full config")
     subparsers.add_parser(
         "runtimes", help="list executable pair profiles and data loaders (no model loading)"
     )

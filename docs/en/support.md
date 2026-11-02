@@ -79,3 +79,35 @@ It checks only the listed adapter source files against the receipt, not current 
 or the entire framework. These results do not upgrade any VLA pair, establish physical action
 tracking, or constitute a held-out model-quality ranking. Other registered world models retain
 their existing evidence status; no new native-entry parity is implied for them.
+
+## Find a world-model replay route
+
+```bash
+environment/core/bin/python -m cli world-models
+environment/core/bin/python -m cli world-models --model ctrl_world
+```
+
+This read-only index covers every checkpoint profile in the model catalog. It joins
+native replay configurations, input/output declarations, training domains, runtime
+asset bindings, historical native acceptance receipts and exact VLA pair evidence.
+It does not load a model or download files. Missing routes and missing published
+receipts are explicit gaps, not inferred failures of the model.
+
+| Route inventory | Checkpoint profiles |
+| --- | --- |
+| Shared replay configuration exists | GE-Sim 2.0 action mode, A2World pretrained, WorldGym, Ctrl-World, Cosmos DROID 20k EMA, Cosmos DROID joint best5600, DreamDojo GR1, IWS PushT, PlayWorld SVD, DreamTrue three-view, IRASim LanguageTable |
+| Adapter exists; shared replay configuration still missing | τ₀-WM Simulator, GigaWorld-1, base Cosmos3-Nano |
+| Compact native parity / long-replay acceptance receipts | Ctrl-World v2 and Cosmos DROID 20k EMA; consult each receipt's scope and source match |
+
+A replay configuration is not proof of a successful official example, full episode,
+or VLA loop. Consult `native_acceptance_evidence` and `closed_loop_evidence` separately.
+Older replay versions remain listed for reproducibility; select the protocol explicitly.
+The base Cosmos checkpoint does not inherit the DROID checkpoint's validation.
+
+For a first run, follow [installation](installation.md) and [model protocols](models.md),
+then prepare the matching input and reference packets using the [workflow guide](workflows.md).
+Replace `CASE` and `MY_NEW_RUN` in the emitted command templates with your prepared case
+and a new output directory. Run admission before execution. The reference packet is
+used only for scoring, never as the model's future observation. Build the offline
+report using the emitted `report` command. These templates deliberately do not invent
+an input converter for an unsupported native dataset.

@@ -7,6 +7,7 @@ Trusted adapter config executes local code, just like the normal runtime registr
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 import hashlib
 import importlib
 import math
@@ -68,8 +69,8 @@ def admit_native_replay(config_path: Path, packet_path: Path, *, suite_dir=None,
     fields = {"schema_version", "environment", "module", "adapter", "kwargs", "gpus", "memory_gib", "seed",
               "action", "video", "output_views", "reset_operation", "worker_options", "instruction_conditioning"}
     if (not isinstance(config, dict) or set(config) != fields
-            or type(config["schema_version"]) is not int or config["schema_version"] not in (1, 2)):
-        raise ValueError("Native replay config fields/schema do not match v1/v2")
+            or type(config["schema_version"]) is not int or config["schema_version"] not in (1, 2, 3)):
+        raise ValueError("Native replay config fields/schema do not match v1/v2/v3")
     structured = config["schema_version"] == 2
     if not isinstance(config["module"], str) or not isinstance(config["environment"], str):
         raise ValueError("Native replay module/environment must be strings")
@@ -137,6 +138,20 @@ def admit_native_replay(config_path: Path, packet_path: Path, *, suite_dir=None,
             raise ValueError("Structured replay needs a nonempty list of conditions")
         for chunk in actions:
             adapter_type.validate_replay_condition(chunk)
+    elif config["schema_version"] == 3:
+        actions = packet["actions"]
+        if (action.temporal_layout != "future" or video.temporal_layout != "future"
+                or action.horizon != video.frames_per_chunk or action.rate_hz != video.fps
+                or hasattr(video, "final_chunk_valid_frames")):
+            raise ValueError("Finite numeric replay requires one future frame per action at equal rates")
+        if not isinstance(actions, list) or not actions:
+            raise ValueError("Finite numeric replay requires a nonempty list of numeric chunks")
+        for index, chunk in enumerate(actions):
+            if (not isinstance(chunk, np.ndarray) or chunk.ndim != 2
+                    or not 1 <= len(chunk) <= action.horizon
+                    or (index < len(actions)-1 and len(chunk) != action.horizon)):
+                raise ValueError("Only the final numeric chunk may be shorter than the native horizon")
+            replace(action, horizon=len(chunk)).wrap(chunk, source="dataset_ground_truth")
     else:
         actions = np.asarray(packet["actions"])
         if actions.ndim != 3 or actions.shape[0] < 1:
@@ -213,6 +228,9 @@ def run_native_replay(config_path: Path, packet_path: Path, output: Path, *, adm
                       reference_path=None, worker_session=None):
     config, spec, video, packet, initial, kwargs, options = admit_native_replay(
         config_path, packet_path, suite_dir=output, resident_session=worker_session)
+    finite = config["schema_version"] == 3
+    if finite and (image_anchors is not None or reference_path is not None or worker_session is not None):
+        raise ValueError("Finite numeric replay currently supports isolated video replay only; no reference, anchors or pooled workers")
     if config["schema_version"] == 2 and image_anchors is not None:
         raise ValueError("Image-anchor intervention is not declared for structured replay")
     anchors = admit_image_anchors(image_anchors, packet, config) if image_anchors is not None else None
@@ -225,7 +243,8 @@ def run_native_replay(config_path: Path, packet_path: Path, output: Path, *, adm
                                        input_sha256=_digest(packet_path))
     if admit_only:
         return {"ok": True, "executed": False, "chunks": len(packet["actions"]),
-                "action_shape": None if config["schema_version"] == 2 else list(packet["actions"].shape),
+                "action_shape": ([list(chunk.shape) for chunk in packet["actions"]] if finite else
+                                 None if config["schema_version"] == 2 else list(packet["actions"].shape)),
                 "reference_validated": reference is not None}
     output.mkdir(parents=True, exist_ok=False)
     worker = None
@@ -265,7 +284,8 @@ def run_native_replay(config_path: Path, packet_path: Path, output: Path, *, adm
             started = time.perf_counter()
             result = worker.call("step", action=chunk, output_views=config["output_views"], state_schema=None)
             prediction = WorldModelOutput(views=result["views"], metadata=result["metadata"])
-            video.validate_output(prediction, tuple(config["output_views"]))
+            expected_video = replace(video, frames_per_chunk=len(chunk)) if finite else video
+            expected_video.validate_output(prediction, tuple(config["output_views"]))
             report["chunk_prediction_sha256"].append({name: hashlib.sha256(value.tobytes()).hexdigest()
                 for name, value in prediction.views.items()})
             for name, value in prediction.views.items():
@@ -298,10 +318,18 @@ def run_native_replay(config_path: Path, packet_path: Path, output: Path, *, adm
             write_packet(output / "conditions.npz", {"actions": packet["actions"], "protocol": packet["protocol"]})
             report["files"]["conditions.npz"] = _digest(output / "conditions.npz")
         else:
-            np.save(output / "actions.npy", packet["actions"], allow_pickle=False)
+            saved_actions = np.concatenate(packet["actions"]) if finite else packet["actions"]
+            np.save(output / "actions.npy", saved_actions, allow_pickle=False)
+            if finite:
+                lengths = [len(chunk) for chunk in packet["actions"]]
+                np.save(output / "action_offsets.npy", np.cumsum([0, *lengths]), allow_pickle=False)
+                report["files"]["action_offsets.npy"] = _digest(output / "action_offsets.npy")
+                report["action_chunk_lengths"] = lengths
+                report["actions_consumed"] = sum(lengths)
+
             report["files"]["actions.npy"] = _digest(output / "actions.npy")
         report.update(status="completed" if worker_session is None else "generated_pending_worker_close",
-                      frames_per_view=video.frame_count(len(packet["actions"])),
+                      frames_per_view=(1 + sum(map(len, packet["actions"])) if finite else video.frame_count(len(packet["actions"]))),
                       video_fps=video.fps, temporal_layout=video.temporal_layout,
                       raw_frames_per_chunk=video.frames_per_chunk, advance_frames_per_chunk=video.advance_frames,
                       saved_initial_frame_source="generated_window_start" if video.temporal_layout == "inclusive" else "recorded_initial_image")

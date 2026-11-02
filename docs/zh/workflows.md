@@ -90,3 +90,86 @@ environment/core/bin/python -m cli native-study score \
 优化必须保留 checkpoint、动作转换、分辨率、种子与评价长度的可追溯性。
 
 [查看产物](artifacts.md) · [解释指标](reliability.md)
+
+## A2World：通过统一回放运行官方示例
+
+pretrained DROID 示例包含三路初始图像和**一个 20×14 动作 chunk**，没有真实未来 RGB。
+这条入口验证生成链路，不代表长时序效果或预测准确率。它复用统一的隔离 worker、
+动作保存、各视角连续视频和结果摘要格式。
+
+```bash
+environment/core/bin/python -m cli prepare-replay \
+  --config configs/replay/a2world_pretrained_native_v1.json \
+  --dataset datasets/a2world/official/droid \
+  --output results/a2world_case/input.npz --chunks 1
+environment/core/bin/python -m cli replay \
+  --config configs/replay/a2world_pretrained_native_v1.json \
+  --input results/a2world_case/input.npz \
+  --output results/a2world_case/replay --admit-only
+```
+
+准入通过后去掉 `--admit-only` 执行，不要伪造 `--reference`。
+结果目录必须未被占用；在复制的配置中选择自己的 GPU。
+也可用 `scripts/replay/a2world.py --output results/a2world_example --gpu 0 --prepare-only`
+准备有效配置；去掉 `--prepare-only` 后同样使用统一回放执行。
+
+获取 NVIDIA 基础 tokenizer 的访问权限后，使用 `scripts/setup/a2world.sh` 安装。
+配置中的 `tokenizer_path` 必须对应
+`base_checkpoints/nvidia/Cosmos-Predict2-2B-Video2World/tokenizer/tokenizer.pth`。
+基础目录存在不等于安装完整；缺少文件会在模型 worker 启动前拒绝准入。
+镜像返回 403 时不能跳过这个依赖。该模型不输出机器人 state。
+
+## GE-Sim 2.0：带标定的动作条件回放
+
+安装后通过 `scripts/serve/ge_sim_v2.sh` 启动独立服务器，用 `CUDA_VISIBLE_DEVICES`
+选择 GPU、`GE_SIM_PORT` 选择端口，并将复制的回放配置中 `kwargs.server_url` 改为相同本地地址。
+统一 worker 是 CPU 客户端（`gpus: []`），它的显存预算**不限制**单独启动的 GPU 服务器。
+运行结束后关闭自己启动的服务器。
+
+```bash
+environment/core/bin/python -m cli prepare-replay \
+  --config configs/replay/ge_sim_v2_action_native_v1.json \
+  --dataset datasets/ge_sim_v2/official/demo_000 \
+  --output results/gesim_case/input.npz --chunks 2
+environment/core/bin/python -m cli replay \
+  --config configs/replay/ge_sim_v2_action_native_v1.json \
+  --input results/gesim_case/input.npz --output results/gesim_case/replay
+```
+
+上述命令使用官方 456 个动作中的前 50 个，连续执行两个 25 帧 chunk，不压缩动作。
+三路 384×512 标定图像和 16 维绝对关节指令保持官方排列，其余动作明确计数，不补齐、不重复。
+示例不包含真实未来 RGB，不能据此计算预测精度。
+`action` 模式由动作经 FK 生成轨迹图，假设躯干和头部静止；`episode` 模式则上传预录制的未来末端轨迹。
+两者是不同实验，此处统一配置明确选择 `action`。
+服务器的权重、配置和日志需与运行结果共同保留；仅凭客户端记录不能证明远端用了哪个 checkpoint。
+
+### 自动管理服务器，执行 GE-Sim 完整轨迹
+
+```bash
+environment/core/bin/python scripts/replay/ge_sim_v2.py \
+  --output results/gesim_full --gpu 0 --memory-gib 28 --chunks all
+```
+
+入口检查空闲显存、获取框架协作式 GPU 锁，启动独立本地端口的服务器，并设置服务器随机种子和
+PyTorch 显存分配上限。数据准备后使用**统一原生回放**执行，生成离线报告；正常或异常退出时均清理
+自己启动的服务器，不影响其他用户进程。服务器环境移除代理变量，模型离线加载；环境、权重和标定示例
+需要提前准备。可用 `--server-config PATH` 指定并记录另一份服务器配置。
+
+官方示例的 `all` 对应全部 456 个动作：18 个 25 步 chunk 加最后 6 步。
+三路连续视频各 457 帧（含初始图像），16 FPS 下约 28.6 秒。
+原生服务器内部会重复最后一个 action token，凑齐固定的 25-token 网络窗口，然后只返回请求的 6 帧。
+框架提交和保存的仍然只有原始 456 个动作。短尾段必须是最后一轮；不能用服务器内部补齐的历史继续下一轮。
+
+完整配置使用回放 schema **v3**：数值动作 chunk 列表，仅允许最后一段较短，每个动作对应一帧输出。
+`actions.npy` 保存平铺的 `[456,16]` 动作，`action_offsets.npy` 保存各段边界。
+V1 的固定长度、V2 的结构化条件协议保持原有行为。V3 当前仅支持独立视频回放，
+不支持参考视频评分、真实图像重新注入或复用 worker 池。
+
+结果包括服务器配置／源码／权重哈希、生命周期记录、`replay/summary.json`、各视角视频和
+`report/index.html`。`boundary_diagnostics.json` 提供解码后帧间变化和近静止片段统计，
+不能证明视角语义正确、操作成功或物理可靠性。
+官方 action 模式首轮读取初始 RGB，此后从自己的生成帧历史采样上下文；FK 轨迹图假设躯干和头部静止。
+
+固定的上游版本需要 `scripts/setup/patches/ge_sim_v2_finite_tail.patch` 兼容补丁，
+将短尾段的轨迹图和相机条件补齐到网络窗口。安装脚本会幂等应用补丁，遇到与补丁冲突的源码改动则停止。
+这里使用的是**上游代码加兼容补丁**，不是未经修改的官方一致性验证；运行记录中的源码哈希明确对应执行版本。

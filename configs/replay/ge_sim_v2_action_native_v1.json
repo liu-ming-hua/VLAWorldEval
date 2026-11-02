@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "environment": "world_models.ge_sim_v2",
+  "module": "adapters.world_models.ge_sim_v2",
+  "adapter": "GESimV2Adapter",
+  "kwargs": {
+    "server_url": "http://127.0.0.1:9000",
+    "repo_path": {
+      "project_path": "third_party/ge-sim-v2"
+    },
+    "chunk_size": 25,
+    "compress_actions": false,
+    "conditioning": "action",
+    "timeout": 600.0
+  },
+  "gpus": [],
+  "memory_gib": 2,
+  "seed": 0,
+  "action": {
+    "dimension": 16,
+    "horizon": 25,
+    "representation": "bimanual_joint_gripper",
+    "frame": "gesim_g01_wm_layout",
+    "semantics": "absolute_joint_target",
+    "rate_hz": 16,
+    "normalization": "raw_official_WM_layout_L7_Lgrip_R7_Rgrip",
+    "temporal_layout": "future"
+  },
+  "video": {
+    "fps": 16,
+    "frames_per_chunk": 25,
+    "temporal_layout": "future"
+  },
+  "output_views": [
+    "head",
+    "left_wrist",
+    "right_wrist"
+  ],
+  "reset_operation": "reset",
+  "instruction_conditioning": false,
+  "worker_options": {
+    "startup_timeout_seconds": 900,
+    "request_timeout_seconds": 1800,
+    "shutdown_grace_seconds": 30
+  }
+}

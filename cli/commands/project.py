@@ -121,3 +121,10 @@ def support(args, root):
 
     print_json(support_report(root))
     return 0
+
+
+def world_models(args, root):
+    from evaluation.reporting.world_models import world_model_report
+
+    print_json(world_model_report(root, args.model))
+    return 0

@@ -86,3 +86,26 @@ def test_native_replay_unclean_shutdown_not_success(tmp_path, monkeypatch):
     report = module.run_native_replay(config, packet, tmp_path / "result")
     assert report["status"] == "failed" and report["world_model_calls"] == 20
     assert report["error"]["code"] == "shutdown_failed"
+
+
+def test_finite_replay_preserves_short_tail_and_flat_actions(tmp_path, monkeypatch):
+    from evaluation.execution.client import ModelWorker
+    module, config, packet_path, packet = replay_fixture(tmp_path, monkeypatch)
+    def launch(*args, **kwargs):
+        kwargs.update(module='tests.support.runtime', adapter='FiniteFixtureWM')
+        return ModelWorker(*args, **kwargs)
+    monkeypatch.setattr(module, 'ModelWorker', launch)
+    cfg = json.loads(config.read_text())
+    cfg['schema_version'] = 3
+    config.write_text(json.dumps(cfg))
+    packet['actions'] = [packet['actions'][0], packet['actions'][1, :1]]
+    write_packet(packet_path, packet)
+    result = module.run_native_replay(config, packet_path, tmp_path / 'finite')
+    assert result['status'] == 'completed' and result['world_model_calls'] == 2
+    assert result['frames_per_view'] == 4 and result['actions_consumed'] == 3
+    np.testing.assert_array_equal(np.load(tmp_path / 'finite/actions.npy'), np.concatenate(packet['actions']))
+    np.testing.assert_array_equal(np.load(tmp_path / 'finite/action_offsets.npy'), [0, 2, 3])
+    packet['actions'].reverse()
+    write_packet(packet_path, packet)
+    with pytest.raises(ValueError, match='Only the final'):
+        module.admit_native_replay(config, packet_path)

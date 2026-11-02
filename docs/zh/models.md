@@ -93,3 +93,45 @@ Ctrl 的 inclusive 窗口包含已有上下文，不能把每次 5 帧都计作 
 | `gigaworld1` | `world_models.gigaworld1` | [上游](https://github.com/open-gigaai/giga-world-1) |
 
 [组合兼容性](compatibility.md) · [指标解释](reliability.md)
+
+## τ₀-WM：权重与数据的适配边界
+
+核查日期：2026-11-02。[官方模型仓库](https://huggingface.co/sii-research/tau-0-wm/tree/main)
+核查版本为 `bb30c3a5e119a60268809a5247eae767ed691729`。
+
+| 资产 | 实际协议 | 当前原生回放状态 |
+| --- | --- | --- |
+| 已发布 `simulator/` 权重 | 网络接收 26 维条件：归一化的 20 维双臂相对 EEF 动作，加 6 维头部／腰部／速度默认控制 | 在已核查发布内容中未找到可直接对齐的真实示例 |
+| 本地 TacoPlay episode | 66 条采样、7 维动作和 state、静态及夹爪两路相机、15 FPS | 与该预训练权重不匹配 |
+| 官方 TacoPlay simulator 配方 | 7 维动作、`whole_body: false`，模型路径指向**微调后**权重的占位符 | 有训练及推理配方，在已核查模型目录中未找到配套权重 |
+| 官方预训练客户端 | 随机观测和 20 维零动作 | 只是接口示例，不是真实动作评测 |
+
+依据见[官方微调说明](https://github.com/sii-research/tau-0-wm#post-training-of-action-conditioned-video-simulator)。
+修改 YAML 中的动作维度不能改变权重已学得的输入层。
+τ₀-VLA 的关节动作示例也不能自动视为此 simulator 的臂基座相对 EEF 示例，仍需核对转换、机器人定义和时间协议。
+
+上游 websocket 返回的是**末帧 RGB 与 reward**，不返回机器人 state。
+项目的可选传输补丁 `scripts/setup/patches/tau0_full_video.patch` 可返回全部解码帧，
+不改变模型输入或采样。安装脚本会幂等应用补丁；已有安装可执行：
+
+```bash
+git -C third_party/tau-0-wm apply --check ../../scripts/setup/patches/tau0_full_video.patch
+git -C third_party/tau-0-wm apply ../../scripts/setup/patches/tau0_full_video.patch
+```
+
+重启服务后，使用 `Tau0WMSimulatorAdapter(return_full_video=True)`。
+适配器通过统一 `step_output` 接口输出 `[T,V,H,W,3]` 未来 RGB，去掉解码的上下文首帧，
+检查末帧一致性，并将生成末帧作为下一轮输入。官方 `chunk: 9` 配置对应八张未来帧，
+**不是 33 个 action 对应 33 张视频帧**；原生回放仍需核对时间对齐。
+默认 `return_full_video=False` 保留末帧接口；要求完整视频但服务未打补丁时会报错，
+不会静默降级。接口单元测试不代表真实权重推理或质量验证通过。
+
+[论文 §V 与附录 A](https://arxiv.org/html/2606.01027v2) 说明了视频／奖励预测和下游微调，
+但没有建立每个实验与公开 simulator 权重的一一对应关系。
+相关 [τ₀-VLA 示例](https://github.com/sii-research/tau-0-vla/tree/main/configs/example_agibot_world_gong)
+除关节命令外还包含 EEF 字段，不过其文档路线使用关节控制。
+在用于此 simulator 前，仍须确认 EEF 坐标系、四元数顺序、命令含义和相机选择。
+
+要继续真实数据评测，需要取得已发布模型 20 维协议下有明确说明的真实 episode，
+或者配套的 7 维 TacoPlay 微调权重与统计量。
+评估公开 checkpoint 的现成能力时，不用 7→20 补零、随机动作替代或额外训练来冒充原生验证。
