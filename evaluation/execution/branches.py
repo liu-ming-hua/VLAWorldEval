@@ -139,6 +139,7 @@ def run_branches(root, manifest, output, *, execute=False):
                 job['seconds_including_startup'] = time.monotonic() - started
                 replace_owned_json(journal, report)
         report['branch_contrasts'] = branch_contrasts(root, jobs)
+        report['prediction_sensitivity'] = prediction_sensitivity(root, jobs)
         report['status'] = 'completed' if all(j['status'] == 'completed' for j in jobs) else 'completed_with_failures'
     except BaseException:
         report['status'] = 'interrupted_or_invalidated'
@@ -148,6 +149,43 @@ def run_branches(root, manifest, output, *, execute=False):
         report['counts']['reference_unknown'] = sum(not j['reference'] for j in jobs)
         replace_owned_json(journal, report)
     return report
+
+
+def prediction_sensitivity(root, jobs):
+    """Same-seed prediction differences without claiming nonexistent branch truth."""
+    import mediapy as media
+    results = []
+    for left, right in combinations(jobs, 2):
+        if left['family'] != right['family'] or left['seed'] != right['seed']:
+            continue
+        row = {'left': left['id'], 'right': right['id'], 'status': 'unknown', 'views': {},
+               'metric_domain': 'decoded_H264_RGB', 'physical_action_tracking_verified': False,
+               'scope': 'Prediction difference only; no alternative physical outcome inferred. Same seed, not independently certified identical noise.'}
+        results.append(row)
+        if any(j['status'] != 'completed' for j in (left, right)):
+            row['reason'] = 'Both completed predictions required'
+            continue
+        try:
+            paths = [project_path(root, j['summary']) for j in (left, right)]
+            reports = [json.loads(p.read_text()) for p in paths]
+            views = set(reports[0]['video_diagnostics'])
+            if views != set(reports[1]['video_diagnostics']):
+                raise ValueError('Prediction camera identities differ')
+            for view in sorted(views):
+                files = [p.parent / f'{view}.mp4' for p in paths]
+                if any(digest(p) != r['files'][p.name] for p, r in zip(files, reports)):
+                    raise ValueError('Prediction video checksum differs')
+                a, b = [np.asarray(media.read_video(p)) for p in files]
+                if a.shape != b.shape or len(a) < 2:
+                    raise ValueError('Prediction geometry or timeline differs')
+                delta = (a[1:].astype(np.float32) - b[1:].astype(np.float32)) / 255
+                row['views'][view] = {'prediction_difference_mse_01': float(np.mean(delta**2)),
+                                      'prediction_difference_mae_01': float(np.mean(np.abs(delta))),
+                                      'frames': len(delta), 'initial_frame_scored': False}
+            row['status'] = 'scored'
+        except (OSError, ValueError, KeyError, RuntimeError) as exc:
+            row.update(reason=str(exc), views={})
+    return results
 
 
 def branch_contrasts(root, jobs):

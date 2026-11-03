@@ -30,10 +30,22 @@ def summarize_transitions(motion, chunk_lengths):
                            for i in indices]}
 
 
+def replay_chunk_lengths(summary):
+    """Infer retained future frames, including cropped inclusive final windows."""
+    if 'action_chunk_lengths' in summary:
+        return summary['action_chunk_lengths']
+    count = summary['world_model_calls']
+    advance = summary['advance_frames_per_chunk']
+    tail = summary['frames_per_view'] - 1 - (count - 1) * advance
+    if count < 1 or advance < 1 or not 1 <= tail <= advance:
+        raise ValueError('Replay frame count is inconsistent with chunk advances')
+    return [advance] * (count - 1) + [tail]
+
+
 def inspect_replay(directory):
     directory = Path(directory)
     summary = json.loads((directory / 'summary.json').read_text())
-    lengths = summary['action_chunk_lengths']
+    lengths = replay_chunk_lengths(summary)
     report = {'scope': 'Decoded H264 transition diagnostics; motion/jumps do not prove action or task correctness',
               'views': {}, 'action_chunk_lengths': lengths}
     for filename in summary['files']:

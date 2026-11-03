@@ -5,6 +5,12 @@ third-party runtimes are obtained separately under their own terms.
 
 ## Unreleased
 
+- Add native Ctrl-World recorded-state, hold-pose and shuffled-state controls through
+  the shared branch executor; separate prediction sensitivity from reference accuracy.
+- Include synchronized GT comparisons, temporal metrics and inclusive-tail boundary
+  diagnostics in offline reports. Two released examples are engineering evidence,
+  not a physical reliability certification.
+
 - Add a read-only world-model route inventory (`python -m cli world-models`) that
   distinguishes registered adapters, replay configurations and acceptance evidence.
 - Integrate A2World input preparation and GE-Sim finite-tail autoregressive replay

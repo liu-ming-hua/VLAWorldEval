@@ -75,6 +75,8 @@ was also compared with the public DROID dataset method on all 992 actions (maxim
 1.2e-7, within predeclared 1e-6 absolute/relative tolerance). This is numerical agreement,
 not bitwise action equality. Real future frames are reserved for scoring.
 
+Ctrl-World additionally supports recorded-state replay against real future RGB, plus hold-pose and shuffled-state controls through the [shared branch workflow](workflows.md#recorded-state-replay-and-action-sensitivity-controls). The two released examples are development diagnostics, not independent held-out validation. Its native conditions are measured absolute EEF/gripper states, not raw controller commands. Prediction differences under controls measure sensitivity; only recorded replay has executed future truth.
+
 `support` includes a separate `runtime_acceptance` list with `current_adapter_sources_match`.
 It checks only the listed adapter source files against the receipt, not current installed assets
 or the entire framework. These results do not upgrade any VLA pair, establish physical action

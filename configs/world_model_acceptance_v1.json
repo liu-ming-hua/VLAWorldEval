@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "verified_at": "2026-11-02",
+  "verified_at": "2026-11-03",
   "records": [
     {
       "model": "Ctrl-World native v2",
@@ -92,7 +92,362 @@
       },
       "physical_reliability_verified": false,
       "vla_pair_validation_upgraded": false,
-      "model_key": "ctrl_world"
+      "model_key": "ctrl_world",
+      "reference_comparison": {
+        "status": "completed",
+        "verified_at": "2026-11-03",
+        "scope": "Two complete official released validation examples, seed 0; engineering diagnostic, not an independent held-out quality estimate or full paper test. Raw RGB metrics exclude initial anchor.",
+        "reference_sent_to_worker": false,
+        "condition_kind": "future_measured_kinematics",
+        "cases": [
+          {
+            "episode": 199,
+            "summary_sha256": "77dceb5d89351b36acb4bf51a6584726e7a40574d66a6d1190bbebb1e01ec161",
+            "metrics": {
+              "exterior_1": {
+                "frames_scored": 32,
+                "initial_frame_scored": false,
+                "mse_01": 0.006341757858806308,
+                "psnr_db_from_mean_mse": 21.97790344237637,
+                "mean_frame_psnr_db": 22.227130353136403,
+                "perfect_frame_count": 0,
+                "ssim_rgb_gaussian11_sigma1p5_population": 0.780851893690534,
+                "frozen_initial_baseline_mse_01": 0.008310609996026001,
+                "relative_mse_improvement_over_frozen": 0.23690825801730153,
+                "temporal_rgb_delta_mae_01": 0.021516645327210426,
+                "lpips": {
+                  "status": "not_computed",
+                  "reason": "Requires separately declared learned evaluator assets"
+                },
+                "physical_action_tracking": {
+                  "status": "not_measured",
+                  "reason": "Pixel fidelity is not robot trajectory or contact truth"
+                },
+                "fid_fvd": {
+                  "status": "not_computed",
+                  "reason": "Small paired samples are not a valid distributional benchmark"
+                }
+              },
+              "exterior_2": {
+                "frames_scored": 32,
+                "initial_frame_scored": false,
+                "mse_01": 0.005193847969130463,
+                "psnr_db_from_mean_mse": 22.8451076690041,
+                "mean_frame_psnr_db": 22.98173723238599,
+                "perfect_frame_count": 0,
+                "ssim_rgb_gaussian11_sigma1p5_population": 0.7849889815716229,
+                "frozen_initial_baseline_mse_01": 0.006122211770971835,
+                "relative_mse_improvement_over_frozen": 0.1516386293991271,
+                "temporal_rgb_delta_mae_01": 0.022259410470724106,
+                "lpips": {
+                  "status": "not_computed",
+                  "reason": "Requires separately declared learned evaluator assets"
+                },
+                "physical_action_tracking": {
+                  "status": "not_measured",
+                  "reason": "Pixel fidelity is not robot trajectory or contact truth"
+                },
+                "fid_fvd": {
+                  "status": "not_computed",
+                  "reason": "Small paired samples are not a valid distributional benchmark"
+                }
+              },
+              "wrist": {
+                "frames_scored": 32,
+                "initial_frame_scored": false,
+                "mse_01": 0.017700634862617942,
+                "psnr_db_from_mean_mse": 17.52011156667168,
+                "mean_frame_psnr_db": 18.37344577446558,
+                "perfect_frame_count": 0,
+                "ssim_rgb_gaussian11_sigma1p5_population": 0.6423253448441674,
+                "frozen_initial_baseline_mse_01": 0.08018315008550397,
+                "relative_mse_improvement_over_frozen": 0.7792474498227779,
+                "temporal_rgb_delta_mae_01": 0.06381811201572418,
+                "lpips": {
+                  "status": "not_computed",
+                  "reason": "Requires separately declared learned evaluator assets"
+                },
+                "physical_action_tracking": {
+                  "status": "not_measured",
+                  "reason": "Pixel fidelity is not robot trajectory or contact truth"
+                },
+                "fid_fvd": {
+                  "status": "not_computed",
+                  "reason": "Small paired samples are not a valid distributional benchmark"
+                }
+              }
+            }
+          },
+          {
+            "episode": 18599,
+            "summary_sha256": "70b85722f8eb095b879a2cd8546cc857bc0f5a4c1c022d828560f410ba75d739",
+            "metrics": {
+              "exterior_1": {
+                "frames_scored": 71,
+                "initial_frame_scored": false,
+                "mse_01": 0.010066211182986305,
+                "psnr_db_from_mean_mse": 19.971339626093,
+                "mean_frame_psnr_db": 20.188660491887248,
+                "perfect_frame_count": 0,
+                "ssim_rgb_gaussian11_sigma1p5_population": 0.7372380748233183,
+                "frozen_initial_baseline_mse_01": 0.007176776951383209,
+                "relative_mse_improvement_over_frozen": -0.40260889410060363,
+                "temporal_rgb_delta_mae_01": 0.022453689947724342,
+                "lpips": {
+                  "status": "not_computed",
+                  "reason": "Requires separately declared learned evaluator assets"
+                },
+                "physical_action_tracking": {
+                  "status": "not_measured",
+                  "reason": "Pixel fidelity is not robot trajectory or contact truth"
+                },
+                "fid_fvd": {
+                  "status": "not_computed",
+                  "reason": "Small paired samples are not a valid distributional benchmark"
+                }
+              },
+              "exterior_2": {
+                "frames_scored": 71,
+                "initial_frame_scored": false,
+                "mse_01": 0.0072931489503442765,
+                "psnr_db_from_mean_mse": 21.37084916609494,
+                "mean_frame_psnr_db": 21.44654685904997,
+                "perfect_frame_count": 0,
+                "ssim_rgb_gaussian11_sigma1p5_population": 0.7766754845175247,
+                "frozen_initial_baseline_mse_01": 0.014807260115389515,
+                "relative_mse_improvement_over_frozen": 0.5074612795675586,
+                "temporal_rgb_delta_mae_01": 0.02385355904698372,
+                "lpips": {
+                  "status": "not_computed",
+                  "reason": "Requires separately declared learned evaluator assets"
+                },
+                "physical_action_tracking": {
+                  "status": "not_measured",
+                  "reason": "Pixel fidelity is not robot trajectory or contact truth"
+                },
+                "fid_fvd": {
+                  "status": "not_computed",
+                  "reason": "Small paired samples are not a valid distributional benchmark"
+                }
+              },
+              "wrist": {
+                "frames_scored": 71,
+                "initial_frame_scored": false,
+                "mse_01": 0.016289078544157582,
+                "psnr_db_from_mean_mse": 17.88103482573408,
+                "mean_frame_psnr_db": 18.094356623198145,
+                "perfect_frame_count": 0,
+                "ssim_rgb_gaussian11_sigma1p5_population": 0.6599714198051537,
+                "frozen_initial_baseline_mse_01": 0.09165568478687923,
+                "relative_mse_improvement_over_frozen": 0.8222796700277405,
+                "temporal_rgb_delta_mae_01": 0.05724320560693741,
+                "lpips": {
+                  "status": "not_computed",
+                  "reason": "Requires separately declared learned evaluator assets"
+                },
+                "physical_action_tracking": {
+                  "status": "not_measured",
+                  "reason": "Pixel fidelity is not robot trajectory or contact truth"
+                },
+                "fid_fvd": {
+                  "status": "not_computed",
+                  "reason": "Small paired samples are not a valid distributional benchmark"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "action_sensitivity": {
+        "status": "completed",
+        "verified_at": "2026-11-03",
+        "scope": "Two released examples, single seed 0. Native measured absolute EEF/gripper conditions. Hold initial pose (not zero coordinates) and shuffle unique future states with shared anchors retained. Decoded H264 prediction differences only; no physical truth for alternative branches; identical noise trace not certified.",
+        "physical_reliability_verified": false,
+        "cases": [
+          {
+            "episode": 199,
+            "summary_sha256": "2d0dfcff1d61b8e24c7ffa481b77a4f9cdf47e1829b37c2326b0dc674472a62d",
+            "completed_branches": 3,
+            "prediction_sensitivity": [
+              {
+                "left": "ctrl_episode_199__recorded__seed0",
+                "right": "ctrl_episode_199__hold_initial_pose__seed0",
+                "status": "scored",
+                "views": {
+                  "exterior_1": {
+                    "prediction_difference_mse_01": 0.007956505753099918,
+                    "prediction_difference_mae_01": 0.028404247015714645,
+                    "frames": 32,
+                    "initial_frame_scored": false
+                  },
+                  "exterior_2": {
+                    "prediction_difference_mse_01": 0.005444773472845554,
+                    "prediction_difference_mae_01": 0.027389759197831154,
+                    "frames": 32,
+                    "initial_frame_scored": false
+                  },
+                  "wrist": {
+                    "prediction_difference_mse_01": 0.07669376581907272,
+                    "prediction_difference_mae_01": 0.19934575259685516,
+                    "frames": 32,
+                    "initial_frame_scored": false
+                  }
+                },
+                "metric_domain": "decoded_H264_RGB",
+                "physical_action_tracking_verified": false,
+                "scope": "Prediction difference only; no alternative physical outcome inferred. Same seed, not independently certified identical noise."
+              },
+              {
+                "left": "ctrl_episode_199__recorded__seed0",
+                "right": "ctrl_episode_199__shuffle_future__seed0",
+                "status": "scored",
+                "views": {
+                  "exterior_1": {
+                    "prediction_difference_mse_01": 0.009838605299592018,
+                    "prediction_difference_mae_01": 0.03455382212996483,
+                    "frames": 32,
+                    "initial_frame_scored": false
+                  },
+                  "exterior_2": {
+                    "prediction_difference_mse_01": 0.009386224672198296,
+                    "prediction_difference_mae_01": 0.042105142027139664,
+                    "frames": 32,
+                    "initial_frame_scored": false
+                  },
+                  "wrist": {
+                    "prediction_difference_mse_01": 0.05633552372455597,
+                    "prediction_difference_mae_01": 0.16588851809501648,
+                    "frames": 32,
+                    "initial_frame_scored": false
+                  }
+                },
+                "metric_domain": "decoded_H264_RGB",
+                "physical_action_tracking_verified": false,
+                "scope": "Prediction difference only; no alternative physical outcome inferred. Same seed, not independently certified identical noise."
+              },
+              {
+                "left": "ctrl_episode_199__hold_initial_pose__seed0",
+                "right": "ctrl_episode_199__shuffle_future__seed0",
+                "status": "scored",
+                "views": {
+                  "exterior_1": {
+                    "prediction_difference_mse_01": 0.008464465849101543,
+                    "prediction_difference_mae_01": 0.0314565971493721,
+                    "frames": 32,
+                    "initial_frame_scored": false
+                  },
+                  "exterior_2": {
+                    "prediction_difference_mse_01": 0.006893272511661053,
+                    "prediction_difference_mae_01": 0.03675245866179466,
+                    "frames": 32,
+                    "initial_frame_scored": false
+                  },
+                  "wrist": {
+                    "prediction_difference_mse_01": 0.07689286023378372,
+                    "prediction_difference_mae_01": 0.19974467158317566,
+                    "frames": 32,
+                    "initial_frame_scored": false
+                  }
+                },
+                "metric_domain": "decoded_H264_RGB",
+                "physical_action_tracking_verified": false,
+                "scope": "Prediction difference only; no alternative physical outcome inferred. Same seed, not independently certified identical noise."
+              }
+            ]
+          },
+          {
+            "episode": 18599,
+            "summary_sha256": "ca833be6e893367cba82ffd1c01263b6ba80d918b5e5da8b40d7966987c5763f",
+            "completed_branches": 3,
+            "prediction_sensitivity": [
+              {
+                "left": "ctrl_episode_18599__recorded__seed0",
+                "right": "ctrl_episode_18599__hold_initial_pose__seed0",
+                "status": "scored",
+                "views": {
+                  "exterior_1": {
+                    "prediction_difference_mse_01": 0.0047855069860816,
+                    "prediction_difference_mae_01": 0.026573624461889267,
+                    "frames": 71,
+                    "initial_frame_scored": false
+                  },
+                  "exterior_2": {
+                    "prediction_difference_mse_01": 0.014605018310248852,
+                    "prediction_difference_mae_01": 0.046018317341804504,
+                    "frames": 71,
+                    "initial_frame_scored": false
+                  },
+                  "wrist": {
+                    "prediction_difference_mse_01": 0.09468507766723633,
+                    "prediction_difference_mae_01": 0.22497962415218353,
+                    "frames": 71,
+                    "initial_frame_scored": false
+                  }
+                },
+                "metric_domain": "decoded_H264_RGB",
+                "physical_action_tracking_verified": false,
+                "scope": "Prediction difference only; no alternative physical outcome inferred. Same seed, not independently certified identical noise."
+              },
+              {
+                "left": "ctrl_episode_18599__recorded__seed0",
+                "right": "ctrl_episode_18599__shuffle_future__seed0",
+                "status": "scored",
+                "views": {
+                  "exterior_1": {
+                    "prediction_difference_mse_01": 0.007513969670981169,
+                    "prediction_difference_mae_01": 0.03348229080438614,
+                    "frames": 71,
+                    "initial_frame_scored": false
+                  },
+                  "exterior_2": {
+                    "prediction_difference_mse_01": 0.01554647833108902,
+                    "prediction_difference_mae_01": 0.048692524433135986,
+                    "frames": 71,
+                    "initial_frame_scored": false
+                  },
+                  "wrist": {
+                    "prediction_difference_mse_01": 0.08164921402931213,
+                    "prediction_difference_mae_01": 0.2075347602367401,
+                    "frames": 71,
+                    "initial_frame_scored": false
+                  }
+                },
+                "metric_domain": "decoded_H264_RGB",
+                "physical_action_tracking_verified": false,
+                "scope": "Prediction difference only; no alternative physical outcome inferred. Same seed, not independently certified identical noise."
+              },
+              {
+                "left": "ctrl_episode_18599__hold_initial_pose__seed0",
+                "right": "ctrl_episode_18599__shuffle_future__seed0",
+                "status": "scored",
+                "views": {
+                  "exterior_1": {
+                    "prediction_difference_mse_01": 0.006777368951588869,
+                    "prediction_difference_mae_01": 0.03353511169552803,
+                    "frames": 71,
+                    "initial_frame_scored": false
+                  },
+                  "exterior_2": {
+                    "prediction_difference_mse_01": 0.014207515865564346,
+                    "prediction_difference_mae_01": 0.047610167413949966,
+                    "frames": 71,
+                    "initial_frame_scored": false
+                  },
+                  "wrist": {
+                    "prediction_difference_mse_01": 0.08485904335975647,
+                    "prediction_difference_mae_01": 0.2145487368106842,
+                    "frames": 71,
+                    "initial_frame_scored": false
+                  }
+                },
+                "metric_domain": "decoded_H264_RGB",
+                "physical_action_tracking_verified": false,
+                "scope": "Prediction difference only; no alternative physical outcome inferred. Same seed, not independently certified identical noise."
+              }
+            ]
+          }
+        ]
+      }
     },
     {
       "model": "Cosmos DROID community 20k-EMA",

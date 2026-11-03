@@ -46,5 +46,14 @@ if __name__ == '__main__':
     parser.add_argument('--output', required=True)
     parser.add_argument('--gpu', type=int, default=0)
     parser.add_argument('--chunks', type=int, default=3)
+    parser.add_argument('--model', choices=['worldgym', 'ctrl_world'], default='worldgym')
+    parser.add_argument('--prepared', type=Path, help='Ctrl native case containing config/input/reference')
+    parser.add_argument('--seed', type=int, default=0)
     args = parser.parse_args()
-    print(prepare(args.output, args.gpu, args.chunks))
+    if args.model == 'ctrl_world':
+        if args.prepared is None:
+            parser.error('--prepared is required for Ctrl native controls')
+        from evaluation.datasets.action_controls import prepare_ctrl_controls
+        print(prepare_ctrl_controls(ROOT, args.prepared, args.output, gpu=args.gpu, seed=args.seed))
+    else:
+        print(prepare(args.output, args.gpu, args.chunks))

@@ -39,7 +39,34 @@ def test_shared_real_worker_path_preserves_all_slots_and_unknown_truth(tmp_path,
     assert result['counts']['reference_unknown'] == 4 and result['independent_families'] == 1
     assert len(result['branch_contrasts']) == 2
     assert all(r['status'] == 'unknown' for r in result['branch_contrasts'])
+    assert all(r['status'] == 'scored' for r in result['prediction_sensitivity'])
+    assert all(not r['physical_action_tracking_verified'] for r in result['prediction_sensitivity'])
     assert not result['physical_reliability_verified']
+
+
+def test_absolute_state_controls_keep_anchor_overlap_and_native_tail():
+    import numpy as np
+    from evaluation.datasets.action_controls import ctrl_control_windows
+    from evaluation.datasets.ctrl_world import inclusive_action_windows
+
+    states = np.arange(10 * 7, dtype=np.float32).reshape(10, 7) + 1
+    windows, _, tail = inclusive_action_windows(states)
+    video = {'fps': 5, 'frames_per_chunk': 5, 'temporal_layout': 'inclusive',
+             'final_chunk_valid_frames': tail}
+    controls, order = ctrl_control_windows(windows, video, seed=0)
+    hold, shuffle = controls['hold_initial_pose'], controls['shuffle_future']
+    np.testing.assert_array_equal(hold, np.broadcast_to(states[0], windows.shape))
+    assert np.all(hold != 0)  # Zero motion is not zero absolute pose.
+    np.testing.assert_array_equal(shuffle[1:, 0], shuffle[:-1, -1])
+    np.testing.assert_array_equal(shuffle[0, 0], states[0])
+    unique = np.concatenate([shuffle[0, :1], shuffle[:, 1:].reshape(-1, 7)])[:len(states)]
+    np.testing.assert_array_equal(unique[1:], states[order])
+    assert set(order) == set(range(1, len(states)))
+    np.testing.assert_array_equal(shuffle[-1, 1:], np.broadcast_to(unique[-1], (4, 7)))
+    broken = windows.copy()
+    broken[1, 0] += 1
+    with pytest.raises(ValueError, match='overlapping'):
+        ctrl_control_windows(broken, video)
 
 
 def test_failed_branch_is_retained_and_other_slots_execute(tmp_path, monkeypatch):

@@ -217,3 +217,48 @@ A conditioning check perturbs every recorded state/EEF/camera row after frame ze
 while holding commanded actions and initial conditions fixed. Unchanged FK bands and
 camera conditions establish absence of those future-state dependencies in this tested
 route. This is not a physical counterfactual test or a guarantee for arbitrary upstream versions.
+
+## Recorded-state replay and action-sensitivity controls
+
+Ctrl-World's native DROID protocol conditions on **measured absolute EEF/gripper
+state trajectories**, not raw actuator commands. Use the pinned official examples
+before interpreting a generic policy's output in this space.
+
+```bash
+# Installed model assets required; no VLA is loaded.
+environment/world_models/ctrl_world/bin/python scripts/acceptance/prepare_world_model_cases.py \
+  --model ctrl_world --output results/ctrl_cases
+
+environment/core/bin/python scripts/acceptance/branch_example.py --model ctrl_world \
+  --prepared results/ctrl_cases/cases/ctrl_released_long_ep199_seed0 \
+  --output results/ctrl_controls --gpu 0 --seed 0
+
+python -m cli branches --manifest results/ctrl_controls/branches.json \
+  --output results/ctrl_controls/evaluation --check-only
+python -m cli branches --manifest results/ctrl_controls/branches.json \
+  --output results/ctrl_controls/evaluation --execute
+python -m cli report --source results/ctrl_controls/evaluation/summary.json \
+  --output results/ctrl_controls/report
+```
+
+Repeat for `ctrl_released_long_ep18599_seed0` with a different output directory.
+Both are official published examples; this is not the full paper test set or an
+independent held-out estimate. Keep the configuration fixed across cases.
+
+| Branch | Intervention | Valid interpretation |
+| --- | --- | --- |
+| `recorded` | All recorded native states, inclusive windows, original tail convention | Paired RGB fidelity against the recorded future |
+| `hold_initial_pose` | Repeat the initial absolute EEF pose and gripper value | Zero-motion condition, **not** zero coordinates |
+| `shuffle_future` | Seeded permutation of unique future states; shared window anchors and initial context preserved | Temporal-order sensitivity; potentially nonphysical trajectories |
+
+Only `recorded` receives a reference packet. Alternative branches must not be scored
+as if the original trajectory were their true physical outcome. The framework keeps
+physical branch contrasts `unknown`, while separately reporting same-seed generated
+video MAE/MSE as `prediction_sensitivity`. These values use decoded H264 RGB; baseline
+reference metrics use raw predictions before encoding. Equal seeds alone do not
+certify identical diffusion-noise traces.
+
+The report provides synchronized videos, prediction/recorded-future comparisons,
+PSNR, SSIM, frozen-initial-image baseline, temporal RGB-change error, motion diagnostics
+and chunk-boundary changes. These measure appearance and sensitivity, not robot
+contact accuracy, task success or policy-ranking validity.

@@ -195,3 +195,42 @@ environment/world_models/ge_sim_v2/bin/python scripts/acceptance/world_model_par
 条件检查会扰动初始帧之后全部记录的 state、EEF 与相机外参，保持动作和初始条件不变。
 若 FK 轨迹图和相机条件不变，只能说明本次路线不依赖这些未来状态字段，
 不能代替有物理真值的动作分支实验，也不保证任意上游版本均如此。
+
+## 真实状态轨迹回放与动作敏感性对照
+
+Ctrl-World 的原生 DROID 协议以**记录的绝对 EEF／夹爪状态轨迹**作为条件，
+不是执行器原始控制命令。先验证官方样例，再解释一般策略输出与该输入空间的关系。
+
+```bash
+# 需要已安装模型与数据；不加载 VLA。
+environment/world_models/ctrl_world/bin/python scripts/acceptance/prepare_world_model_cases.py \
+  --model ctrl_world --output results/ctrl_cases
+
+environment/core/bin/python scripts/acceptance/branch_example.py --model ctrl_world \
+  --prepared results/ctrl_cases/cases/ctrl_released_long_ep199_seed0 \
+  --output results/ctrl_controls --gpu 0 --seed 0
+
+python -m cli branches --manifest results/ctrl_controls/branches.json \
+  --output results/ctrl_controls/evaluation --check-only
+python -m cli branches --manifest results/ctrl_controls/branches.json \
+  --output results/ctrl_controls/evaluation --execute
+python -m cli report --source results/ctrl_controls/evaluation/summary.json \
+  --output results/ctrl_controls/report
+```
+
+对 `ctrl_released_long_ep18599_seed0` 使用新目录重复执行，保持模型配置不变。
+两条都是官方公开样例，不是论文完整测试集，也不是独立留出集估计。
+
+| 分支 | 干预 | 可支持的判断 |
+| --- | --- | --- |
+| `recorded` | 全部原生记录状态，保留窗口锚点与末尾处理 | 与实际记录未来的 RGB 保真度对照 |
+| `hold_initial_pose` | 重复初始绝对末端姿态与夹爪值 | 零运动条件，**不是坐标归零** |
+| `shuffle_future` | 固定种子打乱不重复的未来状态，保留初始条件与窗口共享锚点 | 时间顺序敏感性，轨迹可能不符合物理约束 |
+
+只有 `recorded` 配有 reference。不能把原轨迹未来当作干预分支的真实物理结果。
+框架将物理动作分支对照保留为 `unknown`，另以 `prediction_sensitivity` 展示同种子生成视频间的 MAE/MSE。
+后者在 H264 解码 RGB 上计算；真实回放的参考指标在视频编码前的原始预测上计算。
+相同种子本身不构成扩散噪声轨迹完全一致的认证。
+
+报告提供同步视频、预测／真实未来并排视频、PSNR、SSIM、冻结初始帧基线、时间 RGB 变化误差、
+运动诊断与分段边界变化。这些是图像和敏感性指标，不是接触准确性、任务成功率或策略排名有效性的证明。

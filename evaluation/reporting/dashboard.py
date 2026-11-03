@@ -63,10 +63,11 @@ def build_dashboard(root, sources, output):
     (output / 'media').mkdir()
     report = {'schema_version': 1, 'kind': 'offline_evaluation_dashboard', 'cases': [],
               'sources': [{'path': str(p.relative_to(root)), 'sha256': digest(p)} for p in sources],
-              'branch_contrasts': [], 'physical_reliability_verified': False,
+              'branch_contrasts': [], 'prediction_sensitivity': [], 'physical_reliability_verified': False,
               'scope': 'Provided planned slots only; heterogeneous domains/protocols are not a leaderboard.'}
     for source, cases, contrasts in parsed:
         report['branch_contrasts'].extend(contrasts)
+        report['prediction_sensitivity'].extend(_json(source).get('prediction_sensitivity', []))
         for case in cases:
             row = {'id': str(case.get('id', 'case')), 'status': case.get('status', 'unknown'),
                    'seed': case.get('seed'), 'family': case.get('family'), 'videos': [],
@@ -101,6 +102,10 @@ def build_dashboard(root, sources, output):
                     row['frames'] = native.get('frames_per_view')
                     row['protocol_sha256'] = native.get('config_sha256')
                     row['world_model_calls'] = native['world_model_calls']
+                    row['video_diagnostics'] = native.get('video_diagnostics', {})
+                    if native['status'] == 'completed' and 'advance_frames_per_chunk' in native:
+                        from evaluation.reporting.chunk_boundaries import inspect_replay
+                        row['chunk_boundaries'] = inspect_replay(directory)
                 else:
                     if row['status'] == 'completed':
                         from evaluation.reporting.artifact_checks import audit_job
@@ -145,6 +150,18 @@ def _artifact(directory, relative):
 
 def render_html(report):
     sections = []
+    sensitivity_rows = []
+    for item in report.get('prediction_sensitivity', []):
+        for view, values in item.get('views', {}).items():
+            cells = [item['left'], item['right'], view,
+                     f"{values['prediction_difference_mae_01']:.6f}",
+                     f"{values['prediction_difference_mse_01']:.6f}"]
+            sensitivity_rows.append('<tr>' + ''.join('<td>' + html.escape(c) + '</td>' for c in cells) + '</tr>')
+    if sensitivity_rows:
+        sections.append('<section><h2>Prediction sensitivity</h2><p>Same-seed generated-video differences, decoded H264 RGB in [0,1]. '
+                        'No alternative executed ground truth; these are not correctness scores.</p>'
+                        '<table><tr><th>Branch A</th><th>Branch B</th><th>View</th><th>MAE</th><th>MSE</th></tr>'
+                        + ''.join(sensitivity_rows) + '</table></section>')
     for case in report['cases']:
         e = html.escape
         videos = ''.join(f'<figure><figcaption>{e(v["label"])}</figcaption><video controls preload="metadata" src="{e(v["file"], quote=True)}"></video></figure>' for v in case['videos'])
@@ -173,6 +190,7 @@ body{font:16px system-ui;background:#111824;color:#e4edf6;max-width:1300px;margi
 <pre>''' + html.escape(json.dumps(report['counts'], indent=2)) + '''</pre><a href="report.json">Machine-readable report</a>''' + ''.join(sections) + '''<script>
 for(const section of document.querySelectorAll('section')){
  const videos=[...section.querySelectorAll('video')], seek=section.querySelector('.seek');
+ if(!seek)continue;
  function duration(){const ds=videos.map(v=>v.duration).filter(Number.isFinite);seek.max=ds.length?Math.min(...ds):0;}
  videos.forEach(v=>v.addEventListener('loadedmetadata',duration));
  section.querySelector('.play').onclick=()=>{const t=Number(seek.value);videos.forEach(v=>{v.currentTime=t;v.play().catch(()=>{});});};
