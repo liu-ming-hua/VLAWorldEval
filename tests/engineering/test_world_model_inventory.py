@@ -36,3 +36,38 @@ def test_inventory_distinguishes_base_checkpoint_and_native_wrapper():
 def test_unknown_profile_is_an_actionable_error():
     with pytest.raises(ValueError, match='Unknown world model'):
         world_model_report(ROOT, 'missing_checkpoint')
+
+
+def test_evidence_axes_do_not_promote_interface_or_reference_presence():
+    from evaluation.reporting.world_models import verification_status, render_verification_table
+
+    record = {'interface_tests': {'status': 'passed'}, 'current_adapter_sources_match': True,
+              'long_replay': {'status': 'failed', 'cases': [{'reference_sha256': 'abc'}]}}
+    result = verification_status([record])
+    assert result['interface_tests'] == 'historical_pass'
+    assert result['real_weight_execution'] == 'not_recorded'
+    assert result['ground_truth_comparison'] == 'not_recorded'
+    record['long_replay']['status'] = 'completed'
+    record['current_adapter_sources_match'] = False
+    result = verification_status([record])
+    assert result['native_replay'] == 'historical_pass_source_changed'
+    assert result['physical_reliability'] == 'not_verified'
+    table = render_verification_table({'world_models': [{'model': 'fixture', 'verification': result}]})
+    assert 'not_recorded' in table and 'source_changed' in table
+
+
+def test_receipts_bind_exact_checkpoint_profile():
+    base = world_model_report(ROOT, 'cosmos3_nano')['world_models'][0]
+    tuned = world_model_report(ROOT, 'cosmos3_nano_droid_fd_20k_ema')['world_models'][0]
+    assert base['verification']['native_replay'] == 'not_recorded'
+    assert tuned['verification']['native_replay'].startswith('historical_pass')
+    assert build_parser(ROOT).parse_args(['world-models', '--table']).table
+
+
+def test_server_only_profiles_do_not_require_a_vla_pair_to_show_evidence():
+    ge = world_model_report(ROOT, 'ge_sim_v2')['world_models'][0]
+    tau = world_model_report(ROOT, 'tau0_wm_simulator')['world_models'][0]
+    assert ge['verification']['native_replay'] == 'historical_pass'
+    assert ge['verification']['official_entry_parity'] == 'historical_pass'
+    assert tau['verification']['interface_tests'] == 'historical_pass'
+    assert tau['verification']['real_weight_execution'] == 'not_recorded'

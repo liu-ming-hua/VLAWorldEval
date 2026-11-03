@@ -82,3 +82,25 @@ def test_full_episode_keeps_tail_without_fabricated_actions(bundle, tmp_path):
     assert [len(chunk) for chunk in packet['actions']] == [25, 25, 1]
     np.testing.assert_array_equal(np.concatenate(packet['actions']), actions)
     assert result['source']['unselected_actions'] == 0
+
+
+@pytest.mark.parametrize('leak', [False, True])
+def test_future_condition_audit_detects_recorded_future_dependency(monkeypatch, leak):
+    import sys
+    import types
+    from evaluation.validation.ge_sim_parity import audit_future_conditions
+
+    module = types.ModuleType('gesim.conditioning.policy_band')
+    cache = {'state_joints': np.zeros((3, 20)), 'state_eef': np.zeros((3, 14)),
+             'c2w_episode': np.zeros((3, 3, 4, 4)), 'intrinsic': np.eye(3)}
+    module.load_bundle_cache = lambda episode: cache
+    def render(actions, episode, *, bundle_cache):
+        row = bundle_cache['state_joints'][1 if leak else 0]
+        return (row.copy(), actions.copy(), bundle_cache['intrinsic'].copy())
+    module.render_policy_traj_from_bundle = render
+    monkeypatch.setitem(sys.modules, 'gesim', types.ModuleType('gesim'))
+    monkeypatch.setitem(sys.modules, 'gesim.conditioning', types.ModuleType('gesim.conditioning'))
+    monkeypatch.setitem(sys.modules, 'gesim.conditioning.policy_band', module)
+    result = audit_future_conditions('fixture', np.ones((25, 16), np.float32))
+    assert result['status'] == ('failed' if leak else 'passed')
+    assert np.all(cache['state_joints'] == 0)  # Never mutate the source episode.

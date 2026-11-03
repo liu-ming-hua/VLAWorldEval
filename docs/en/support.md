@@ -68,8 +68,9 @@ and [checksum-bound receipts](../../configs/world_model_acceptance_v1.json).
 | --- | --- | --- | --- | --- |
 | Ctrl-World native v2 | Yes | Passed | Two chunks, exact model conditions and decoded frames | 2 public episodes, 26 calls, 33 / 72 frames per view |
 | Cosmos DROID community 20k-EMA | Yes | Passed | Two chunks, exact effective sample settings and decoded frames | 3 development episodes, 62 calls, 465 / 241 / 289 frames |
+| GE-Sim 2.0 action mode | Catalogued | Passed | 25 + 25 + 6 actions, exact decoded RGB and predicted state | 1 official example, 456 actions, 19 calls, 457 frames per view |
 
-The checks share loaded weights; loader parity is outside their scope. Cosmos action conversion
+The Ctrl-World and Cosmos checks share loaded weights; loader parity is outside their scope. GE-Sim uses two independently seeded servers with the same checkpoint/configuration. Cosmos action conversion
 was also compared with the public DROID dataset method on all 992 actions (maximum difference
 1.2e-7, within predeclared 1e-6 absolute/relative tolerance). This is numerical agreement,
 not bitwise action equality. Real future frames are reserved for scoring.
@@ -97,7 +98,7 @@ receipts are explicit gaps, not inferred failures of the model.
 | --- | --- |
 | Shared replay configuration exists | GE-Sim 2.0 action mode, A2World pretrained, WorldGym, Ctrl-World, Cosmos DROID 20k EMA, Cosmos DROID joint best5600, DreamDojo GR1, IWS PushT, PlayWorld SVD, DreamTrue three-view, IRASim LanguageTable |
 | Adapter exists; shared replay configuration still missing | τ₀-WM Simulator, GigaWorld-1, base Cosmos3-Nano |
-| Compact native parity / long-replay acceptance receipts | Ctrl-World v2 and Cosmos DROID 20k EMA; consult each receipt's scope and source match |
+| Compact native parity / long-replay acceptance receipts | Ctrl-World v2, Cosmos DROID 20k EMA and GE-Sim action mode; consult each receipt's scope and source match |
 
 A replay configuration is not proof of a successful official example, full episode,
 or VLA loop. Consult `native_acceptance_evidence` and `closed_loop_evidence` separately.
@@ -111,3 +112,24 @@ and a new output directory. Run admission before execution. The reference packet
 used only for scoring, never as the model's future observation. Build the offline
 report using the emitted `report` command. These templates deliberately do not invent
 an input converter for an unsupported native dataset.
+
+### Independent validation stages
+
+```bash
+python -m cli world-models --table
+python -m cli world-models --model ge_sim_v2
+```
+
+The matrix separately reports interface tests, real-weight execution, native replay,
+official-entry parity and ground-truth comparison. A passed interface test cannot
+upgrade the other stages. `not_recorded` means no compact published receipt, not a
+failed model. `historical_pass_source_changed` keeps old evidence visible while
+warning that the listed adapter source no longer matches. Evidence binds the exact
+checkpoint profile; base and post-trained checkpoints do not inherit each other's results.
+
+GE-Sim has an official action-mode entry comparison (25 + 25 + 6 actions, exact decoded
+RGB and predicted-state equality), plus one complete 456-action replay. Its example
+has no recorded future RGB, so the GT comparison remains unavailable. The first chunk
+boundary in the long video has a pixel-change peak; a completed rollout is not a
+smoothness or physics guarantee. τ₀-WM currently has interface-test evidence only.
+The compact machine-readable source is `configs/world_model_acceptance_v1.json`.

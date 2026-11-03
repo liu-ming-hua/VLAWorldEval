@@ -7,6 +7,38 @@ from evaluation.planning.registry import load_runtime_registry
 from evaluation.reporting.support import support_report
 
 
+def verification_status(records, pairs=()):
+    """Report independent evidence axes, never infer quality from route existence."""
+    def status(field, accepted):
+        matching = [r for r in records if r.get(field, {}).get('status') in accepted]
+        if not matching:
+            return 'not_recorded'
+        return ('historical_pass' if any(r.get('current_adapter_sources_match') is True for r in matching)
+                else 'historical_pass_source_changed')
+    replay = status('long_replay', {'completed'})
+    parity = status('native_entry_parity', {'passed'})
+    real = replay if replay != 'not_recorded' else parity
+    if real == 'not_recorded' and any(p.get('real_weight_loop', {}).get('status') in {'passed', 'historical_pass', 'completed'} for p in pairs):
+        real = 'historical_pair_run_only'
+    return {'interface_tests': status('interface_tests', {'passed'}),
+            'real_weight_execution': real, 'native_replay': replay,
+            'official_entry_parity': parity,
+            'ground_truth_comparison': status('reference_comparison', {'passed', 'completed'}),
+            'physical_reliability': 'not_verified'}
+
+
+def render_verification_table(report):
+    """Compact user-facing matrix; the JSON report retains evidence and blockers."""
+    columns = [('interface_tests', 'Interface tests'), ('real_weight_execution', 'Real weights'),
+               ('native_replay', 'Native replay'), ('official_entry_parity', 'Entry parity'),
+               ('ground_truth_comparison', 'GT comparison')]
+    lines = ['| Checkpoint | ' + ' | '.join(label for _, label in columns) + ' |',
+             '| --- | ' + ' | '.join('---' for _ in columns) + ' |']
+    for row in report['world_models']:
+        lines.append('| ' + row['model'] + ' | ' + ' | '.join(row['verification'][key] for key, _ in columns) + ' |')
+    return '\n'.join(lines) + '\n\nHistorical evidence only. not_recorded means no published receipt, not model failure. No physical-reliability certification.'
+
+
 def world_model_report(root, model=None):
     root = Path(root)
     catalog = load_model_catalog(root)['world_models']
@@ -31,9 +63,8 @@ def world_model_report(root, model=None):
                   if cfg.get("adapter") == native_adapter
                   and cfg.get("environment") == entry["environment"]]
         pairs = [p for p in support['pairs'] if p['world_model'] == adapter]
-        source = runtime.get('module', '').replace('.', '/') + '.py'
         evidence = [r for r in support['runtime_acceptance']
-                    if source in r.get('adapter_sources', {})]
+                    if r.get('model_key') == key]
         blockers = []
         if not routes:
             blockers.append('No shared native replay configuration; adapter registration alone is insufficient.')
@@ -73,6 +104,7 @@ def world_model_report(root, model=None):
                      'declared_assets': runtime.get('assets', {}),
                      'native_replay_routes': replay,
                      'native_acceptance_evidence': evidence,
+                     'verification': verification_status(evidence, pairs),
                      'closed_loop_evidence': pairs, 'gaps': blockers})
     return {'schema_version': 1, 'world_models': rows, 'execution_performed': False,
             'scope': 'Declared routes plus published historical evidence. No environment, weight, '

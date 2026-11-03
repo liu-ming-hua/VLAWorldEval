@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "verified_at": "2026-10-31",
+  "verified_at": "2026-11-02",
   "records": [
     {
       "model": "Ctrl-World native v2",
@@ -91,7 +91,8 @@
         "checkpoints/world_models/ctrl_world/svd/vae/diffusion_pytorch_model.safetensors": "9975042d7bee021bd53a72b1af14c8627d624f6547ec9abe661b68b962b88c49"
       },
       "physical_reliability_verified": false,
-      "vla_pair_validation_upgraded": false
+      "vla_pair_validation_upgraded": false,
+      "model_key": "ctrl_world"
     },
     {
       "model": "Cosmos DROID community 20k-EMA",
@@ -234,7 +235,105 @@
           },
           "scope": "Public ee_pose/midtrain branch, backward-framewise OpenCV rot6d, flipped commanded gripper; float rounding tolerance, not bitwise certification"
         }
+      ],
+      "model_key": "cosmos3_nano_droid_fd_20k_ema"
+    },
+    {
+      "model_key": "ge_sim_v2",
+      "model": "GE-Sim 2.0 action mode",
+      "status": "historical_pass",
+      "adapter_sources": {
+        "adapters/world_models/ge_sim_v2.py": "54d9809c9199bef6845edeecbc31b295f6024f8dc6513f3f989653db8349cd67"
+      },
+      "interface_tests": {
+        "status": "passed",
+        "test_module": "tests/models/test_ge_sim_preparation.py"
+      },
+      "physical_reliability_verified": false,
+      "native_entry_parity": {
+        "status": "passed",
+        "report_sha256": "78c046dd9b1d8afb54fa42a4bde41fc8f6b03213f209d06d0fe5023493bcc827",
+        "scope": "Official WorldModelEnv action mode vs adapter. Not parity with episode-mode examples/replay.py; JPEG HTTP transport included.",
+        "seed": 0,
+        "action_chunk_lengths": [
+          25,
+          25,
+          6
+        ],
+        "exact_rgb_and_state": true,
+        "rgb_max_abs": 0,
+        "upstream_commit": "4a34498e326dfa88d6300b2e476e8a67795c430a",
+        "checkpoint_sha256": "3c0518dae1d7723b8d79ea735a22dd4ff4ff8b956fb04ec95f683b6e99006d47",
+        "compatibility_patch_sha256": "17cecd60b8f403cd92be7243aed584b981c8cb9c8ac8a7dee52086caf7a858ef",
+        "future_condition_audit": {
+          "status": "passed",
+          "checks": {
+            "trajectory_band": true,
+            "camera_to_world": true,
+            "fk_eef": true
+          },
+          "scope": "Future recorded state/EEF/camera rows only; initial calibration and commanded actions retained. Not a physical counterfactual."
+        }
+      },
+      "long_replay": {
+        "status": "completed",
+        "planned": 1,
+        "completed": 1,
+        "world_model_calls": 19,
+        "actions_consumed": 456,
+        "frames_per_view": {
+          "head": 457,
+          "left_wrist": 457,
+          "right_wrist": 457
+        },
+        "summary_sha256": "fbfc4a5311b46f546adc00052458cafe4e85ee0c6942296a420bc73a909d68ac",
+        "scope": "One official demo_000 action-mode episode, 18x25+6 commands, generated image memory; not full paper test set.",
+        "input_files_sha256": {
+          "actions_0.npy": "f84b98700b9120ecff182d1841e364a63a80913bc82b5dda6e878695219fb524",
+          "task.txt": "337af9711d1ecde984539c7a3cb4827f10e6f880e3bc04a837555fe69f2d1e29",
+          "intrinsic.npy": "f9a123c3ef23c081f1da5b1f4ad89f6ff4f849174e1bc095dcff9ebb102789c6",
+          "extrinsic_alignstate_0.npy": "3c854b9d147ece27ce7eecf3a27929304da920983e61f5f1493bc3c0e515bc1e",
+          "state_joints_0.npy": "86a72e7ee1eb35022ebbdfcf9b8b81b773b81d80795693c6f2200c7b4d012b93",
+          "state_eef_poses_0.npy": "acffb06f4a9ab40f634f458f94f88e7d20e3a0c2d7f49c74e01068c85ad115fd",
+          "cur_head.png": "3419824c3b8d61630da5c19610febd58e2b7bca811bd093271be92caef9a2997",
+          "cur_left.png": "8a1f5ae04b2a083182c53955e36e682452426fe55ede7a1908c70cc60944569a",
+          "cur_right.png": "665e2ca048520d1d29c8987bb41032583902652b0f1a80ea914495577e9118a5"
+        },
+        "output_files_sha256": {
+          "head.mp4": "f90091c634edf988e1992a76ce012cc164ba4026e5d10b30f98cd79729ccf6fb",
+          "left_wrist.mp4": "109e9b8ea79090f44714199fa62364bdbea2eae6ecb12d46d6908b3cd314d9d4",
+          "right_wrist.mp4": "f3fbbea1f72fd6de141ceedc4c9c2d1065a5cb73648985a32c51d78f27a5e83a",
+          "action_offsets.npy": "b13ec6426c6303f615bc682f6a09fe440a295547e4348b691b3c80fcf2668580",
+          "actions.npy": "f84b98700b9120ecff182d1841e364a63a80913bc82b5dda6e878695219fb524"
+        }
+      },
+      "reference_comparison": {
+        "status": "not_available",
+        "reason": "Official bundle has no recorded future RGB"
+      },
+      "known_limitations": [
+        "Static head and torso assumption",
+        "Decoded first chunk boundary shows a visible pixel-change peak",
+        "Entry parity does not certify physics or task success"
       ]
+    },
+    {
+      "model_key": "tau0_wm_simulator",
+      "model": "Tau0 simulator transport",
+      "status": "interface_only",
+      "adapter_sources": {
+        "adapters/world_models/tau0_wm_simulator.py": "d23a31d946b95f74584415ec6b40899517e2c90f1df0b9bd547b2da331a85885"
+      },
+      "interface_tests": {
+        "status": "passed",
+        "test_module": "tests/models/test_tau0_adapter.py"
+      },
+      "physical_reliability_verified": false,
+      "reference_comparison": {
+        "status": "not_available",
+        "reason": "No verified protocol-matched real episode"
+      },
+      "scope": "Optional full-video and terminal feedback unit tests only; no checkpoint inference certification."
     }
   ]
 }

@@ -80,3 +80,44 @@ it; do not overwrite the failed receipt. Installed environment paths are not rel
 [Support evidence](support.md) · [Longer experiments](workflows.md)
 
 New environments live under `environment/verification/first_rollout_<id>/`; the report records the location. Results contain receipts and rollout artifacts rather than virtual environments. The recipe also checks finite `[20,1,10]` native/converted action arrays and the expected 21-frame output.
+
+## Alternative: a complete GE-Sim replay without a VLA
+
+This route uses the official `demo_000` calibrated bundle and recorded **16-D absolute
+joint commands**. It is a full episode engineering example, not a task-success benchmark.
+Only the initial RGB is supplied; later RGB comes from the model. Head and torso are
+assumed stationary. No recorded future RGB is bundled for scoring.
+
+```bash
+# Explicit preparation: proxies disabled; dependencies and weights use mirrors.
+bash scripts/setup/core.sh
+bash scripts/setup/ge_sim_v2.sh
+
+# No server or GPU allocation: validate the installed assets and complete input.
+environment/core/bin/python scripts/replay/ge_sim_v2.py \
+  --check-only --output results/gesim_check --gpu 0 --memory-gib 28
+
+# Fresh output directory. Automatically starts and stops its own server.
+environment/core/bin/python scripts/replay/ge_sim_v2.py \
+  --output results/gesim_full --gpu 0 --memory-gib 28 --chunks all
+
+# Open report/index.html locally, or forward port 8080 when using a remote server.
+environment/core/bin/python -m http.server 8080 --bind 127.0.0.1 \
+  --directory results/gesim_full
+```
+
+Select an available physical GPU with `--gpu`; 28 GiB is a tested allocator cap,
+not a guarantee for other drivers, checkpoints or acceleration settings.
+Setup links the source-bundled example into `datasets/ge_sim_v2/official/demo_000`
+without replacing user data. `--episode PATH` selects another calibrated bundle.
+A failed check must be corrected before inference. Every run requires a new output path.
+
+| Result | Meaning |
+| --- | --- |
+| `replay/head.mp4`, `left_wrist.mp4`, `right_wrist.mp4` | Three synchronized continuous videos; initial frame plus 456 future frames for this example |
+| `replay/actions.npy`, `action_offsets.npy` | All 456 unchanged commands, boundaries of 18×25 + 6 actions |
+| `replay/summary.json`, `receipt.json` | Calls, frames, hashes, server lifecycle and declared limitations |
+| `boundary_diagnostics.json` | Chunk-boundary pixel changes; not task or physics scores |
+| `report/index.html` | Portable replay viewer |
+
+For native-entry comparison and its limitations, see [GE-Sim validation](workflows.md#ge-sim-action-mode-validation).

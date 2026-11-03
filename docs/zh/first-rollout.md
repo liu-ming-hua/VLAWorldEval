@@ -73,3 +73,42 @@ VLA 与 WM 各自使用常驻进程；该组合依赖兼容，因此两个进程
 [组合验证证据](support.md) · [更长实验](workflows.md)
 
 新环境统一保存在 `environment/verification/first_rollout_<id>/`，具体位置写入报告；结果目录仅保存凭证与 rollout 产物，不混放虚拟环境。验收还会检查原生／转换后 action 均为有限值 `[20,1,10]`，以及视频确实为预期的21帧。
+
+## 可选路线：不使用 VLA 的 GE-Sim 完整回放
+
+使用官方 `demo_000` 标定样例与真实记录的 **16 维绝对关节命令**。
+这是完整轨迹的工程示例，不是任务成功率评测。只提供初始 RGB，后续 RGB 来自模型；
+假定头部与躯干静止。样例未附带可用于评分的真实未来 RGB。
+
+```bash
+# 显式准备：关闭代理，依赖与权重走镜像。
+bash scripts/setup/core.sh
+bash scripts/setup/ge_sim_v2.sh
+
+# 不启动服务、不分配 GPU 显存：检查已有资产和完整输入。
+environment/core/bin/python scripts/replay/ge_sim_v2.py \
+  --check-only --output results/gesim_check --gpu 0 --memory-gib 28
+
+# 使用新的输出目录，自动启动并结束自己创建的服务。
+environment/core/bin/python scripts/replay/ge_sim_v2.py \
+  --output results/gesim_full --gpu 0 --memory-gib 28 --chunks all
+
+# 本地打开 report/index.html；远程使用时将 8080 端口转发到电脑。
+environment/core/bin/python -m http.server 8080 --bind 127.0.0.1 \
+  --directory results/gesim_full
+```
+
+通过 `--gpu` 选择有空余显存的物理卡；28 GiB 是已测试的显存分配上限，
+不保证适用于不同驱动、权重或加速配置。
+安装会将源码附带的样例链接到 `datasets/ge_sim_v2/official/demo_000`，不覆盖用户数据。
+可用 `--episode PATH` 指定其他标定样例。检查失败须先修复；每次运行使用新输出目录。
+
+| 结果 | 含义 |
+| --- | --- |
+| `replay/head.mp4`、`left_wrist.mp4`、`right_wrist.mp4` | 三路同步连续视频，本例为初始帧加 456 张未来帧 |
+| `replay/actions.npy`、`action_offsets.npy` | 原样保存全部 456 个命令及 18×25 + 6 的分段边界 |
+| `replay/summary.json`、`receipt.json` | 调用数、帧数、哈希、服务生命周期及验证限制 |
+| `boundary_diagnostics.json` | 分段边界的像素变化，不是任务或物理评分 |
+| `report/index.html` | 可移植回放查看页面 |
+
+原生入口对照及其限制见[GE-Sim 验证](workflows.md)。

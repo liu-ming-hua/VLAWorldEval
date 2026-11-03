@@ -45,6 +45,13 @@ else
 fi
 
 cd "${ROOT_DIR}"
+# The official calibrated example ships in the pinned source tree. Expose it
+# through the dataset layout without duplicating files or replacing user data.
+EXAMPLE_DIR="${ROOT_DIR}/datasets/ge_sim_v2/official"
+mkdir -p "${EXAMPLE_DIR}"
+if [[ ! -e "${EXAMPLE_DIR}/demo_000" && ! -L "${EXAMPLE_DIR}/demo_000" ]]; then
+  ln -s ../../../third_party/ge-sim-v2/assets/demo_000 "${EXAMPLE_DIR}/demo_000"
+fi
 mkdir -p "${MODEL_DIR}"
 if [[ ! -x "${VENV_DIR}/bin/python" ]]; then
   "${UV_BIN}" venv "${VENV_DIR}" --python 3.11

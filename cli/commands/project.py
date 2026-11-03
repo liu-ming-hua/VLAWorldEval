@@ -124,7 +124,11 @@ def support(args, root):
 
 
 def world_models(args, root):
-    from evaluation.reporting.world_models import world_model_report
+    from evaluation.reporting.world_models import world_model_report, render_verification_table
 
-    print_json(world_model_report(root, args.model))
+    report = world_model_report(root, args.model)
+    if args.table:
+        print(render_verification_table(report))
+    else:
+        print_json(report)
     return 0

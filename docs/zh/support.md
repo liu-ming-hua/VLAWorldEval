@@ -61,8 +61,9 @@ environment/core/bin/python scripts/acceptance/support_evidence.py --check
 | --- | --- | --- | --- | --- |
 | Ctrl-World native v2 | 是 | 通过 | 两轮，模型条件与解码帧完全一致 | 2 条官方公开轨迹，26 次调用，各视角 33／72 帧 |
 | Cosmos DROID 社区 20k-EMA | 是 | 通过 | 两轮，有效采样参数与解码帧完全一致 | 3 条开发轨迹，62 次调用，465／241／289 帧 |
+| GE-Sim 2.0 action 模式 | 已列入目录 | 通过 | 25 + 25 + 6 个动作，解码 RGB 与预测 state 完全一致 | 1 条官方样例，456 个动作，19 次调用，各视角 457 帧 |
 
-一致性检查共享已加载的权重，不包含加载器独立认证。Cosmos 另外对全部 992 个动作与公开 DROID 数据集方法
+Ctrl-World 与 Cosmos 的一致性检查共享已加载权重，不包含加载器独立认证；GE-Sim 使用两个独立固定种子的服务及相同权重、配置。Cosmos 另外对全部 992 个动作与公开 DROID 数据集方法
 进行转换比较，最大差异约 1.2e-7，在预先规定的绝对／相对 1e-6 容差内；这是数值一致，不是动作逐位相同。
 真实未来图像只参与评分。
 
@@ -86,7 +87,7 @@ environment/core/bin/python -m cli world-models --model ctrl_world
 | --- | --- |
 | 已有统一回放配置 | GE-Sim 2.0 action 模式、A2World pretrained、WorldGym、Ctrl-World、Cosmos DROID 20k EMA、Cosmos DROID joint best5600、DreamDojo GR1、IWS PushT、PlayWorld SVD、DreamTrue 三视角、IRASim LanguageTable |
 | 已有适配器，尚缺统一回放配置 | τ₀-WM Simulator、GigaWorld-1、基础版 Cosmos3-Nano |
-| 已有精简原生一致性／长回放验收记录 | Ctrl-World v2 和 Cosmos DROID 20k EMA；以记录中的适用范围、源码匹配状态为准 |
+| 已有精简原生一致性／长回放验收记录 | Ctrl-World v2、Cosmos DROID 20k EMA 和 GE-Sim action 模式；以记录中的适用范围、源码匹配状态为准 |
 
 有回放配置不代表已通过官方示例、完整轨迹或 VLA 闭环验证。
 分别查看 `native_acceptance_evidence` 和 `closed_loop_evidence`。
@@ -97,3 +98,20 @@ environment/core/bin/python -m cli world-models --model ctrl_world
 将命令模板中的 `CASE`、`MY_NEW_RUN` 替换为已准备的数据目录和新结果目录，先检查准入，再执行推理。
 参考视频只参与生成后的评分，不作为模型的未来观测输入。最后使用输出提示中的 `report` 命令生成离线报告。
 对于尚未支持的数据格式，入口不会伪造数据转换命令。
+
+### 独立的验收阶段
+
+```bash
+python -m cli world-models --table
+python -m cli world-models --model ge_sim_v2
+```
+
+表格分别展示接口测试、真实权重运行、原生数据回放、官方入口一致性、真实未来对照。
+接口测试通过不会提升其他阶段。`not_recorded` 表示缺少公开的简短验证记录，不表示模型失败。
+`historical_pass_source_changed` 保留历史证据，同时提示对应适配器源码已变化。
+证据绑定精确 checkpoint profile，基础权重与微调权重不互相继承结论。
+
+GE-Sim 已完成官方 action 模式入口对照（25 + 25 + 6 个动作，解码 RGB 和预测 state 完全一致），
+以及一条完整 456 动作回放。样例没有真实未来 RGB，因此真实未来对照仍不可用。
+长视频第一个分段边界存在像素变化峰值，回放完成不代表平滑性或物理正确性通过。
+τ₀-WM 目前仅有接口测试证据。机器可读的简短记录位于 `configs/world_model_acceptance_v1.json`。

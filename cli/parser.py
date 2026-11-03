@@ -67,6 +67,7 @@ def build_parser(root):
     subparsers.add_parser("models", help="list catalogued VLA and world-model adapters")
     world_models = subparsers.add_parser("world-models", help="audit native replay routes, protocols and published evidence; no inference")
     world_models.add_argument("--model", help="exact checkpoint-profile key from models")
+    world_models.add_argument("--table", action="store_true", help="compact validation evidence matrix")
     cleanup_parser = subparsers.add_parser(
         "cleanup-results",
         help="preview retention policy; --apply archives old generated outputs without deleting",

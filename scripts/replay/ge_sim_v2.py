@@ -39,6 +39,7 @@ def main():
     parser.add_argument('--seed', type=int, default=0)
     parser.add_argument('--chunks', default='all', help='all, or a positive number of complete chunks')
     parser.add_argument('--server-config', type=Path, default=ROOT / 'configs/world_models/ge_sim_v2.yaml')
+    parser.add_argument('--check-only', action='store_true', help='Validate assets/data without starting a server or allocating GPU memory')
     args = parser.parse_args()
     if args.gpu < 0 or not 0 <= args.seed < 2**32:
         parser.error('GPU must be nonnegative; seed must be uint32')
@@ -100,6 +101,14 @@ def main():
                                          for path in sorted(weight_root.rglob('*')) if path.is_file()}
         record['upstream_sources_sha256'] = {str(path.relative_to(ROOT)): digest(path)
             for path in sorted((ROOT / 'third_party/ge-sim-v2/src/gesim').rglob('*.py'))}
+        admission = run_native_replay(config_path, output / 'input.npz', output / 'replay', admit_only=True)
+        record['input_admission'] = admission
+        if args.check_only:
+            record.update(status='admitted', model_inference_performed=False,
+                          next_step='Run again without --check-only using a new output directory.')
+            save()
+            print(json.dumps(record, indent=2))
+            return
         with run_signal_handlers(), native_gpu_lease(ROOT, [args.gpu]):
             resource_admission({'world_model_gpus': [args.gpu],
                                 'max_process_memory_gib_per_gpu': args.memory_gib}, False)

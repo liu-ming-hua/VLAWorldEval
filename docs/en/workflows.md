@@ -192,3 +192,28 @@ The pinned upstream revision requires the reviewed
 for short band/camera conditioning windows. Setup applies it idempotently and refuses
 source changes that conflict with the patch. This is **upstream plus a compatibility patch**, not an
 unmodified-official parity claim. Source hashes in the receipt identify the executed code.
+
+## GE-Sim action-mode validation
+
+The official `examples/replay.py` selects `conditioning="episode"` and uses recorded
+future EEF trajectories. Our action replay selects `conditioning="action"`, rendering
+trajectory bands and moving wrist-camera geometry from joint commands via the official FK.
+Comparing those two modes directly is not adapter parity.
+
+```bash
+environment/world_models/ge_sim_v2/bin/python scripts/acceptance/world_model_parity.py \
+  --model ge_sim --input datasets/ge_sim_v2/official/demo_000 \
+  --output results/gesim_parity --gpu 0 --memory-gib 28 --chunks 2 --tail-actions 6
+```
+
+This compares the official `WorldModelEnv` in action mode against the framework adapter.
+It launches two independently seeded servers with the same weights/configuration and
+compares decoded RGB and predicted state, including HTTP JPEG transport. The test uses
+a **56-action prefix** (25 + 25 + 6), not the episode's last six actions. A separate full
+replay checks complete-episode coverage. Temporary raw comparison arrays are removed;
+`report.json` retains hashes, frame counts, errors and process lifecycle records.
+
+A conditioning check perturbs every recorded state/EEF/camera row after frame zero
+while holding commanded actions and initial conditions fixed. Unchanged FK bands and
+camera conditions establish absence of those future-state dependencies in this tested
+route. This is not a physical counterfactual test or a guarantee for arbitrary upstream versions.

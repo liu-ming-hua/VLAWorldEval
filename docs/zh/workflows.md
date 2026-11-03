@@ -173,3 +173,25 @@ V1 的固定长度、V2 的结构化条件协议保持原有行为。V3 当前�
 固定的上游版本需要 `scripts/setup/patches/ge_sim_v2_finite_tail.patch` 兼容补丁，
 将短尾段的轨迹图和相机条件补齐到网络窗口。安装脚本会幂等应用补丁，遇到与补丁冲突的源码改动则停止。
 这里使用的是**上游代码加兼容补丁**，不是未经修改的官方一致性验证；运行记录中的源码哈希明确对应执行版本。
+
+(ge-sim-action-mode-validation)=
+## GE-Sim action 模式验证
+
+官方 `examples/replay.py` 使用 `conditioning="episode"`，会读取记录的未来 EEF 轨迹。
+框架动作回放使用 `conditioning="action"`，通过官方 FK 将关节命令转成轨迹图和腕部相机几何。
+直接比较这两种模式，不等于验证适配器一致性。
+
+```bash
+environment/world_models/ge_sim_v2/bin/python scripts/acceptance/world_model_parity.py \
+  --model ge_sim --input datasets/ge_sim_v2/official/demo_000 \
+  --output results/gesim_parity --gpu 0 --memory-gib 28 --chunks 2 --tail-actions 6
+```
+
+此命令比较官方 `WorldModelEnv` 的 action 模式与框架适配器。
+两次独立启动服务，固定相同权重、配置和随机种子，对照解码 RGB 与预测 state，包含 HTTP JPEG 传输。
+使用 **56 个动作的前缀**（25 + 25 + 6），不是轨迹末尾的六个动作；完整轨迹覆盖由另一次全量回放验证。
+临时比较数组自动删除，`report.json` 保留哈希、帧数、误差和服务生命周期记录。
+
+条件检查会扰动初始帧之后全部记录的 state、EEF 与相机外参，保持动作和初始条件不变。
+若 FK 轨迹图和相机条件不变，只能说明本次路线不依赖这些未来状态字段，
+不能代替有物理真值的动作分支实验，也不保证任意上游版本均如此。
